@@ -1,34 +1,28 @@
-import React, {useEffect} from 'react';
-import logo from './logo.svg';
-import './App.css';
-import axios from "axios";
+import React from 'react';
+
 
 function App() {
-  useEffect(() => {
-    const test = () => {
-      return axios.get("/test");
-    }
-    test();
-  }, [])
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <div style={{
+                position:"fixed",
+                top:0,
+                left:0,
+                width: "100%",
+                height: "100vh",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#ccc",
+                fontSize:"42px",
+                color:"#fff",
+                fontWeight:"bold"
+            }}>
+                준비중입니다.
+            </div>
+        </div>
+    );
 }
 
 export default App;
