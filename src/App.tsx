@@ -1,26 +1,18 @@
 import React from 'react';
+import 'semantic-ui-css/semantic.min.css';
+import {ErrorPage} from "@/pages/error";
+import {BrowserRouter} from "react-router-dom";
+import LoginForm from "@/components/join/loginForm";
+import Router from "@/routes";
 
 
 function App() {
-
     return (
         <div className="App">
-            <div style={{
-                position:"fixed",
-                top:0,
-                left:0,
-                width: "100%",
-                height: "100vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#ccc",
-                fontSize:"42px",
-                color:"#fff",
-                fontWeight:"bold"
-            }}>
-                준비중입니다.
-            </div>
+            <BrowserRouter>
+                <Router/>
+                {/*<LoginForm/>*/}
+            </BrowserRouter>
         </div>
     );
 }

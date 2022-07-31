@@ -29,6 +29,21 @@ export const handlers = [
         return res(ctx.status(200), ctx.json({email: email}));
     }),
 
+    rest.post('/register', (req, res, ctx) => {
+        const {email, password} = <User>req.body;
+        const checkEmail = users.filter((v) => v.email !== email);
+        if(!!checkEmail.length) return res(ctx.status(201), ctx.json("이미 사용하고있는 이메일입니다."));
+
+        const newKey = users[users.length -1].key;
+        users.push({
+            key: newKey,
+            email: email,
+            password: password
+        })
+
+        return res(ctx.status(200), ctx.json({email: email}));
+    }),
+
 
     rest.get("/test", (req,res,ctx) => {
         return res(ctx.status(200), ctx.json(users))
