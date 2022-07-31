@@ -1,5 +1,6 @@
 import {Grid, Segment} from "semantic-ui-react";
 import FormLayer from "@/components/join/formLayer";
+import Helper from "@/pages/helper";
 
 export default function LoginForm() {
     return (
@@ -9,6 +10,7 @@ export default function LoginForm() {
                     <Segment>
                         <FormLayer/>
                     </Segment>
+                    <Helper/>
                 </Grid.Column>
             </Grid.Row>
         </Grid>

@@ -24,7 +24,8 @@
       "@/*": ["src/*"],
       "@/app/*": ["src/app/*"],
       "@assets/*": ["src/assets/*"]
-    }
+    },
+    "types": ["kakao.maps.d.ts"]
   },
   "include": [
     "src","**/*.ts","**/*.tsx"

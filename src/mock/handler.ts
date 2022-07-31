@@ -1,13 +1,7 @@
 import {rest} from "msw";
+import {MemberType} from "@/types/member";
 
-
-interface User {
-    key: number;
-    email: string;
-    password: string;
-}
-
-const users = <User[]>[
+const users = <MemberType[]>[
     {
         key: 0,
         email: "test@test.com",
@@ -17,7 +11,7 @@ const users = <User[]>[
 
 export const handlers = [
     rest.post("/login", (req, res, ctx) => {
-        const {email, password} = <User>req.body;
+        const {email, password} = <MemberType>req.body;
 
         const checkEmail = users.filter((v) => v.email === email);
         if (!checkEmail.length) return res(ctx.status(201), ctx.json("email"));
@@ -30,7 +24,7 @@ export const handlers = [
     }),
 
     rest.post('/register', (req, res, ctx) => {
-        const {email, password} = <User>req.body;
+        const {email, password} = <MemberType>req.body;
         const checkEmail = users.filter((v) => v.email !== email);
         if(!!checkEmail.length) return res(ctx.status(201), ctx.json("이미 사용하고있는 이메일입니다."));
 
