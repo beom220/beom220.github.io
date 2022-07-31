@@ -1,10 +1,8 @@
 import {Map, MapMarker} from "react-kakao-maps-sdk";
-import {Button, Grid, Icon, Segment} from "semantic-ui-react";
-import {useNavigate} from "react-router";
+import {Grid, Segment} from "semantic-ui-react";
 import Helper from "@/pages/helper";
 
 export default function MapSample() {
-    const navigate = useNavigate();
     const whereAt = {
         lat: 37.47943754699013, lng: 126.82406106502174
     }
