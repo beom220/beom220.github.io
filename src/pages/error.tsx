@@ -1,6 +1,8 @@
 import {Button, Modal, Header, Icon, Divider} from "semantic-ui-react";
+import {useNavigate} from "react-router";
 
 export function ErrorPage(){
+    const navigate = useNavigate();
     return(
         <Modal
             basic
@@ -18,7 +20,7 @@ export function ErrorPage(){
                 </p>
             </Modal.Content>
             <Modal.Actions>
-                <Button color='green' inverted>
+                <Button color='green' type="button" inverted onClick={() => navigate(-1)}>
                     <Icon name='checkmark' /> Go Back
                 </Button>
             </Modal.Actions>
