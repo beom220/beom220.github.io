@@ -6,9 +6,8 @@ export default function MapSample() {
     const {loading, error} = useInjectKakaoMapApi({
         appkey: process.env.REACT_APP_KAKAOMAP_API_KEY.toString()
     })
-
     const coordinate = {
-        lat: 37.53702976188573, lng: 127.00923267432718
+        lat: 37.46700010391151, lng: 126.65644969608586
     }
     return (
         <Grid style={{marginTop: "20px"}}>
@@ -27,7 +26,7 @@ export default function MapSample() {
                                 style={{width: "100%", height: "200px"}}
                             >
                                 <MapMarker position={coordinate}>
-                                    <div style={{color: "#000", textAlign: "center"}}>집</div>
+                                    <div style={{color: "#000", textAlign: "center"}}>자늑 더 베이크</div>
                                 </MapMarker>
                             </Map>
                         }
