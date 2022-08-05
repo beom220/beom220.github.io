@@ -1,15 +1,19 @@
-import {Button, Dimmer, Form} from "semantic-ui-react";
+import {Button, Form} from "semantic-ui-react";
 import {useForm, SubmitHandler} from "react-hook-form";
 import {ChangeEvent, useEffect} from "react";
 import {useLogin} from "@/api";
 import useSession from "@/hooks/useSession";
 import {MemberType} from "@/types/member";
+import useModals from "@/hooks/useModals";
 import styled from "@emotion/styled";
-import FormInput from "semantic-ui-react/dist/commonjs/collections/Form/FormInput";
+import AlertPortal from "@/components/common/alert";
+
 
 export default function LoginForm() {
     const {register, handleSubmit, setValue, trigger, formState: {errors}} = useForm();
+    const {isOpen, handleModal, message, handleMessage} = useModals();
     const [GetSession, SetSession] = useSession();
+
     const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
         setValue(name, value);
@@ -42,17 +46,24 @@ export default function LoginForm() {
     const {mutate, isLoading, isError, error, isSuccess} = useLogin();
     const onSubmit: SubmitHandler<MemberType> = (inputs: MemberType) => {
         mutate(inputs, {
-            onSuccess: (data, variables, context) => {
+            onSuccess: (data) => {
                 const {status, data: message} = data;
                 if (status !== 200) {
-                    return alert(message + ' error');
+                    handleMessage({
+                        content: (message + ' error')
+                    })
+                    return handleModal(true);
                 }
                 SetSession('user', message);
-                console.log('getSession :: ',GetSession("user", ""))
-                alert('성공');
+                handleMessage({
+                    title:'성공',
+                    content: '어디로가고싶어?'
+                })
+                handleModal(true);
                 // navigate('/');
             },
-            onError: () => { }
+            onError: () => {
+            },
         })
     }
 
@@ -63,7 +74,6 @@ export default function LoginForm() {
                 fluid
                 icon='user'
                 iconPosition='left'
-                // label="email"
                 placeholder="email"
                 disabled={isLoading}
                 onChange={onChange}
@@ -72,7 +82,6 @@ export default function LoginForm() {
             <Input
                 name="password"
                 fluid
-                // label="password"
                 icon='lock'
                 iconPosition='left'
                 type="password"
@@ -80,7 +89,8 @@ export default function LoginForm() {
                 onChange={onChange}
                 error={checkErrorPoint("password", !!errors.password)}
             />
-            <Button loading={isLoading} fluid primary type="submit">로그인</Button>
+            <Button loading={isLoading} disabled={isLoading} color="violet" fluid type="submit">로그인</Button>
+            <AlertPortal message={message} isOpen={isOpen} handler={() => handleModal(false)}/>
         </Form>
     )
 }
