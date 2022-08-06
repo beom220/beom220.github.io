@@ -1,9 +1,15 @@
-import {Button, Modal} from "semantic-ui-react";
-import { AlertProps} from "@/types/alert";
+import {Button, Modal, Ref} from "semantic-ui-react";
+import {AlertProps} from "@/types/alert";
+import {useRef, useLayoutEffect} from "react";
 import styled from "@emotion/styled";
 
 
 export default function AlertPortal({message, isOpen, handler}: AlertProps) {
+
+    const forwardedRef = useRef<HTMLButtonElement>(null);
+    useLayoutEffect(() => {
+        if (forwardedRef.current !== null) forwardedRef.current.focus();
+    });
     return (
         <BlurModal
             dimmer="blurring"
@@ -21,9 +27,11 @@ export default function AlertPortal({message, isOpen, handler}: AlertProps) {
             }
 
             <Modal.Actions>
-                <Button positive size="tiny" onClick={handler}>
-                    확인
-                </Button>
+                <Ref innerRef={forwardedRef}>
+                    <Button positive size="tiny" onClick={handler}>
+                        확인
+                    </Button>
+                </Ref>
             </Modal.Actions>
         </BlurModal>
     )
