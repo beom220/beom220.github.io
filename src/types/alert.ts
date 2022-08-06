@@ -1,11 +1,4 @@
-/* ModalKeys Types
-* title
-* contents
-* button close
-* button confirm
-* */
-
-/*
+/**
 * handler = open Control
 * actionHandler = parents action
 * */
@@ -23,7 +16,7 @@ export interface AlertProps {
 }
 
 /* ConfirmMessage Types */
-export interface ConfirmProps {
+export interface ConfirmProps extends AlertProps{
     message: ModalMessage;
     isOpen: boolean;
     handler: () => void;

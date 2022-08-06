@@ -28,7 +28,7 @@ export default function AlertPortal({message, isOpen, handler}: AlertProps) {
 
             <Modal.Actions>
                 <Ref innerRef={forwardedRef}>
-                    <Button positive size="tiny" onClick={handler}>
+                    <Button size="tiny" style={{fontWeight:600}} onClick={handler}>
                         확인
                     </Button>
                 </Ref>
