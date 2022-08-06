@@ -12,7 +12,14 @@ export default function LoginLayout({children}: Props) {
         <>
             {/*<Background/>*/}
             <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle'>
-                <Grid.Column style={{maxWidth: 450, position:'fixed'}}>
+                <Grid.Column
+                    style={{
+                        maxWidth: 450,
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)'
+                    }}>
                     {children}
                 </Grid.Column>
             </Grid>

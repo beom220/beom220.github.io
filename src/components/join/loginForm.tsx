@@ -55,18 +55,26 @@ export default function LoginForm() {
     const {mutate, isLoading, isError, error, isSuccess} = useLogin();
     const onSubmit: SubmitHandler<MemberType> = (inputs: MemberType) => {
         mutate(inputs, {
-            onSuccess: (data) => {
-                const {status, data: message} = data;
-                if (status !== 200) {
+            /*
+            * Response 있는 에러 && 500 미만인 에러들은 화면에서 처리
+            * 그 이상의 에러는 에러화면으로 이동
+            * */
+            onError: (error:any) => {
+                if(error.response){
+                    const {status, data} = error.response;
+                    if(status >= 500) return navigate('/error')
                     handleMessage({
-                        content: (message + ' error')
+                        content: (data)
                     })
                     return handleModal(true);
                 }
+                return navigate('/error')
+            },
+            onSuccess: (data) => {
+                const {data: message} = data;
                 SetSession('user', message);
                 setMember(GetSession('user'))
-            },
-            onError: () => {navigate('/error')},
+            }
         })
     }
 
