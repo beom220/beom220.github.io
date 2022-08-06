@@ -4,9 +4,13 @@ import 'semantic-ui-css/semantic.min.css';
 import {BrowserRouter} from "react-router-dom";
 import Router from "@/routes";
 import Template from "@/components/template";
+import {useRecoilValue} from "recoil";
+import {memberState} from "@/app/member";
+import Login from "@/pages/member/login";
 
 
 function App() {
+    const member = useRecoilValue(memberState);
     return (
         <div className="App">
 
@@ -15,6 +19,7 @@ function App() {
                     <Router/>
                 </Template>
             </BrowserRouter>
+
         </div>
     );
 }
