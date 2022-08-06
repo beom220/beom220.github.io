@@ -22,7 +22,7 @@ root.render(
         <QueryClientProvider client={queryClient}>
             {process.env.NODE_ENV === "development" && (
                 <>
-                    <DebugObserver/>
+                    {/*<DebugObserver/>*/}
                     <ReactQueryDevtools
                         initialIsOpen={false}
                         position={"bottom-right"}
