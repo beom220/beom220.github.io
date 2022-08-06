@@ -1,26 +1,22 @@
-import {Grid, Header, Segment, Message, Image, Divider} from "semantic-ui-react";
-import LoginForm from "@/components/join/loginForm";
+import {Grid} from "semantic-ui-react";
+import {ReactNode} from "react";
 // import loginBg from "@/assets/images/bg.jpg"
 // import styled from "@emotion/styled";
-export default function LoginLayout() {
+
+interface Props {
+    children?: ReactNode
+}
+
+export default function LoginLayout({children}: Props) {
     return (
-        <div>
+        <>
             {/*<Background/>*/}
             <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle'>
-                <Grid.Column style={{maxWidth: 450}}>
-                    <Segment>
-                        <Header as='h2' color='black' textAlign='left'>
-                            Join Us
-                        </Header>
-                        <Divider hidden/>
-                        <LoginForm/>
-                    </Segment>
-                    <Message>
-                        New to us? <a href='#'>Sign Up</a>
-                    </Message>
+                <Grid.Column style={{maxWidth: 450, position:'fixed'}}>
+                    {children}
                 </Grid.Column>
             </Grid>
-        </div>
+        </>
     );
 }
 

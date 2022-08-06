@@ -7,6 +7,11 @@ const users = <MemberType[]>[
         email: "test@test.com",
         password: "qwer1234",
     },
+    {
+        key: 1,
+        email: "qwer@qwer.com",
+        password: "qwer1234",
+    },
 ];
 
 export const handlers = [
@@ -28,7 +33,7 @@ export const handlers = [
         const checkEmail = users.filter((v) => v.email !== email);
         if(!!checkEmail.length) return res(ctx.status(201), ctx.json("이미 사용하고있는 이메일입니다."));
 
-        const newKey = users[users.length -1].key;
+        const newKey = Number(users[users.length -1].key) + 1;
         users.push({
             key: newKey,
             email: email,

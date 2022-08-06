@@ -6,13 +6,22 @@ import useSession from "@/hooks/useSession";
 import {MemberType} from "@/types/member";
 import useModals from "@/hooks/useModals";
 import styled from "@emotion/styled";
-import AlertPortal from "@/components/common/alert";
-
+import {AlertPortal} from "@/components/common";
+import {useRecoilState} from "recoil";
+import {memberState} from "@/app/member";
+import {useNavigate} from "react-router";
 
 export default function LoginForm() {
     const {register, handleSubmit, setValue, trigger, formState: {errors}} = useForm();
     const {isOpen, handleModal, message, handleMessage} = useModals();
-    const [GetSession, SetSession] = useSession();
+    const {GetSession, SetSession} = useSession();
+    const [member, setMember] = useRecoilState(memberState);
+    const navigate = useNavigate();
+
+    /* 로그인 유저라면 페이지 이동*/
+    useEffect(() => {
+        if(member) navigate('/');
+    },[member])
 
     const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
@@ -55,15 +64,9 @@ export default function LoginForm() {
                     return handleModal(true);
                 }
                 SetSession('user', message);
-                handleMessage({
-                    title:'성공',
-                    content: '어디로가고싶어?'
-                })
-                handleModal(true);
-                // navigate('/');
+                setMember(GetSession('user'))
             },
-            onError: () => {
-            },
+            onError: () => {navigate('/error')},
         })
     }
 
@@ -85,6 +88,7 @@ export default function LoginForm() {
                 icon='lock'
                 iconPosition='left'
                 type="password"
+                placeholder="password"
                 disabled={isLoading}
                 onChange={onChange}
                 error={checkErrorPoint("password", !!errors.password)}
