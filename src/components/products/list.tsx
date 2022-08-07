@@ -1,9 +1,10 @@
-import {Card, Divider, Grid, Image, Placeholder} from "semantic-ui-react";
+import {Button, Card, Divider, Grid, Header, Image, Placeholder} from "semantic-ui-react";
 import {useNavigate} from "react-router";
 import {useQuery} from "@tanstack/react-query";
 import {getProductsAPI} from "@/api/product/product";
 import {queryKeys} from "@/types/queryKey";
 import {Link} from "react-router-dom";
+import {useLayoutEffect} from "react";
 
 interface Product {
     id: string;
@@ -13,50 +14,32 @@ interface Product {
     meta: string;
 }
 
-export default function ProductList() {
+export default function List() {
     const {data, isError} = useQuery(queryKeys.products, getProductsAPI, { staleTime: 60 * 1000 });
     const navigate = useNavigate();
+
+    useLayoutEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }, [])
 
     if (isError) {
         navigate('/error')
     }
 
-    if (data) {
-        const {data: product} = data;
-        return (
-            <div>
-                <h1>Product</h1>
-                <Divider/>
-                <Grid centered={true} padded={true}>
-                    {product.map((v: Product, i: number) => (<Product data={v} key={i}/>))}
-                </Grid>
-            </div>
-        )
-    }
-
     // loading
+    const placeholder = new Array(15).fill(0).map((v, i) => (<Dummy key={i}/>))
+
+    const content = data ? data.data.map((v: Product, i: number) => (<Product data={v} key={i}/>)) : null;
+
     return (
         <div>
             <h1>Product</h1>
             <Divider/>
             <Grid centered={true} padded={true}>
-                {new Array(15).fill(0).map((v, i) => (
-                    <Grid.Column mobile={16} tablet={8} computer={5} style={CardWrap} key={i}>
-                        <Card style={CardStyle}>
-                            <Placeholder style={{width: "100%", height: 220, maxWidth: 'unset'}}>
-                                <Placeholder.Image/>
-                            </Placeholder>
-                            <Card.Content>
-                                <Placeholder>
-                                    <Placeholder.Paragraph/>
-                                    <Placeholder.Line/>
-                                    <Placeholder.Paragraph/>
-                                    <Placeholder.Line/>
-                                </Placeholder>
-                            </Card.Content>
-                        </Card>
-                    </Grid.Column>
-                ))}
+                {!data ? placeholder : content}
             </Grid>
         </div>
     );
@@ -68,7 +51,7 @@ function Product({data}: any) {
     return (
         <Grid.Column mobile={16} tablet={8} computer={5} style={CardWrap}>
             <Card style={CardStyle} as={Link} to={forwardLink}>
-                <Image src={image} wrapped ui={false}/>
+                <Image src={image} loading={"true"} wrapped ui={false}/>
                 <Card.Content>
                     <Card.Header>{header}</Card.Header>
                     <Card.Meta>{meta}</Card.Meta>
@@ -88,6 +71,26 @@ function Product({data}: any) {
 
 
                     </Card.Description>
+                </Card.Content>
+            </Card>
+        </Grid.Column>
+    )
+}
+
+function Dummy(){
+    return(
+        <Grid.Column mobile={16} tablet={8} computer={5} style={CardWrap}>
+            <Card style={CardStyle}>
+                <Placeholder style={{width: "100%", height: 188, maxWidth: 'unset'}}>
+                    <Placeholder.Image/>
+                </Placeholder>
+                <Card.Content>
+                    <Placeholder>
+                        <Placeholder.Paragraph/>
+                        <Placeholder.Line/>
+                        <Placeholder.Paragraph/>
+                        <Placeholder.Line/>
+                    </Placeholder>
                 </Card.Content>
             </Card>
         </Grid.Column>
