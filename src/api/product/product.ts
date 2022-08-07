@@ -1,9 +1,15 @@
 import clientAPI from "@/api/configAPI";
-import {useQuery} from "@tanstack/react-query";
 
-const getProductsAPI = () => {
-    return clientAPI.get('/product');
+export const getProductsAPI = () => {
+    return clientAPI.get('/products');
 };
 
-export const useGetProducts = () => useQuery(['products'], getProductsAPI)
+export const getProductDetailAPI = (id:string) => {
+    return clientAPI.get('/product/' + id)
+}
 
+
+
+//
+// const todoId = '123'
+// useQuery(['todos', todoId], () => getProductDetailAPI(todoId));

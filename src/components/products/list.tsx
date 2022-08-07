@@ -1,11 +1,12 @@
 import {Card, Divider, Grid, Image, Placeholder} from "semantic-ui-react";
 import {useNavigate} from "react-router";
+import {useQuery} from "@tanstack/react-query";
+import {getProductsAPI} from "@/api/product/product";
+import {queryKeys} from "@/types/queryKey";
 import {Link} from "react-router-dom";
-import {useGetProducts} from "@/api/product/product";
-import {useEffect} from "react";
-
 
 interface Product {
+    id: string;
     image: string;
     header: string;
     description: string;
@@ -13,34 +14,34 @@ interface Product {
 }
 
 export default function ProductList() {
-    const {data, isLoading, isError} = useGetProducts();
+    const {data, isError} = useQuery(queryKeys.products, getProductsAPI, { staleTime: 60 * 1000 });
     const navigate = useNavigate();
-    useEffect(() => {
-        console.log('isLoading ::::', isLoading)
-        console.log('isError ::::', isError)
-    }, [isLoading, isError])
 
     if (isError) {
         navigate('/error')
     }
 
     if (data) {
+        const {data: product} = data;
         return (
             <div>
                 <h1>Product</h1>
-                <Grid>
-                    {data.data.map((v: Product, i: number) => (<Product data={v} key={i}/>))}
+                <Divider/>
+                <Grid centered={true} padded={true}>
+                    {product.map((v: Product, i: number) => (<Product data={v} key={i}/>))}
                 </Grid>
             </div>
         )
     }
 
+    // loading
     return (
         <div>
             <h1>Product</h1>
-            <Grid>
+            <Divider/>
+            <Grid centered={true} padded={true}>
                 {new Array(15).fill(0).map((v, i) => (
-                    <Grid.Column mobile={16} tablet={8} computer={4} style={CardWrap}>
+                    <Grid.Column mobile={16} tablet={8} computer={5} style={CardWrap} key={i}>
                         <Card style={CardStyle}>
                             <Placeholder style={{width: "100%", height: 220, maxWidth: 'unset'}}>
                                 <Placeholder.Image/>
@@ -57,40 +58,35 @@ export default function ProductList() {
                     </Grid.Column>
                 ))}
             </Grid>
-
-
-            {/*<Card.Group itemsPerRow={4}>*/}
-            {/*    {new Array(15).fill(0).map((v, i) => (*/}
-            {/*        <Card key={i}>*/}
-            {/*            <Placeholder style={{width: "100%", height: 220,}}>*/}
-            {/*                <Placeholder.Image square/>*/}
-            {/*            </Placeholder>*/}
-            {/*            <Card.Content>*/}
-            {/*                <Placeholder>*/}
-            {/*                    <Placeholder.Paragraph/>*/}
-            {/*                    <Placeholder.Line/>*/}
-            {/*                    <Placeholder.Paragraph/>*/}
-            {/*                    <Placeholder.Line/>*/}
-            {/*                </Placeholder>*/}
-            {/*            </Card.Content>*/}
-            {/*        </Card>*/}
-            {/*    ))}*/}
-            {/*</Card.Group>*/}
         </div>
     );
 }
 
-export function Product({data}: any){
-    const {image, header, description, meta} = data;
+function Product({data}: any) {
+    const {image, header, description, meta, id} = data;
+    const forwardLink = '/product/' + id;
     return (
-        <Grid.Column mobile={16} tablet={8} computer={4} style={CardWrap}>
-            <Card style={CardStyle}>
+        <Grid.Column mobile={16} tablet={8} computer={5} style={CardWrap}>
+            <Card style={CardStyle} as={Link} to={forwardLink}>
                 <Image src={image} wrapped ui={false}/>
                 <Card.Content>
                     <Card.Header>{header}</Card.Header>
                     <Card.Meta>{meta}</Card.Meta>
                     <Card.Description>
-                        {description}
+                        <p style={{
+                            width:'100%',
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            wordBreak: 'break-word',
+
+                            display: '-webkit-box',
+                            WebkitLineClamp: '2',
+                            WebkitBoxOrient: 'vertical',
+                        }}>
+                            {description}
+                        </p>
+
+
                     </Card.Description>
                 </Card.Content>
             </Card>
@@ -99,4 +95,4 @@ export function Product({data}: any){
 }
 
 const CardWrap = {display: 'flex'}
-const CardStyle = {width: '100%', maxWidth:'450px', margin:'0 auto'}
+const CardStyle = {width: '100%', maxWidth: '450px', margin: '0 auto'}
