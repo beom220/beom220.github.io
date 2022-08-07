@@ -1,24 +1,33 @@
-import {Icon, Menu, Sidebar} from "semantic-ui-react";
+import {Icon, Image, Menu, Sidebar} from "semantic-ui-react";
+import {useRecoilState} from "recoil";
+import {sidebarState} from "@/app/template";
+import {useCallback} from "react";
+import {Link} from "react-router-dom";
 
-interface SideOptions {
-    visible: boolean;
-}
+export default function Sidenav() {
+    const [isOpen, setIsOpen] = useRecoilState(sidebarState);
+    const sidebarClose = useCallback((): void => {
+        setIsOpen({
+            visible: false,
+            dimmed: false
+        })
+    }, [isOpen]);
 
-export default function Sidenav({visible}: SideOptions) {
+
     return (
         <Sidebar
             as={Menu}
-            animation="overlay"
+            animation="push"
             direction="left"
             icon='labeled'
             inverted
             vertical
-            visible={visible}
+            visible={isOpen.visible}
+            onHide={sidebarClose}
             width='thin'
-            style={{
-                top: '53px',
-            }}
+            style={{top: '53px'}}
         >
+
             <Menu.Item as='a'>Home</Menu.Item>
             <Menu.Item as='a'>Games</Menu.Item>
             <Menu.Item as='a'>Channels</Menu.Item>

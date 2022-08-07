@@ -11,9 +11,10 @@ export default function LoginLayout({children}: Props) {
     return (
         <>
             {/*<Background/>*/}
-            <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle'>
+
                 <Grid.Column
                     style={{
+                        width:'100%',
                         maxWidth: 450,
                         position: 'fixed',
                         top: '50%',
@@ -22,7 +23,6 @@ export default function LoginLayout({children}: Props) {
                     }}>
                     {children}
                 </Grid.Column>
-            </Grid>
         </>
     );
 }

@@ -1,8 +1,8 @@
-import {Container, Dropdown, Menu, Image, Icon, Button} from "semantic-ui-react";
+import {Dropdown, Menu, Image, Icon, Button} from "semantic-ui-react";
 import {Link} from "react-router-dom";
-import {useRecoilState, useRecoilValue} from "recoil";
+import {useRecoilState} from "recoil";
 import {sidebarState} from "@/app/template";
-import {useCallback, useEffect} from "react";
+import {useCallback} from "react";
 import {memberState} from "@/app/member";
 import useSession from "@/hooks/useSession";
 
@@ -11,18 +11,14 @@ export default function HeaderNav() {
     const [member, setMember] = useRecoilState(memberState);
     const {DeleteSession} = useSession();
 
-    useEffect(()=>{
-        console.log(member)
-    },[member])
-
-    const sidebarToggle = useCallback(() => {
+    const sidebarToggle = useCallback((): void => {
         setIsOpen({
             visible: !isOpen.visible,
             dimmed: !isOpen.dimmed
         })
-    },[isOpen]);
+    }, [isOpen]);
 
-    const onLogOut = useCallback(() => {
+    const onLogOut = useCallback((): void => {
         DeleteSession('user');
         setMember(null);
     }, [member])
@@ -55,9 +51,13 @@ export default function HeaderNav() {
                 </Dropdown.Menu>
             </Dropdown>
 
-            {member?
-                <Menu.Item as={Button} onClick={onLogOut}>LogOut</Menu.Item> :
-                <Menu.Item as={Link} to="login">Join</Menu.Item>
+            {member ?
+                <Menu.Item position="right" onClick={onLogOut}>Sign Out</Menu.Item> :
+                <Menu.Item position="right">
+                    <Button as={Link} primary to="/login">
+                        Join Us
+                    </Button>
+                </Menu.Item>
             }
         </Menu>
     )

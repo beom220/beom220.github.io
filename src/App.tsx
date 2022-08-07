@@ -15,9 +15,7 @@ function App() {
         <div className="App">
 
             <BrowserRouter>
-                <Template>
-                    <Router/>
-                </Template>
+                <Router/>
             </BrowserRouter>
 
         </div>
