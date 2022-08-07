@@ -1,26 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import 'semantic-ui-css/semantic.min.css';
+// import './app.css';
+import {BrowserRouter} from "react-router-dom";
+import Router from "@/routes";
+import Template from "@/components/template";
+import {useRecoilValue} from "recoil";
+import {memberState} from "@/app/member";
+import Login from "@/pages/member/login";
 
 
 function App() {
-
+    const member = useRecoilValue(memberState);
     return (
         <div className="App">
-            <div style={{
-                position:"fixed",
-                top:0,
-                left:0,
-                width: "100%",
-                height: "100vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#ccc",
-                fontSize:"42px",
-                color:"#fff",
-                fontWeight:"bold"
-            }}>
-                준비중입니다.
-            </div>
+
+            <BrowserRouter>
+                <Router/>
+            </BrowserRouter>
+
         </div>
     );
 }
