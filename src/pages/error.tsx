@@ -20,7 +20,7 @@ export function ErrorPage(){
                 </p>
             </Modal.Content>
             <Modal.Actions>
-                <Button color='green' type="button" inverted onClick={() => navigate(-1)}>
+                <Button color='green' type="button" inverted onClick={() => navigate('/')}>
                     <Icon name='checkmark' /> Go Back
                 </Button>
             </Modal.Actions>
