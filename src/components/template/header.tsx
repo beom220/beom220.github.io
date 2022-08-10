@@ -1,14 +1,17 @@
-import {Dropdown, Menu, Image, Icon, Button} from "semantic-ui-react";
+import {Dropdown, Menu, Image, Popup, Icon, Button, TransitionablePortal, Segment} from "semantic-ui-react";
 import {Link} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {sidebarState} from "@/app/template";
-import {useCallback} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {memberState} from "@/app/member";
 import useSession from "@/hooks/useSession";
+import MessagePortal from "@/components/common/message";
 
 export default function HeaderNav() {
+
     const [isOpen, setIsOpen] = useRecoilState(sidebarState);
     const [member, setMember] = useRecoilState(memberState);
+    const [fadeMessage, setFadeMessage] = useState<boolean>(false);
     const {DeleteSession} = useSession();
 
     const sidebarToggle = useCallback((): void => {
@@ -21,7 +24,17 @@ export default function HeaderNav() {
     const onLogOut = useCallback((): void => {
         DeleteSession('user');
         setMember(null);
-    }, [member])
+        setFadeMessage(true);
+    }, [member,fadeMessage])
+
+    useEffect(() => {
+        if(fadeMessage){
+            setTimeout(() => {
+                setFadeMessage(false)
+            },2000)
+        }
+    },[fadeMessage])
+
 
     return (
         <Menu fixed='top' inverted>
@@ -50,7 +63,6 @@ export default function HeaderNav() {
                     <Dropdown.Item>List Item</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
-
             {member ?
                 <Menu.Item position="right" onClick={onLogOut}>Sign Out</Menu.Item> :
                 <Menu.Item position="right">
@@ -59,6 +71,9 @@ export default function HeaderNav() {
                     </Button>
                 </Menu.Item>
             }
+            <MessagePortal isOpen={fadeMessage}>
+                <p>로그아웃 하셨습니다</p>
+            </MessagePortal>
         </Menu>
-    )
+    );
 }
