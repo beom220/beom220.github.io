@@ -1,7 +1,7 @@
 import {Button, Card, Divider, Grid, Header, Image, Placeholder} from "semantic-ui-react";
 import {useNavigate} from "react-router";
 import {useQuery} from "@tanstack/react-query";
-import {getProductsAPI} from "@/api/product/product";
+import {getProductsAPI} from "@/api";
 import {queryKeys} from "@/types/queryKey";
 import {Link} from "react-router-dom";
 import {useLayoutEffect} from "react";
@@ -36,7 +36,9 @@ export default function List() {
 
     return (
         <div>
-            <h1>Product</h1>
+            <h1>Product
+                <Button as={Link} primary to="/product/create" floated='right'>Create</Button>
+            </h1>
             <Divider/>
             <Grid centered={true} padded={true}>
                 {!data ? placeholder : content}

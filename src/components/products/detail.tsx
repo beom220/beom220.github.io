@@ -1,6 +1,6 @@
 import {Button, Divider, Header, Image, Placeholder, Segment} from "semantic-ui-react";
 import {useParams} from "react-router";
-import {getProductDetailAPI} from "@/api/product/product";
+import {getProductDetailAPI} from "@/api";
 import {useQuery} from "@tanstack/react-query";
 import {queryKeys} from "@/types/queryKey";
 import {Link} from "react-router-dom";
@@ -31,7 +31,6 @@ export default function Detail() {
                 </Placeholder> :
                 <Header as='h1'>
                     {data.data.header}
-                    <Button as={Link} primary to="/product/create" floated='right'>Create</Button>
                 </Header>
             }
             <Divider/>

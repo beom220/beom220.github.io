@@ -6,8 +6,8 @@ import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 
 import {Editor} from '@toast-ui/react-editor';
 import {ChangeEvent, FormEvent, useRef, useState} from "react";
-import {Button, ButtonGroup, Divider, Form, Grid, Segment} from "semantic-ui-react";
-import {EditorType} from "@toast-ui/editor";
+import {Button, Divider, Form, Segment} from "semantic-ui-react";
+import {Link} from "react-router-dom";
 
 interface PostDataTypes {
     title: string | undefined;
@@ -39,7 +39,6 @@ export default function ToastEditor() {
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // const data = editorRef.current?.getInstance().getHTML();
-
         console.log(postData);
     }
     return (
@@ -65,7 +64,7 @@ export default function ToastEditor() {
                 />
                 <Divider hidden/>
                 <div style={{textAlign: "right"}}>
-                    <Button type="button">뒤로가기</Button>
+                    <Button as={Link} basic to="/product">뒤로가기</Button>
                     <Button type="submit" primary>확인</Button>
                 </div>
             </Segment>
