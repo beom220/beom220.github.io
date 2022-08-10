@@ -17,8 +17,5 @@ export interface AlertProps {
 
 /* ConfirmMessage Types */
 export interface ConfirmProps extends AlertProps{
-    message: ModalMessage;
-    isOpen: boolean;
-    handler: () => void;
     actionHandler: () => any;
 }
