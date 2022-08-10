@@ -2,13 +2,14 @@ import {ChangeEvent, useEffect} from "react";
 import {Button, Form, Grid} from "semantic-ui-react";
 import {useForm, SubmitHandler} from "react-hook-form";
 import {MemberType} from "@/types/member";
-import {useLogin} from "@/api";
 import useSession from "@/hooks/useSession";
 import useModals from "@/hooks/useModals";
 import {AlertPortal} from "@/components/common";
 import {useRecoilState} from "recoil";
 import {memberState} from "@/app/member";
 import {useNavigate} from "react-router";
+import {useMutation} from "@tanstack/react-query";
+import {postLoginAPI} from "@/api/member/login";
 
 export default function LoginForm() {
     const [member, setMember] = useRecoilState(memberState);
@@ -52,7 +53,7 @@ export default function LoginForm() {
         return false;
     }
 
-    const {mutate, isLoading, isError, error, isSuccess} = useLogin();
+    const {mutate, isLoading} = useMutation(postLoginAPI);
     const onSubmit: SubmitHandler<MemberType> = (inputs: MemberType) => {
         mutate(inputs, {
             /*
@@ -66,7 +67,7 @@ export default function LoginForm() {
                     handleMessage({
                         content: (data)
                     })
-                    return handleModal(true)
+                    return handleModal(true);
                 }
                 return navigate('/error')
             },

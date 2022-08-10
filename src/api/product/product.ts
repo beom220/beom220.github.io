@@ -7,9 +7,3 @@ export const getProductsAPI = () => {
 export const getProductDetailAPI = (id:string) => {
     return clientAPI.get('/product/' + id)
 }
-
-
-
-//
-// const todoId = '123'
-// useQuery(['todos', todoId], () => getProductDetailAPI(todoId));
