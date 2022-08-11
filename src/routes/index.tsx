@@ -1,13 +1,12 @@
 import {Routes, Route} from "react-router";
 import {Navigate} from "react-router-dom";
-import {ErrorPage} from "@/pages/error";
 import MapSample from "@/pages/mapsample";
-import {Login, ProductList, ProductDetail, ProductCreate} from "@/pages";
+import {Login, ErrorPage, ProductList, ProductDetail, ProductCreate} from "@/pages";
 import {memberState} from "@/app/member";
 import {useRecoilValue} from "recoil";
 
 
-export default function Router(){
+export default function Router() {
     const member = useRecoilValue(memberState);
     return (
         <Routes>
@@ -15,7 +14,7 @@ export default function Router(){
                    element={<ProductDetail/>}
             />
             <Route path="/product/create"
-                   element={!member ? <ProductCreate/> : <Navigate to="/"/>}
+                   element={member ? <ProductCreate/> : <Navigate to="/"/>}
             />
             <Route path="/product"
                    element={<ProductList/>}

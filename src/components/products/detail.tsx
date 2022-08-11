@@ -1,5 +1,5 @@
 import {Button, Divider, Header, Image, Placeholder, Segment} from "semantic-ui-react";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {getProductDetailAPI} from "@/api";
 import {useQuery} from "@tanstack/react-query";
 import {queryKeys} from "@/types/queryKey";
@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import {useLayoutEffect} from "react";
 
 export default function Detail() {
+    const navigate = useNavigate();
     const {productById} = queryKeys;
     const params = useParams();
 
@@ -58,7 +59,7 @@ export default function Detail() {
                 }
             </Segment>
             <Divider hidden/>
-            <Button as={Link} basic to="/product" floated='right'>Go List</Button>
+            <Button basic floated='right' onClick={() => navigate(-1)}>Go List</Button>
         </>
     )
 }
