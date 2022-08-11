@@ -16,7 +16,7 @@ export default function Router() {
             <Route path="/product/create"
                    element={member ? <ProductCreate/> : <Navigate to="/"/>}
             />
-            <Route path="/product"
+            <Route path="/products"
                    element={<ProductList/>}
             />
 

@@ -19,7 +19,7 @@ const categories = [
     "덕수궁",
     "청주",
     "어린이미술관",
-]
+] as const;
 
 interface Product {
     id: string;
@@ -35,10 +35,10 @@ export default function List() {
     const params = new URLSearchParams(queryData).get('cate');
     const member = useRecoilValue(memberState);
     const [activeTab, setActiveTab] = useState<string | undefined>(undefined);
-    const [activePage, setActivePage] = useState<string | number | undefined>(1)
+
     const handleActiveClick = (e: React.MouseEvent<HTMLAnchorElement>, data: MenuItemProps) => {
         setActiveTab(data.name);
-        navigate('/product?cate=' + data.name)
+        navigate('/products?cate=' + data.name)
     }
 
     useEffect(() => {
@@ -57,10 +57,6 @@ export default function List() {
         {staleTime: 60 * 1000}
     );
 
-    const handlePaginationChange = (event: React.MouseEvent<HTMLAnchorElement>, data: PaginationProps) => {
-        setActivePage(data.activePage)
-    }
-
     const navigate = useNavigate();
 
     useLayoutEffect(() => {
@@ -78,14 +74,15 @@ export default function List() {
     const content = data?.data.length ?
         data.data.map((v: Product, i: number) => (<ProductItem data={v} key={i}/>)) :
         (<Grid.Column>
-            <Segment style={{padding: '6rem 1rem', textAlign: 'center'}}><h2>데이터가 없습니다.</h2>
+            <Segment style={{padding: '6rem 1rem', textAlign: 'center'}}><h2>현재 진행하고 있는 전시가 없습니다.</h2>
             </Segment>
         </Grid.Column>);
 
     return (
         <div>
-            <h1>Product
-                {member && <Button as={Link} primary to="/product/create" floated='right'>Create</Button>}
+            <h1>
+                전시
+                {member && <Button as={Link} primary to="/product/openAt" floated='right'>openAt</Button>}
             </h1>
             <Menu>
                 {categories.map((value, index) => (
@@ -100,37 +97,24 @@ export default function List() {
             <Grid padded={true} columns={1}>
                 {!data ? placeholder : content}
             </Grid>
-            <div style={{textAlign: "center", marginTop:"4rem"}}>
-                <Pagination
-                    totalPages={50}
-                    activePage={activePage}
-                    onPageChange={handlePaginationChange}
-                    ellipsisItem={{content: <Icon name='ellipsis horizontal'/>, icon: true}}
-                    firstItem={{content: <Icon name='angle double left'/>, icon: true}}
-                    lastItem={{content: <Icon name='angle double right'/>, icon: true}}
-                    prevItem={{content: <Icon name='angle left'/>, icon: true}}
-                    nextItem={{content: <Icon name='angle right'/>, icon: true}}
-                />
-            </div>
         </div>
     );
 }
 
 function ProductItem({data}: any) {
-    const {image, header, description, meta, id, category, create} = data;
+    const {image, header, description, meta, id, category, openAt, closeAt} = data;
     const forwardLink = '/product/' + id;
     return (
         <>
             <Grid.Column mobile={16} tablet={8} computer={5} style={CardWrap}>
                 <Card style={CardStyle} as={Link} to={forwardLink}>
-                    <Image src={image} loading={"true"} wrapped ui={false}/>
+                    <Image src={image} loading={"true"} wrapped />
                     <Card.Content>
-                        <Card.Header>
-                            <Card.Meta style={{fontWeight: '600', color: 'black'}}>{category}</Card.Meta>
-                            {header}
-                        </Card.Header>
-                        <Card.Description>
-                            <p style={{
+                        <Card.Meta>
+                            {category}
+                        </Card.Meta>
+                        <Card.Header
+                            style={{
                                 width: '100%',
                                 textOverflow: 'ellipsis',
                                 overflow: 'hidden',
@@ -140,17 +124,14 @@ function ProductItem({data}: any) {
                                 WebkitLineClamp: '2',
                                 WebkitBoxOrient: 'vertical',
                             }}>
-                                {description}
-                            </p>
-                        </Card.Description>
+                            {header}
+                        </Card.Header>
                     </Card.Content>
                     <Card.Content extra>
-                        {create}
+                        {openAt} ~ {closeAt}
                     </Card.Content>
                 </Card>
             </Grid.Column>
-
-
         </>
     )
 }
@@ -159,7 +140,7 @@ function Dummy() {
     return (
         <Grid.Column mobile={16} tablet={8} computer={5} style={CardWrap}>
             <Card style={CardStyle}>
-                <Placeholder style={{width: "100%", height: 188, maxWidth: 'unset'}}>
+                <Placeholder style={{width: "100%", height: 320, maxWidth: 'unset'}}>
                     <Placeholder.Image/>
                 </Placeholder>
                 <Card.Content>
