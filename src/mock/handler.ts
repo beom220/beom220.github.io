@@ -20,7 +20,7 @@ export const handlers = [
     rest.get('/product/:id', (req, res, ctx) => {
         const result = products.filter((v) => v.id === String(req.params.id))
 
-        if (!result.length) res(ctx.status(404), ctx.json("요청한 자료를 찾을 수 없습니다."))
+        if (!result.length) return res(ctx.status(404), ctx.json("요청한 자료를 찾을 수 없습니다."))
         return res(ctx.status(200), ctx.json(result[0]))
     }),
 
@@ -41,9 +41,9 @@ export const handlers = [
         const row = products.filter(v => v.category === category).slice(0).sort((a,b) =>
             (new Date(a.openAt).getTime() - new Date(b.openAt).getTime()) * -1);
 
-        if (!row.length) {
+        if (!row.length)
             return res(ctx.status(200), ctx.json([]))
-        }
+
         return res(ctx.status(200), ctx.json(row))
     }),
 

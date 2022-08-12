@@ -17,6 +17,10 @@ export default function Detail() {
         {staleTime: 60 * 1000}
     );
 
+    if(isError){
+        navigate('/error')
+    }
+
     useLayoutEffect(() => {
         window.scrollTo({
             top: 0,

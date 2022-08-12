@@ -39,7 +39,7 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "cp build/index.html build/404.html && gh-pages -d build",
     "postinstall": "semantic-ui-css-patch"
   },
   "eslintConfig": {
