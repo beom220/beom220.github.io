@@ -3,7 +3,6 @@ import {useNavigate, useParams} from "react-router";
 import {getProductDetailAPI} from "@/api";
 import {useQuery} from "@tanstack/react-query";
 import {queryKeys} from "@/types/queryKey";
-import {Link} from "react-router-dom";
 import {useLayoutEffect} from "react";
 
 export default function Detail() {

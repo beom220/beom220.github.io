@@ -1,8 +1,7 @@
-import {Icon, Image, Menu, Sidebar} from "semantic-ui-react";
+import { Menu, Sidebar} from "semantic-ui-react";
 import {useRecoilState} from "recoil";
 import {sidebarState} from "@/app/template";
 import {useCallback} from "react";
-import {Link} from "react-router-dom";
 
 export default function Sidenav() {
     const [isOpen, setIsOpen] = useRecoilState(sidebarState);
@@ -11,7 +10,7 @@ export default function Sidenav() {
             visible: false,
             dimmed: false
         })
-    }, [isOpen]);
+    }, [setIsOpen]);
 
 
     return (

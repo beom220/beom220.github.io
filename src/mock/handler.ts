@@ -36,7 +36,7 @@ export const handlers = [
     }),
 
     rest.post("/login", (req, res, ctx) => {
-        const {email, password} = <MemberType>req.body;
+        const {email, password} = req.body as MemberType;
 
         const checkEmail = members.filter((v) => v.email === email);
         if (!checkEmail.length) return res(ctx.status(401), ctx.json("해당 이메일로 가입된 정보가 없습니다."));
@@ -49,7 +49,7 @@ export const handlers = [
     }),
 
     rest.post('/register', (req, res, ctx) => {
-        const {email, password} = <MemberType>req.body;
+        const {email, password} = req.body as MemberType;
         const checkEmail = members.filter((v) => v.email === email);
         if (!!checkEmail.length) return res(ctx.status(201), ctx.json("이미 사용하고있는 이메일입니다."));
 

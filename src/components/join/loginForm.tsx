@@ -10,7 +10,6 @@ import {memberState} from "@/app/member";
 import {useNavigate} from "react-router";
 import {useMutation} from "@tanstack/react-query";
 import {postLoginAPI} from "@/api/member/login";
-import {postRegisterAPI} from "@/api/member/register";
 
 export default function LoginForm() {
     const [member, setMember] = useRecoilState(memberState);
@@ -22,7 +21,7 @@ export default function LoginForm() {
     /* 로그인 유저라면 페이지 이동*/
     useEffect(() => {
         if (member) navigate('/');
-    }, [member])
+    }, [member, navigate])
 
     /* input validation */
     useEffect(() => {
@@ -34,7 +33,7 @@ export default function LoginForm() {
             required: true,
             minLength: 4
         });
-    }, []);
+    }, [register]);
 
     const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
