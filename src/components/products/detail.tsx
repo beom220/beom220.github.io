@@ -41,10 +41,10 @@ export default function Detail() {
             <Divider/>
             <Segment vertical>
                 {!data ?
-                    <Placeholder style={{width: 500, height: 500, maxWidth: 'unset', margin: '0 auto'}}>
+                    <Placeholder style={{maxWidth: 500, width:'100%', margin: '0 auto'}}>
                         <Placeholder.Image/>
                     </Placeholder> :
-                    <Image src={data.data.image} style={{width: 500, height: 500, margin: '0 auto'}}/>
+                    <Image src={data.data.image} style={{maxWidth: 500, width: '100%', margin: '0 auto'}}/>
                 }
                 <Divider hidden/>
                 {!data ?

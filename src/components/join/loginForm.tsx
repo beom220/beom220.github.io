@@ -10,6 +10,7 @@ import {memberState} from "@/app/member";
 import {useNavigate} from "react-router";
 import {useMutation} from "@tanstack/react-query";
 import {postLoginAPI} from "@/api/member/login";
+import {postRegisterAPI} from "@/api/member/register";
 
 export default function LoginForm() {
     const [member, setMember] = useRecoilState(memberState);
@@ -52,7 +53,16 @@ export default function LoginForm() {
         }
         return false;
     }
-
+    // const {mutate:test} = useMutation(postRegisterAPI);
+    // useEffect(()=>{
+    //     test({
+    //         email:'sample@sample.com',
+    //         password:'qwer1234'
+    //     }, {
+    //         onError: (error:any) => console.log(error),
+    //         onSuccess: (data) => console.log(data)
+    //     })
+    // },[])
     const {mutate, isLoading} = useMutation(postLoginAPI);
     const onSubmit: SubmitHandler<MemberType> = (inputs: MemberType) => {
         mutate(inputs, {
