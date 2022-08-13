@@ -1,14 +1,18 @@
-import {Dropdown, Menu, Image, Icon, Button} from "semantic-ui-react";
+import {Dropdown, Menu, Image, ButtonGroup, Icon, Button,} from "semantic-ui-react";
 import {Link} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {sidebarState} from "@/app/template";
-import {useCallback} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {memberState} from "@/app/member";
 import useSession from "@/hooks/useSession";
+import MessagePortal from "@/components/common/message";
+import {B} from "msw/lib/glossary-297d38ba";
 
 export default function HeaderNav() {
+
     const [isOpen, setIsOpen] = useRecoilState(sidebarState);
     const [member, setMember] = useRecoilState(memberState);
+    const [fadeMessage, setFadeMessage] = useState<boolean>(false);
     const {DeleteSession} = useSession();
 
     const sidebarToggle = useCallback((): void => {
@@ -21,7 +25,17 @@ export default function HeaderNav() {
     const onLogOut = useCallback((): void => {
         DeleteSession('user');
         setMember(null);
-    }, [member])
+        setFadeMessage(true);
+    }, [member, fadeMessage])
+
+    useEffect(() => {
+        if (fadeMessage) {
+            setTimeout(() => {
+                setFadeMessage(false)
+            }, 2000)
+        }
+    }, [fadeMessage])
+
 
     return (
         <Menu fixed='top' inverted>
@@ -51,14 +65,24 @@ export default function HeaderNav() {
                 </Dropdown.Menu>
             </Dropdown>
 
-            {member ?
-                <Menu.Item position="right" onClick={onLogOut}>Sign Out</Menu.Item> :
-                <Menu.Item position="right">
-                    <Button as={Link} primary to="/login">
+            <Menu.Menu position="right">
+                {member ?
+                    <>
+                    <Menu.Item onClick={onLogOut}>
+                        My Page
+                    </Menu.Item>
+                    <Menu.Item onClick={onLogOut} color="black">Sign Out <Icon style={{paddingLeft:".625rem"}} name="sign out alternate"/></Menu.Item>
+                    </> :
+                    <Menu.Item as={Link} to="/login">
                         Join Us
-                    </Button>
-                </Menu.Item>
-            }
+                    </Menu.Item>
+                }
+
+
+            </Menu.Menu>
+            <MessagePortal isOpen={fadeMessage}>
+                <p>로그아웃 하셨습니다</p>
+            </MessagePortal>
         </Menu>
-    )
+    );
 }

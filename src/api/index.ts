@@ -1,1 +1,2 @@
-export {useLogin} from "@/api/member/login";
+export {postLoginAPI} from "@/api/member/login";
+export {getProductsAPI, getProductDetailAPI} from "@/api/product/product"
