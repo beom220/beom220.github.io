@@ -21,6 +21,7 @@
     "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "msw": "^0.44.2",
+    "qs": "^6.11.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.34.0",
@@ -38,7 +39,7 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "cp build/index.html build/404.html && gh-pages -d build",
     "postinstall": "semantic-ui-css-patch"
   },
   "eslintConfig": {

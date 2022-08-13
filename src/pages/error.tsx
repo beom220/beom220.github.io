@@ -1,7 +1,7 @@
 import {Button, Modal, Header, Icon, Divider} from "semantic-ui-react";
 import {useNavigate} from "react-router";
 
-export function ErrorPage(){
+export default function ErrorPage(){
     const navigate = useNavigate();
     return(
         <Modal

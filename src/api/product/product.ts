@@ -1,7 +1,7 @@
 import clientAPI from "@/api/configAPI";
 
-export const getProductsAPI = () => {
-    return clientAPI.get('/products');
+export const getProductsAPI = (queryString:string) => {
+    return clientAPI.get('/products?category=' + queryString);
 };
 
 export const getProductDetailAPI = (id:string) => {

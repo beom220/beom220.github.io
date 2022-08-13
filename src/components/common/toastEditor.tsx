@@ -55,7 +55,7 @@ export default function ToastEditor() {
                     language="ko-KR"
                     height="auto"
                     initialEditType="wysiwyg"
-                    hideModeSwitch // 에디터 모드 off
+                    // hideModeSwitch // 에디터 모드 off
                     initialValue={postData.content}
                     onChange={onChangeContent}
                     plugins={[
