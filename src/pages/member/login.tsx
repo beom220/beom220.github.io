@@ -1,6 +1,7 @@
 import LoginLayout from "@/components/join/loginLayout";
 import LoginForm from "@/components/join/loginForm";
 import {Divider, Header, Message, Segment} from "semantic-ui-react";
+import {Link} from "react-router-dom";
 
 export default function Login(){
     return (
@@ -13,7 +14,7 @@ export default function Login(){
                 <LoginForm/>
             </Segment>
             <Message>
-                New to us? <a href='#'>Sign Up</a>
+                New to us? <Link to="/">Sign Up</Link>
             </Message>
         </LoginLayout>
     )

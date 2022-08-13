@@ -21,7 +21,7 @@ export default function LoginForm() {
     /* 로그인 유저라면 페이지 이동*/
     useEffect(() => {
         if (member) navigate('/');
-    }, [member])
+    }, [member, navigate])
 
     /* input validation */
     useEffect(() => {
@@ -33,7 +33,7 @@ export default function LoginForm() {
             required: true,
             minLength: 4
         });
-    }, []);
+    }, [register]);
 
     const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
@@ -52,7 +52,16 @@ export default function LoginForm() {
         }
         return false;
     }
-
+    // const {mutate:test} = useMutation(postRegisterAPI);
+    // useEffect(()=>{
+    //     test({
+    //         email:'sample@sample.com',
+    //         password:'qwer1234'
+    //     }, {
+    //         onError: (error:any) => console.log(error),
+    //         onSuccess: (data) => console.log(data)
+    //     })
+    // },[])
     const {mutate, isLoading} = useMutation(postLoginAPI);
     const onSubmit: SubmitHandler<MemberType> = (inputs: MemberType) => {
         mutate(inputs, {

@@ -5,7 +5,6 @@ import reportWebVitals from './reportWebVitals';
 import {RecoilRoot} from "recoil";
 import {QueryClientProvider, QueryClient} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
-import {DebugObserver} from "@/app/debug";
 
 (async () => {
     const {worker} = await import('@/mock/worker');

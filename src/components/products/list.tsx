@@ -1,5 +1,5 @@
-import {Button, Card, Divider, Grid, Icon, Image, Menu, Pagination, Placeholder, Segment} from "semantic-ui-react";
-import {useLocation, useNavigate, useParams} from "react-router";
+import {Button, Card, Grid, Image, Menu,  Placeholder, Segment} from "semantic-ui-react";
+import {useLocation, useNavigate} from "react-router";
 import {useQuery} from "@tanstack/react-query";
 import {getProductsAPI} from "@/api";
 import {queryKeys} from "@/types/queryKey";
@@ -9,8 +9,6 @@ import {useRecoilValue} from "recoil";
 import {memberState} from "@/app/member";
 import * as React from "react";
 import {MenuItemProps} from "semantic-ui-react/dist/commonjs/collections/Menu/MenuItem";
-import QueryString from "qs";
-import {PaginationProps} from "semantic-ui-react/dist/commonjs/addons/Pagination/Pagination";
 
 const categories = [
     "전체",
@@ -49,11 +47,11 @@ export default function List() {
             return setActiveTab(categories[0]);
         }
         setActiveTab(params || categories[0]);
-    }, [queryData, activeTab])
+    }, [queryData, activeTab, params])
 
 
-    const {data, isError, isSuccess, error} = useQuery(queryKeys.productsByCate(String(activeTab)),
-        (v) => getProductsAPI(String(activeTab)),
+    const {data, isError} = useQuery(queryKeys.productsByCate(String(activeTab)),
+        () => getProductsAPI(String(activeTab)),
         {staleTime: 60 * 1000}
     );
 
@@ -102,7 +100,7 @@ export default function List() {
 }
 
 function ProductItem({data}: any) {
-    const {image, header, description, meta, id, category, openAt, closeAt} = data;
+    const {image, header, id, category, openAt, closeAt} = data;
     const forwardLink = '/product/' + id;
     return (
         <>
