@@ -1,4 +1,4 @@
-import {Container, Segment, Sidebar} from "semantic-ui-react";
+import {Segment, Sidebar} from "semantic-ui-react";
 import {useRecoilValue} from "recoil";
 import {sidebarState} from "@/app/template";
 import {ReactNode} from "react";
@@ -16,8 +16,8 @@ export default function Contents({children}: Props) {
                 <Segment style={{
                     paddingTop: '96px',
                     width: '100%',
-                    paddingLeft: '46px',
-                    paddingRight: '46px',
+                    paddingLeft: '1rem',
+                    paddingRight: '1rem',
                     paddingBottom: '126px',
                     transition: 'all ease .5s',
                     minHeight: '100vh',

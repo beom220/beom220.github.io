@@ -36,15 +36,16 @@ export default function Detail() {
                 </Placeholder> :
                 <Header as='h1'>
                     {data.data.header}
+                    <Button as={Link} primary to="/product/create" floated='right'>Create</Button>
                 </Header>
             }
             <Divider/>
             <Segment vertical>
                 {!data ?
-                    <Placeholder style={{width: 500, height: 500, maxWidth: 'unset', margin: '0 auto'}}>
+                    <Placeholder style={{maxWidth: 500, width:'100%', margin: '0 auto'}}>
                         <Placeholder.Image/>
                     </Placeholder> :
-                    <Image src={data.data.image} style={{width: 500, height: 500, margin: '0 auto'}}/>
+                    <Image src={data.data.image} style={{maxWidth: 500, width: '100%', margin: '0 auto'}}/>
                 }
                 <Divider hidden/>
                 {!data ?

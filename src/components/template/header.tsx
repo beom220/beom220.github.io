@@ -1,4 +1,4 @@
-import {Dropdown, Menu, Image, ButtonGroup, Icon, Button,} from "semantic-ui-react";
+import {Dropdown, Menu, Image, Icon, } from "semantic-ui-react";
 import {Link} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {sidebarState} from "@/app/template";
@@ -6,7 +6,6 @@ import {useCallback, useEffect, useState} from "react";
 import {memberState} from "@/app/member";
 import useSession from "@/hooks/useSession";
 import MessagePortal from "@/components/common/message";
-import {B} from "msw/lib/glossary-297d38ba";
 
 export default function HeaderNav() {
 
@@ -20,13 +19,13 @@ export default function HeaderNav() {
             visible: !isOpen.visible,
             dimmed: !isOpen.dimmed
         })
-    }, [isOpen]);
+    }, [isOpen, setIsOpen]);
 
     const onLogOut = useCallback((): void => {
         DeleteSession('user');
         setMember(null);
         setFadeMessage(true);
-    }, [member, fadeMessage])
+    }, [setMember, DeleteSession])
 
     useEffect(() => {
         if (fadeMessage) {
