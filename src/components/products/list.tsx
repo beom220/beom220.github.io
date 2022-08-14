@@ -32,7 +32,7 @@ export default function List() {
     const queryData = location.search;
     const params = new URLSearchParams(queryData).get('cate');
     const member = useRecoilValue(memberState);
-    const [activeTab, setActiveTab] = useState<string | undefined>(undefined);
+    const [activeTab, setActiveTab] = useState<string | null | undefined>(categories[0]);
 
     const handleActiveClick = (e: React.MouseEvent<HTMLAnchorElement>, data: MenuItemProps) => {
         setActiveTab(data.name);
@@ -40,14 +40,13 @@ export default function List() {
     }
 
     useEffect(() => {
-        if (!activeTab && !!params) {
+        if (!!params) {
             return setActiveTab(params);
         }
-        if (!activeTab) {
+        if (!params) {
             return setActiveTab(categories[0]);
         }
-        setActiveTab(params || categories[0]);
-    }, [queryData, activeTab, params])
+    }, [params])
 
 
     const {data, isError} = useQuery(queryKeys.productsByCate(String(activeTab)),

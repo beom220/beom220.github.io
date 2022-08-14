@@ -4,12 +4,24 @@ import {getProductDetailAPI} from "@/api";
 import {useQuery} from "@tanstack/react-query";
 import {queryKeys} from "@/types/queryKey";
 import {Link} from "react-router-dom";
-import {useLayoutEffect} from "react";
+import {useEffect, useLayoutEffect} from "react";
+import { ConfirmPortal } from "@/components/common"
+import useModals from "@/hooks/useModals";
+import Calender from "@/components/common/calender";
 
 export default function Detail() {
     const navigate = useNavigate();
     const {productById} = queryKeys;
     const params = useParams();
+    const {isOpen, handleModal, message, handleMessage} = useModals();
+
+    useEffect(() => {
+        handleMessage({
+            title:'예약하기',
+            content: <Calender/>
+        })
+    }, [])
+
 
     const {data, isError} = useQuery(
         productById(String(params.id)),
@@ -71,46 +83,46 @@ export default function Detail() {
                     <Table definition>
                         <Table.Body>
                             <Table.Row>
+                                <Table.Cell>작가</Table.Cell>
+                                <Table.Cell>
+                                    {data.authors}
+                                </Table.Cell>
+                            </Table.Row>
+                            <Table.Row>
                                 <Table.Cell width={2}>기간</Table.Cell>
                                 <Table.Cell>{data.openAt} ~ {data.closeAt}</Table.Cell>
                             </Table.Row>
                             <Table.Row>
+                                <Table.Cell>작품수</Table.Cell>
+                                <Table.Cell>
+                                    {data.itemCount}
+                                </Table.Cell>
+                            </Table.Row>
+                            <Table.Row>
                                 <Table.Cell>주최 / 후원</Table.Cell>
                                 <Table.Cell>
-                                    국립현대미술관/ (협력) ArkDes, Sharjah Art Foundation/(후원) 테라로사
+                                    {data.sponsor}
                                 </Table.Cell>
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell>장소</Table.Cell>
                                 <Table.Cell>
-                                    서울 지하1층, 6전시실, 온라인 플랫폼
+                                    {data.place}
                                 </Table.Cell>
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell>관람료</Table.Cell>
                                 <Table.Cell>
-                                    서울관통합권 4,000원
-                                </Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>작가</Table.Cell>
-                                <Table.Cell>
-                                    김실비, 김아영, 염지혜, 김웅현, 안정주&전소정, 바래, 안드레아스 바너슈테트, 제나 수텔라, 왕 & 쇠데르스트룀, 바스마 알 샤리프, 샤리프 와키드, 유리 패티슨, 시몬 C. 니키유, ASMR티카, 알리 체리, 마하 마아문, 아마드 고세인
-                                </Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>작품수</Table.Cell>
-                                <Table.Cell>
-                                    20여점
+                                    {data.price}
                                 </Table.Cell>
                             </Table.Row>
                         </Table.Body>
                     </Table>
                 </>
             }
-
-
-            <Button basic floated='right' onClick={() => navigate(-1)}>Go List</Button>
+            <Button floated='right' positive onClick={() => handleModal(true)}>예약하기</Button>
+            <Button floated='right' onClick={() => navigate(-1)}>목록으로</Button>
+            <ConfirmPortal actionHandler={() => handleModal(false)} message={message} isOpen={isOpen} handler={() => handleModal(false)}/>
         </>
     );
 }

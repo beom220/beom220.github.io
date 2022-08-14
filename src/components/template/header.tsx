@@ -5,7 +5,7 @@ import {sidebarState} from "@/app/template";
 import {useCallback, useEffect, useState} from "react";
 import {memberState} from "@/app/member";
 import useSession from "@/hooks/useSession";
-import MessagePortal from "@/components/common/message";
+import { MessagePortal } from "@/components/common";
 
 export default function HeaderNav() {
 
