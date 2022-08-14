@@ -3,6 +3,7 @@ import {useNavigate, useParams} from "react-router";
 import {getProductDetailAPI} from "@/api";
 import {useQuery} from "@tanstack/react-query";
 import {queryKeys} from "@/types/queryKey";
+import {Link} from "react-router-dom";
 import {useLayoutEffect} from "react";
 
 export default function Detail() {
@@ -35,6 +36,7 @@ export default function Detail() {
                 </Placeholder> :
                 <Header as='h1'>
                     {data.data.header}
+                    <Button as={Link} primary to="/product/create" floated='right'>Create</Button>
                 </Header>
             }
             <Divider/>
