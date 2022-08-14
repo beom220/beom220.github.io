@@ -35,7 +35,7 @@ export default function Detail() {
                     <Placeholder.Line/>
                 </Placeholder> :
                 <Header as='h1'>
-                    {data.data.header}
+                    {data.header}
                     <Button as={Link} primary to="/product/create" floated='right'>Create</Button>
                 </Header>
             }
@@ -45,7 +45,7 @@ export default function Detail() {
                     <Placeholder style={{maxWidth: 500, width:'100%', margin: '0 auto'}}>
                         <Placeholder.Image/>
                     </Placeholder> :
-                    <Image src={data.data.image} style={{maxWidth: 500, width: '100%', margin: '0 auto'}}/>
+                    <Image src={data.image} style={{maxWidth: 500, width: '100%', margin: '0 auto'}}/>
                 }
                 <Divider hidden/>
                 {!data ?
@@ -59,7 +59,7 @@ export default function Detail() {
                         <Placeholder.Line/>
                     </Placeholder> :
                     <p style={{fontSize: '1.25rem', whiteSpace: 'pre-wrap'}}>
-                        {data.data.description}
+                        {data.description}
                     </p>
                 }
             </Segment>
@@ -72,7 +72,7 @@ export default function Detail() {
                         <Table.Body>
                             <Table.Row>
                                 <Table.Cell width={2}>기간</Table.Cell>
-                                <Table.Cell>{data.data.openAt} ~ {data.data.closeAt}</Table.Cell>
+                                <Table.Cell>{data.openAt} ~ {data.closeAt}</Table.Cell>
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell>주최 / 후원</Table.Cell>

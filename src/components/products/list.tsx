@@ -69,18 +69,18 @@ export default function List() {
     }
     // loading
     const placeholder = new Array(15).fill(0).map((v, i) => (<Dummy key={i}/>));
-    const content = data?.data.length ?
-        data.data.map((v: Product, i: number) => (<ProductItem data={v} key={i}/>)) :
+    const content = !data?.length ?
         (<Grid.Column>
             <Segment style={{padding: '6rem 1rem', textAlign: 'center'}}><h2>현재 진행하고 있는 전시가 없습니다.</h2>
             </Segment>
-        </Grid.Column>);
+        </Grid.Column>) :
+        data.map((v: Product, i: number) => (<ProductItem data={v} key={i}/>))
 
     return (
         <div>
             <h1>
                 전시
-                {member && <Button as={Link} primary to="/product/openAt" floated='right'>openAt</Button>}
+                {member && <Button as={Link} primary to="/product/create" floated='right'>create</Button>}
             </h1>
             <Menu>
                 {categories.map((value, index) => (
