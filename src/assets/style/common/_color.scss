@@ -1,0 +1,27 @@
+$input-basic: #c9d1d9;
+$input-basic-bg: #fff;
+$place-holder-basic: #8b949e;
+
+$COLORS: (
+	red:red,
+	orange:orange,
+	yellow:yellow,
+	olive:olive,
+	green:green,
+	teal:teal,
+	blue:blue,
+	violet:violet,
+	purple:purple,
+	pink:pink,
+	brown:brown,
+	grey:grey,
+	black:black,
+);
+
+@function color-keys() {
+	@return map-keys($COLORS)
+}
+
+@function color-value($name){
+	@return map-get($COLORS, $name)
+}
