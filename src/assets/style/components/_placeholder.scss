@@ -1,0 +1,12 @@
+@use '../common';
+
+.placeholder{
+	position: static;
+	overflow: hidden;
+	background-color: #fff;
+	background-image: linear-gradient(to right,rgba(0,0,0,.08) 0,rgba(0,0,0,.15) 15%,rgba(0,0,0,.08) 30%);
+	background-size: 1200px 100%;
+	max-width: 30rem;
+	height: 300px;
+	@include common.placeholderShimmer(2s, linear);
+}
