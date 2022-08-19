@@ -2,9 +2,15 @@ import {rest} from "msw";
 import {MemberType} from "@/types/member";
 import {products, categories} from "@/mock/product";
 import {members} from "@/mock/members";
+import {topics} from "@/mock/lifeTopic";
 
 
 export const handlers = [
+    rest.get('/product/topics', (req, res, ctx) => {
+        const topic = [...topics.defaultTopic, ...topics.favoriteTopic];
+        return res(ctx.status(200), ctx.json(topic))
+    }),
+
     rest.get('/product/:id', (req, res, ctx) => {
         const result = products.filter((v) => v.id === String(req.params.id))
 

@@ -46,23 +46,23 @@ export default function HeaderNav() {
                 {/*Project Name*/}
             </Menu.Item>
 
-            <Dropdown item simple text='Dropdown'>
-                <Dropdown.Menu>
-                    <Dropdown.Item>List Item</Dropdown.Item>
-                    <Dropdown.Item>List Item</Dropdown.Item>
-                    <Dropdown.Divider/>
-                    <Dropdown.Header>Header Item</Dropdown.Header>
-                    <Dropdown.Item>
-                        <i className='dropdown icon'/>
-                        <span className='text'>Submenu</span>
-                        <Dropdown.Menu>
-                            <Dropdown.Item>List Item</Dropdown.Item>
-                            <Dropdown.Item>List Item</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown.Item>
-                    <Dropdown.Item>List Item</Dropdown.Item>
-                </Dropdown.Menu>
-            </Dropdown>
+            {/*<Dropdown item simple text='Dropdown'>*/}
+            {/*    <Dropdown.Menu>*/}
+            {/*        <Dropdown.Item>List Item</Dropdown.Item>*/}
+            {/*        <Dropdown.Item>List Item</Dropdown.Item>*/}
+            {/*        <Dropdown.Divider/>*/}
+            {/*        <Dropdown.Header>Header Item</Dropdown.Header>*/}
+            {/*        <Dropdown.Item>*/}
+            {/*            <i className='dropdown icon'/>*/}
+            {/*            <span className='text'>Submenu</span>*/}
+            {/*            <Dropdown.Menu>*/}
+            {/*                <Dropdown.Item>List Item</Dropdown.Item>*/}
+            {/*                <Dropdown.Item>List Item</Dropdown.Item>*/}
+            {/*            </Dropdown.Menu>*/}
+            {/*        </Dropdown.Item>*/}
+            {/*        <Dropdown.Item>List Item</Dropdown.Item>*/}
+            {/*    </Dropdown.Menu>*/}
+            {/*</Dropdown>*/}
 
             <Menu.Menu position="right">
                 {member ?
