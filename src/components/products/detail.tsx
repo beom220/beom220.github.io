@@ -3,24 +3,24 @@ import {useNavigate, useParams} from "react-router";
 import {getProductDetailAPI} from "@/api";
 import {useQuery} from "@tanstack/react-query";
 import {queryKeys} from "@/types/queryKey";
-import {useEffect, useLayoutEffect} from "react";
-import Calender from "@/components/common/calender";
-import useModals from "@/hooks/useModals";
+import {useLayoutEffect} from "react";
 import {Link} from "react-router-dom";
-import {ConfirmPortal} from "@/components/common";
+// import Calender from "@/components/common/calender";
+// import useModals from "@/hooks/useModals";
+// import {ConfirmPortal} from "@/components/common";
 
 export default function Detail() {
     const navigate = useNavigate();
     const {productById} = queryKeys;
     const params = useParams();
-    const {isOpen, handleModal, message, handleMessage} = useModals();
-
-    useEffect(() => {
-        handleMessage({
-            title:'예약하기',
-            content: <Calender/>
-        })
-    }, [])
+    // const {isOpen, handleModal, message, handleMessage} = useModals();
+    //
+    // useEffect(() => {
+    //     handleMessage({
+    //         title:'예약하기',
+    //         content: <Calender/>
+    //     })
+    // }, [])
 
 
     const {data, isError} = useQuery(
@@ -120,9 +120,9 @@ export default function Detail() {
                     </Table>
                 </>
             }
-            <Button floated='right' positive onClick={() => handleModal(true)}>예약하기</Button>
+            {/*<Button floated='right' positive onClick={() => handleModal(true)}>예약하기</Button>*/}
             <Button floated='right' onClick={() => navigate(-1)}>목록으로</Button>
-            <ConfirmPortal actionHandler={() => handleModal(false)} message={message} isOpen={isOpen} handler={() => handleModal(false)}/>
+            {/*<ConfirmPortal actionHandler={() => handleModal(false)} message={message} isOpen={isOpen} handler={() => handleModal(false)}/>*/}
         </>
     );
 }

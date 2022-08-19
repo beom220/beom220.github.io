@@ -1,4 +1,4 @@
-import {Dropdown, Menu, Image, Icon, } from "semantic-ui-react";
+import {Menu, Image, Icon, } from "semantic-ui-react";
 import {Link} from "react-router-dom";
 import {useRecoilState} from "recoil";
 import {sidebarState} from "@/app/template";

@@ -6,7 +6,7 @@ import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 
 import {Editor} from '@toast-ui/react-editor';
 import {ChangeEvent, FormEvent,  useEffect, useRef, useState} from "react";
-import {Button, Divider, Form, Segment, Dropdown, DropdownProps} from "semantic-ui-react";
+import {Button, Divider, Form, Segment, Dropdown} from "semantic-ui-react";
 import {useNavigate} from "react-router";
 import {useQuery} from "@tanstack/react-query";
 import {getProductTopics} from "@/api/product/product";
@@ -51,7 +51,7 @@ export default function ToastEditor() {
     // editor control
     const editorRef = useRef<Editor>(null);
 
-    const {data, isError, isLoading} = useQuery(
+    const {data, isLoading} = useQuery(
         queryKeys.products_topics,
         () => getProductTopics(),
         {staleTime: 60 * 1000}
