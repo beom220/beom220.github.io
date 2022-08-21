@@ -1,4 +1,5 @@
 export const queryKeys = {
+    teams: ['teams'] as const,
     products: ['products'] as const,
     products_topics: ['products_topics'] as const,
     productsByCate: (productsCate: string) => ['products', productsCate] as const,
