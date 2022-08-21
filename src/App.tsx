@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import 'semantic-ui-css/semantic.min.css';
 // import './app.css';
 import {BrowserRouter} from "react-router-dom";
 import Router from "@/routes";
