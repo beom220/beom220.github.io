@@ -9,7 +9,6 @@ function App() {
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <Router/>
             </BrowserRouter>
-
         </div>
     );
 }

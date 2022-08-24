@@ -6,6 +6,8 @@ import {RecoilRoot} from "recoil";
 import {QueryClientProvider, QueryClient} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import {DebugObserver} from "@/app/debug";
+import {CssBaseline, ThemeProvider} from "@mui/material";
+import {theme} from "@/theme";
 
 (async () => {
     const {worker} = await import('@/mock/worker');
@@ -35,7 +37,10 @@ root.render(
                     />
                 </>
             )}
-            <App/>
+            <ThemeProvider theme={theme}>
+                <CssBaseline/>
+                <App/>
+            </ThemeProvider>
         </QueryClientProvider>
     </RecoilRoot>,
 

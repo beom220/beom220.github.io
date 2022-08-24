@@ -5,3 +5,8 @@ export const queryKeys = {
     productsByCate: (productsCate: string) => ['products', productsCate] as const,
     productById: (productId: string) => ['product', productId] as const,
 };
+
+export const testKeys = {
+    user : ['user'] as const,
+    info : ['info'] as const,
+}
