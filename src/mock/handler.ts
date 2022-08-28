@@ -2,15 +2,78 @@ import {rest} from "msw";
 import {MemberType} from "@/types/member";
 import {products, categories} from "@/mock/product";
 import {members} from "@/mock/members";
-import {topics} from "@/mock/lifeTopic";
+import alliance from "@/mock/alliance"
 
 
 export const handlers = [
-    rest.get('/product/topics', (req, res, ctx) => {
-        const topic = [...topics.defaultTopic, ...topics.favoriteTopic];
-        return res(ctx.status(200), ctx.json(topic))
+    rest.get("/alliance/:id", (req, res, ctx) => {
+        const id = String(req.params.id);
+
+        const rows = alliance.filter((value) => {
+            return value.objectId === id
+        })
+
+        if(!rows.length){
+            return res(ctx.status(200), ctx.json('자료가없다'))
+        }
+        return res(ctx.status(200), ctx.json(rows[0]))
     }),
 
+    rest.get("/alliance", (req, res, ctx) => {
+        const page = Number(req.url.searchParams.get('page'));
+        const sort = req.url.searchParams.get('sort');
+        const limit = Number(req.url.searchParams.get('limit'));
+        const name = req.url.searchParams.get('name');
+        const tag = req.url.searchParams.get('tag');
+
+        if (!page && !sort && !limit && !name && !tag) {
+            return res(ctx.status(200), ctx.json(alliance))
+        }
+
+        // name 으로 검색시
+        if (name) {
+            const rows = alliance.filter((value) => {
+                if (value.name.includes(name)) return value;
+                if (value.category.includes(name)) return value;
+                if (value.address.includes(name)) return value;
+            })
+
+            return res(ctx.status(200), ctx.json(
+                {
+                    rows: rows.slice(limit * (page), limit * (page + 1)),
+                    totalPage: Math.ceil(rows.length / limit)
+                }
+            ))
+        }
+
+        if (tag) {
+            if (tag === '전체') {
+                return res(ctx.status(200), ctx.json(
+                    {
+                        rows: alliance.slice(limit * (page), limit * (page + 1)),
+                        totalPage: Math.ceil(alliance.length / limit)
+                    }
+                ))
+            }
+            const rows = alliance.filter((value) => {
+                if (value.category.includes(tag)) return value;
+            })
+            return res(ctx.status(200), ctx.json(
+                {
+                    rows: rows.slice(limit * (page), limit * (page + 1)),
+                    totalPage: Math.ceil(rows.length / limit)
+                }
+            ))
+        }
+
+        return res(ctx.status(200), ctx.json(
+            {
+                rows: alliance.slice(limit * (page), limit * (page + 1)),
+                totalPage: Math.ceil(alliance.length / limit)
+            }
+        ))
+    }),
+    
     rest.get('/product/:id', (req, res, ctx) => {
         const result = products.filter((v) => v.id === String(req.params.id))
 

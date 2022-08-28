@@ -1,10 +1,10 @@
-export const menuList = [
+export const navMenu = [
     {
         href: "/alliance/school-register",
         title: "학교 관리",
     },
     {
-        href: "/alliance",
+        href: "/shop",
         title: "제휴사 관리",
     },
     {
@@ -16,8 +16,7 @@ export const menuList = [
         title: "쿠폰 관리",
     },
     {
-        href: '/products?cate=서울',
-        // href: "/calculate",
+        href: "/calculate",
         title: "정산 관리",
     },
     {

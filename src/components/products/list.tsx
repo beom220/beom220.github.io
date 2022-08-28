@@ -9,6 +9,7 @@ import {useRecoilValue} from "recoil";
 import {memberState} from "@/app/member";
 import * as React from "react";
 import {MenuItemProps} from "semantic-ui-react/dist/commonjs/collections/Menu/MenuItem";
+import DataTable from "@/components/common/dataTable";
 
 const categories = [
     "전체",
@@ -81,6 +82,7 @@ export default function List() {
                 전시
                 {member && <Button as={Link} primary to="/product/create" floated='right'>create</Button>}
             </h1>
+
             <Menu>
                 {categories.map((value, index) => (
                     <Menu.Item

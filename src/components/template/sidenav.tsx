@@ -1,12 +1,20 @@
 import { Menu, Sidebar} from "semantic-ui-react";
 import {useRecoilState} from "recoil";
 import {sidebarState} from "@/app/template";
-import {useCallback} from "react";
+import {MouseEvent, useCallback, useEffect, useState} from "react";
 import {menuList} from "@/constants/menuList";
 import {Link} from "react-router-dom";
+import {MenuItemProps} from "semantic-ui-react";
+import {useLocation} from "react-router";
 
 export default function Sidenav() {
+    const location = useLocation();
     const [isOpen, setIsOpen] = useRecoilState(sidebarState);
+    const [activeItem, setActiveItem] = useState<string>(menuList[0].title)
+
+    useEffect(() =>{
+        console.log(location.pathname)
+    },[location])
     const sidebarClose = useCallback((): void => {
         setIsOpen({
             visible: false,
@@ -14,8 +22,23 @@ export default function Sidenav() {
         })
     }, [setIsOpen]);
 
+    const onActiveItem = (e:MouseEvent<HTMLAnchorElement>, data: MenuItemProps) => {
+        setActiveItem(data.name as string)
+        sidebarClose()
+    }
     const MenuList = menuList.map((v) => {
-        return <Menu.Item as={Link} to={`/${v}`} style={{textAlign:'left'}}>{v}</Menu.Item>
+        return <Menu.Item
+            key={v.title}
+            as={Link}
+            to={`${v.href}`}
+            style={{
+                textAlign:'left',
+                fontSize: '14px'
+            }}
+            name={v.title}
+            active={activeItem === v.title}
+            onClick={onActiveItem}
+        />
     })
 
     return (
@@ -31,7 +54,13 @@ export default function Sidenav() {
             width='thin'
             style={{top: '53px', width:'80%', maxWidth:'200px'}}
         >
-            {MenuList}
+            <Menu.Item style={{textAlign:'left'}}>
+                <Menu.Header>제휴사</Menu.Header>
+                <Menu.Menu>
+                    {MenuList}
+                </Menu.Menu>
+            </Menu.Item>
+
         </Sidebar>
     );
 }
