@@ -10,6 +10,9 @@ export default function Router() {
     const member = useRecoilValue(memberState);
     return (
         <Routes>
+            <Route path="/alliance/menu/:id"
+                   element={<Alliance/>}
+            />
             <Route path="/alliance/:id"
                    element={<Alliance/>}
             />

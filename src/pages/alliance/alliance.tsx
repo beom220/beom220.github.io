@@ -1,12 +1,11 @@
 import Template from "@/components/template";
-import {Button, Container, Header, Image, Label, Menu, MenuItemProps, Table} from "semantic-ui-react";
+import {Button, Container, Header, Image, Label, Loader, Menu, MenuItemProps, Table} from "semantic-ui-react";
 import {useQuery} from "@tanstack/react-query";
 import {testKeys} from "@/types/queryKey";
 import {getAllianceAPI} from "@/api";
 import {useNavigate, useParams} from "react-router";
 import * as React from "react";
 import {MouseEvent, useState} from "react";
-import {menuList} from "@/constants/menuList";
 
 export default function Alliance() {
     const navigate = useNavigate();
@@ -38,14 +37,42 @@ export default function Alliance() {
 
         return `${yy}년 ${mm}월 ${dd}일 `
     }
-
-    const [activeItem, setActiveItem] = useState<string>('기본정보')
+    const menu = [
+        {
+            href: '/info',
+            text: '기본정보',
+            key: '0',
+        },
+        {
+            href: '/menu',
+            text: '메뉴등록(서비스)',
+            key: '1',
+        },
+        {
+            href: '/option',
+            text: '옵션관리',
+            key: '2',
+        },
+        {
+            href: '/review',
+            text: '리뷰관리',
+            key: '3',
+        },
+        {
+            href: '/ask',
+            text: '문의관리',
+            key: '4',
+        },
+    ];
+    const [activeItem, setActiveItem] = useState<string>(menu[0].text)
     const onActiveItem = (e:MouseEvent<HTMLAnchorElement>, data: MenuItemProps) => {
         setActiveItem(data.name as string)
+        navigate('/alliance' + data.value + '/' + AllianceId)
     }
     return (
         <Template>
             <Container>
+                <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
                 {data &&
                     <>
                         <Header
@@ -55,31 +82,14 @@ export default function Alliance() {
                         />
 
                         <Menu pointing secondary style={{marginTop:'6rem'}}>
-                            <Menu.Item
-                                name='기본정보'
-                                active={activeItem === '기본정보'}
-                                onClick={onActiveItem}
-                            />
-                            <Menu.Item
-                                name='메뉴등록(서비스)'
-                                active={activeItem === '메뉴등록(서비스)'}
-                                onClick={onActiveItem}
-                            />
-                            <Menu.Item
-                                name='옵션관리'
-                                active={activeItem === '옵션관리'}
-                                onClick={onActiveItem}
-                            />
-                            <Menu.Item
-                                name='리뷰관리'
-                                active={activeItem === '리뷰관리'}
-                                onClick={onActiveItem}
-                            />
-                            <Menu.Item
-                                name='문의관리'
-                                active={activeItem === '문의관리'}
-                                onClick={onActiveItem}
-                            />
+                            {menu.map((v) =>
+                                <Menu.Item
+                                    name={v.text}
+                                    active={activeItem === v.text}
+                                    value={v.href}
+                                    onClick={onActiveItem}
+                                />
+                            )}
                         </Menu>
 
 
@@ -200,9 +210,9 @@ export default function Alliance() {
                                 </Table.Row>
                             </Table.Body>
                         </Table>
+                        <Button floated='right' onClick={() => navigate(-1)}>목록으로</Button>
                     </>
                 }
-                <Button floated='right' onClick={() => navigate(-1)}>목록으로</Button>
             </Container>
         </Template>
     )

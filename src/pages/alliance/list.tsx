@@ -66,7 +66,7 @@ export default function AllianceList() {
     const onHandleSelectData = (event: SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
         setSearchData(data.value as string)
     }
-    const onSearchSubmit = (e: MouseEvent) => {
+    const onSearchSubmit = () => {
         setQueryOption({
             ...queryOption,
             page: 0,
@@ -121,7 +121,7 @@ export default function AllianceList() {
                 {data && <>
                     <Table compact celled size='large' style={{margin: "4rem 0"}}>
                         <Table.Header>
-                            <Table.Row>
+                            <Table.Row style={{textAlign: "center"}}>
                                 <Table.HeaderCell width={4}>{columns[0]}</Table.HeaderCell>
                                 <Table.HeaderCell width={8}>{columns[1]}</Table.HeaderCell>
                                 <Table.HeaderCell width={2}>{columns[2]}</Table.HeaderCell>
@@ -137,20 +137,26 @@ export default function AllianceList() {
                                     </Table.Cell>
                                 </Table.Row> : <>
                                     {data.rows.map((v: any, i: number) =>
-                                        <Table.Row key={i}>
+                                        <Table.Row key={i} style={{textAlign: "center"}}>
                                             {dataRow.map((row, index) => {
-                                                    if (row === 'name') {
-                                                        return <Table.Cell key={index}><Link
+                                                if (row === 'name') {
+                                                    return <Table.Cell key={index} style={{textAlign: "left"}}>
+                                                        <Link
                                                             to={'/alliance/' + v.objectId}>{String(v[row])}</Link></Table.Cell>
-                                                    }
-                                                    if (row === 'status') {
-                                                        return <Table.Cell key={index}>{v[row] ?
-                                                            <Label color="teal">게시</Label> :
-                                                            <Label color="orange">대기</Label>}</Table.Cell>
-                                                    }
-                                                    return <Table.Cell key={index}>{String(v[row])}</Table.Cell>
                                                 }
-                                            )}
+                                                if (row === 'status') {
+                                                    return (
+                                                        <Table.Cell key={index}>{v[row] ?
+                                                            <Label color="teal">게시</Label> :
+                                                            <Label color="orange">대기</Label>}
+                                                        </Table.Cell>)
+                                                }
+                                                if (row === 'address') {
+                                                    return <Table.Cell key={index}
+                                                                       style={{textAlign: "left"}}>{String(v[row])}</Table.Cell>
+                                                }
+                                                return <Table.Cell key={index}>{String(v[row])}</Table.Cell>
+                                            })}
                                         </Table.Row>
                                     )}</>
                             }
