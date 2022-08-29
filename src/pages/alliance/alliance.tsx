@@ -1,11 +1,11 @@
 import Template from "@/components/template";
-import {Button, Container, Header, Image, Label, Loader, Menu, MenuItemProps, Table} from "semantic-ui-react";
+import {Button, Container, Image, Label, Loader, Table} from "semantic-ui-react";
 import {useQuery} from "@tanstack/react-query";
 import {testKeys} from "@/types/queryKey";
 import {getAllianceAPI} from "@/api";
 import {useNavigate, useParams} from "react-router";
 import * as React from "react";
-import {MouseEvent, useState} from "react";
+import AllianceHeader from "@/components/alliance/header";
 
 export default function Alliance() {
     const navigate = useNavigate();
@@ -37,62 +37,14 @@ export default function Alliance() {
 
         return `${yy}년 ${mm}월 ${dd}일 `
     }
-    const menu = [
-        {
-            href: '/info',
-            text: '기본정보',
-            key: '0',
-        },
-        {
-            href: '/menu',
-            text: '메뉴등록(서비스)',
-            key: '1',
-        },
-        {
-            href: '/option',
-            text: '옵션관리',
-            key: '2',
-        },
-        {
-            href: '/review',
-            text: '리뷰관리',
-            key: '3',
-        },
-        {
-            href: '/ask',
-            text: '문의관리',
-            key: '4',
-        },
-    ];
-    const [activeItem, setActiveItem] = useState<string>(menu[0].text)
-    const onActiveItem = (e:MouseEvent<HTMLAnchorElement>, data: MenuItemProps) => {
-        setActiveItem(data.name as string)
-        navigate('/alliance' + data.value + '/' + AllianceId)
-    }
+
     return (
         <Template>
             <Container>
                 <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
                 {data &&
                     <>
-                        <Header
-                            as='h2'
-                            content={data.name}
-                            subheader='Manage your alliance setting'
-                        />
-
-                        <Menu pointing secondary style={{marginTop:'6rem'}}>
-                            {menu.map((v) =>
-                                <Menu.Item
-                                    name={v.text}
-                                    active={activeItem === v.text}
-                                    value={v.href}
-                                    onClick={onActiveItem}
-                                />
-                            )}
-                        </Menu>
-
-
+                        <AllianceHeader/>
                         <Table definition style={{margin: '4rem 0'}} size="large">
                             <Table.Body>
                                 <Table.Row>
