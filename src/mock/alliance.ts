@@ -30,7 +30,7 @@ interface Alliance {
     benefit?:string;
 }
 
-const alliance = <Alliance[]>[
+const alliance = [
     {
         objectId: 'KeBKFHSAx4',
         open_time: new Date('19 Aug 2022 00:00:00'),
@@ -255,6 +255,6 @@ const alliance = <Alliance[]>[
         category: '음식점',
         category_list: ["기본"]
     },
-];
+] as Alliance[];
 
 export default alliance;

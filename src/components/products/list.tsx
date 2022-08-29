@@ -7,9 +7,8 @@ import {Link} from "react-router-dom";
 import {useEffect, useLayoutEffect, useState} from "react";
 import {useRecoilValue} from "recoil";
 import {memberState} from "@/app/member";
-import * as React from "react";
-import {MenuItemProps} from "semantic-ui-react/dist/commonjs/collections/Menu/MenuItem";
-import DataTable from "@/components/common/dataTable";
+import {MouseEvent} from "react";
+import {MenuItemProps} from "semantic-ui-react";
 
 const categories = [
     "전체",
@@ -35,7 +34,7 @@ export default function List() {
     const member = useRecoilValue(memberState);
     const [activeTab, setActiveTab] = useState<string | null | undefined>(categories[0]);
 
-    const handleActiveClick = (e: React.MouseEvent<HTMLAnchorElement>, data: MenuItemProps) => {
+    const handleActiveClick = (e: MouseEvent<HTMLAnchorElement>, data: MenuItemProps) => {
         setActiveTab(data.name);
         navigate('/products?cate=' + data.name)
     }

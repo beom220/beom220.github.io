@@ -34,9 +34,15 @@ export default function AllianceList() {
     const paramsTag = params.get('tag');
     const navigate = useNavigate();
 
+    const [queryOption, setQueryOption] = useState<QueryOption>({
+        page: 0,
+        limit: 5,
+        tag: "전체"
+    })
+
     useEffect(() => {
-        if (location.pathname === '/alliance' && !paramsPage || location.pathname === '/alliance' && !paramsTag) {
-            return navigate('/alliance?page=0' + '&limit=' + queryOption.limit + '&tag=' + queryOption.tag)
+        if ( (location.pathname === '/alliance' && !paramsPage) || (location.pathname === '/alliance' && !paramsTag)) {
+            return navigate(`/alliance?page=0&limit=${queryOption.limit}&tag=${queryOption.tag}`)
         }
         if (Number(paramsPage) !== queryOption.page || paramsTag !== queryOption.tag) {
             setQueryOption({
@@ -45,13 +51,8 @@ export default function AllianceList() {
                 tag: paramsTag
             })
         }
-    }, [paramsPage, paramsTag])
+    }, [location.pathname, navigate, paramsPage, paramsTag, queryOption])
 
-    const [queryOption, setQueryOption] = useState<QueryOption>({
-        page: 0,
-        limit: 5,
-        tag: "전체"
-    })
 
     const onChangePage = useCallback((e: MouseEvent<HTMLAnchorElement>, data: PaginationProps) => {
         setQueryOption({
@@ -59,7 +60,7 @@ export default function AllianceList() {
             page: Number(data.activePage) - 1
         })
         navigate('/alliance?page=' + (Number(data.activePage) - 1) + '&limit=' + queryOption.limit + '&tag=' + queryOption.tag)
-    }, [queryOption, setQueryOption])
+    }, [queryOption, setQueryOption, navigate])
 
 
     const [searchData, setSearchData] = useState<string>(allianceSelect[0].text);
@@ -72,7 +73,8 @@ export default function AllianceList() {
             page: 0,
             tag: searchData
         })
-        navigate('/alliance?page=0' + '&limit=' + queryOption.limit + '&tag=' + searchData)
+
+        navigate(`/alliance?page=0&limit=${queryOption.limit}&tag=${searchData}`)
     }
     const {data, isError, isLoading} = useQuery(
         testKeys.allianceByOrder(queryOption),

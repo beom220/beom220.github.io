@@ -36,6 +36,7 @@ export const handlers = [
                 if (value.name.includes(name)) return value;
                 if (value.category.includes(name)) return value;
                 if (value.address.includes(name)) return value;
+                return false;
             })
 
             return res(ctx.status(200), ctx.json(
@@ -57,6 +58,7 @@ export const handlers = [
             }
             const rows = alliance.filter((value) => {
                 if (value.category.includes(tag)) return value;
+                return false;
             })
             return res(ctx.status(200), ctx.json(
                 {
