@@ -1,19 +1,21 @@
-import {useNavigate, useParams} from "react-router";
+import {useLocation, useNavigate, useParams} from "react-router";
 import {useQuery} from "@tanstack/react-query";
 import {testKeys} from "@/types/queryKey";
-import {getAllianceAPI} from "@/api";
-import {MouseEvent, useState} from "react";
+import {getAllianceInfoAPI} from "@/api";
+import {MouseEvent, useEffect, useState} from "react";
 import {Header, Menu, MenuItemProps} from "semantic-ui-react";
 import * as React from "react";
 
 export default function AllianceHeader() {
     const navigate = useNavigate();
+    const location = useLocation();
     const params = useParams();
     const AllianceId = params.id as string;
+    const locationItem = location.pathname.split('/');
 
     const {data, isError, isLoading} = useQuery(
-        testKeys.allianceID(AllianceId),
-        () => getAllianceAPI(AllianceId),
+        testKeys.allianceInfo(AllianceId),
+        () => getAllianceInfoAPI(AllianceId),
         {staleTime: 60 * 1000}
     );
 
@@ -24,7 +26,7 @@ export default function AllianceHeader() {
             key: '0',
         },
         {
-            href: '/menu',
+            href: '/service',
             text: '메뉴등록(서비스)',
             key: '1',
         },
@@ -44,11 +46,20 @@ export default function AllianceHeader() {
             key: '4',
         },
     ];
-    const [activeItem, setActiveItem] = useState<string>(menu[0].text)
+
+    const [activeItem, setActiveItem] = useState<string>(locationItem[2])
     const onActiveItem = (e: MouseEvent<HTMLAnchorElement>, data: MenuItemProps) => {
-        setActiveItem(data.name as string)
         navigate('/alliance' + data.value + '/' + AllianceId)
     }
+
+    useEffect(() => {
+        menu.map((v) => {
+            if(v.href.includes(locationItem[2])){
+                setActiveItem(v.text)
+            }
+        })
+    },[location])
+
     return (
         <>
             {data &&

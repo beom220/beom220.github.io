@@ -121,7 +121,7 @@ export default function AllianceList() {
 
                 <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
                 {data && <>
-                    <Table compact celled size='large' style={{margin: "4rem 0"}}>
+                    <Table compact celled size='small' style={{margin: "4rem 0"}}>
                         <Table.Header>
                             <Table.Row style={{textAlign: "center"}}>
                                 <Table.HeaderCell width={4}>{columns[0]}</Table.HeaderCell>
@@ -144,7 +144,7 @@ export default function AllianceList() {
                                                 if (row === 'name') {
                                                     return <Table.Cell key={index} style={{textAlign: "left"}}>
                                                         <Link
-                                                            to={'/alliance/' + v.objectId}>{String(v[row])}</Link></Table.Cell>
+                                                            to={'/alliance/info/' + v.objectId}>{String(v[row])}</Link></Table.Cell>
                                                 }
                                                 if (row === 'status') {
                                                     return (

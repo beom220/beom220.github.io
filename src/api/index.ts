@@ -9,7 +9,12 @@ export const getAllianceListAPI = async (query:object) => {
     return data;
 }
 
-export const getAllianceAPI = async (id:string) => {
-    const {data} = await clientAPI.get('/alliance/' + id)
+export const getAllianceInfoAPI = async (id:string) => {
+    const {data} = await clientAPI.get('/alliance/info/' + id)
+    return data;
+}
+
+export const getAllianceServiceAPI = async (id:string) => {
+    const {data} = await clientAPI.get('/alliance/service/' + id)
     return data;
 }

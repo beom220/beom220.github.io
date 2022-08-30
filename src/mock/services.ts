@@ -25,10 +25,6 @@ export const services  = [
         working_start: "11:00",
         working_end: "14:30",
         working_day: [],
-        "option": {
-            "__type": "Relation",
-            "className": "Option"
-        },
         objectId: "abpfFYm99E",
         allianceId: "EZ1388vqmU"
     },

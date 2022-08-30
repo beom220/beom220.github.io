@@ -3,10 +3,23 @@ import {MemberType} from "@/types/member";
 import {products, categories} from "@/mock/product";
 import {members} from "@/mock/members";
 import alliance from "@/mock/alliance"
+import {services} from "@/mock/services";
 
 
 export const handlers = [
-    rest.get("/alliance/:id", (req, res, ctx) => {
+    rest.get("/alliance/service/:id", (req, res, ctx) => {
+        const id = String(req.params.id);
+
+        const rows = services.filter((value) => {
+            return value.allianceId === id
+        })
+
+        if(!rows.length){
+            return res(ctx.status(200), ctx.json('자료가없다'))
+        }
+        return res(ctx.status(200), ctx.json(rows))
+    }),
+    rest.get("/alliance/info/:id", (req, res, ctx) => {
         const id = String(req.params.id);
 
         const rows = alliance.filter((value) => {

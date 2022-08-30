@@ -2,19 +2,19 @@ import Template from "@/components/template";
 import {Button, Container, Image, Label, Loader, Table} from "semantic-ui-react";
 import {useQuery} from "@tanstack/react-query";
 import {testKeys} from "@/types/queryKey";
-import {getAllianceAPI} from "@/api";
+import {getAllianceInfoAPI} from "@/api";
 import {useNavigate, useParams} from "react-router";
 import * as React from "react";
 import AllianceHeader from "@/components/alliance/header";
 
-export default function Alliance() {
+export default function AllianceInfo() {
     const navigate = useNavigate();
     const params = useParams();
     const AllianceId = params.id as string;
 
     const {data, isError, isLoading} = useQuery(
-        testKeys.allianceID(AllianceId),
-        () => getAllianceAPI(AllianceId),
+        testKeys.allianceInfo(AllianceId),
+        () => getAllianceInfoAPI(AllianceId),
         {staleTime: 60 * 1000}
     );
 
@@ -45,7 +45,7 @@ export default function Alliance() {
                 {data &&
                     <>
                         <AllianceHeader/>
-                        <Table definition style={{margin: '4rem 0'}} size="large">
+                        <Table definition style={{margin: '4rem 0'}} size="small">
                             <Table.Body>
                                 <Table.Row>
                                     <Table.Cell width={4}>게시여부</Table.Cell>
@@ -162,7 +162,7 @@ export default function Alliance() {
                                 </Table.Row>
                             </Table.Body>
                         </Table>
-                        <Button floated='right' onClick={() => navigate(-1)}>목록으로</Button>
+                        <Button floated='right' size="small" onClick={() => navigate('/alliance')}>목록으로</Button>
                     </>
                 }
             </Container>

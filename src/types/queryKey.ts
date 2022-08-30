@@ -9,6 +9,8 @@ export const queryKeys = {
 export const testKeys = {
     user: ['user'] as const,
     info: ['info'] as const,
+
     allianceByOrder : (order: object) => ['alliance', Object.entries(order).map(v => v.join('=')).join('&')] as const,
-    allianceID : (id: string) => ['allianceID', id] as const,
+    allianceInfo : (id: string) => ['allianceInfo', id] as const,
+    allianceService : (id: string) => ['allianceService', id] as const,
 }
