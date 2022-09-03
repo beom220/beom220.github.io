@@ -23,7 +23,7 @@ export interface QueryOption {
     page?: number | null;
     limit: number;
     name?: string | null;
-    tag?: string | null;
+    tag?: number | string | null;
 }
 
 export default function AllianceList() {
@@ -35,14 +35,14 @@ export default function AllianceList() {
     const navigate = useNavigate();
 
     const [queryOption, setQueryOption] = useState<QueryOption>({
-        page: 0,
-        limit: 5,
-        tag: "전체"
+        page: 1,
+        limit: 10,
+        tag: 0,
     })
 
     useEffect(() => {
-        if ( (location.pathname === '/alliance' && !paramsPage) || (location.pathname === '/alliance' && !paramsTag)) {
-            return navigate(`/alliance?page=0&limit=${queryOption.limit}&tag=${queryOption.tag}`)
+        if ((location.pathname === '/') || (location.pathname === '/alliance' && !paramsPage) || (location.pathname === '/alliance' && !paramsTag)) {
+            return navigate(`/alliance?page=1&limit=${queryOption.limit}&tag=${queryOption.tag}`)
         }
         if (Number(paramsPage) !== queryOption.page || paramsTag !== queryOption.tag) {
             setQueryOption({
@@ -57,24 +57,25 @@ export default function AllianceList() {
     const onChangePage = useCallback((e: MouseEvent<HTMLAnchorElement>, data: PaginationProps) => {
         setQueryOption({
             ...queryOption,
-            page: Number(data.activePage) - 1
+            page: Number(data.activePage)
         })
-        navigate('/alliance?page=' + (Number(data.activePage) - 1) + '&limit=' + queryOption.limit + '&tag=' + queryOption.tag)
+        navigate('/alliance?page=' + Number(data.activePage) + '&limit=' + queryOption.limit + '&tag=' + queryOption.tag)
     }, [queryOption, setQueryOption, navigate])
 
 
     const [searchData, setSearchData] = useState<string>(allianceSelect[0].text);
     const onHandleSelectData = (event: SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
+        console.log(data)
         setSearchData(data.value as string)
     }
     const onSearchSubmit = () => {
         setQueryOption({
             ...queryOption,
-            page: 0,
-            tag: searchData
+            page: 1,
+            tag: allianceSelect.filter(v => v.value === searchData)[0].key
         })
 
-        navigate(`/alliance?page=0&limit=${queryOption.limit}&tag=${searchData}`)
+        navigate(`/alliance?page=0&limit=${queryOption.limit}&tag=${queryOption.tag}`)
     }
     const {data, isError, isLoading} = useQuery(
         testKeys.allianceByOrder(queryOption),
@@ -132,13 +133,13 @@ export default function AllianceList() {
                         </Table.Header>
 
                         <Table.Body>
-                            {!data.rows.length ?
+                            {!data.data.length ?
                                 <Table.Row textAlign="center">
                                     <Table.Cell colSpan='4' style={{padding: "80px 0"}}>
                                         <h2>자료가 없습니다.</h2>
                                     </Table.Cell>
                                 </Table.Row> : <>
-                                    {data.rows.map((v: any, i: number) =>
+                                    {data.data.map((v: any, i: number) =>
                                         <Table.Row key={i} style={{textAlign: "center"}}>
                                             {dataRow.map((row, index) => {
                                                 if (row === 'name') {
@@ -167,7 +168,7 @@ export default function AllianceList() {
                     <div style={{textAlign: "center"}}>
                         <Pagination
                             boundaryRange={0}
-                            activePage={Number(queryOption.page) + 1}
+                            activePage={Number(queryOption.page)}
                             ellipsisItem={null}
                             firstItem={{content: <Icon name="angle double left"/>, icon: true}}
                             lastItem={{content: <Icon name="angle double right"/>, icon: true}}

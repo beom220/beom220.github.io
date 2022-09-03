@@ -1,11 +1,14 @@
 import {useQuery} from "@tanstack/react-query";
 import {testKeys} from "@/types/queryKey";
-import {getAllianceServiceAPI} from "@/api";
+import {getAllianceServiceAPI, getAllianceServiceMenuAPI} from "@/api";
 import {useNavigate, useParams} from "react-router";
-import {Button, Container, Label, Loader, Table} from "semantic-ui-react";
+import {Button, Container, Image, Label, Loader, Table, Card, Placeholder, Form, Radio} from "semantic-ui-react";
 import AllianceHeader from "@/components/alliance/header";
-import * as React from "react";
 import Template from "@/components/template";
+import useModals from "@/hooks/useModals";
+import {ConfirmPortal} from "@/components/common";
+import {ReactNode, useEffect, useState} from "react";
+import {AllianceEditService} from "@/pages";
 
 export default function AllianceService() {
     const navigate = useNavigate();
@@ -15,16 +18,13 @@ export default function AllianceService() {
         () => getAllianceServiceAPI(params.id as string),
         {staleTime: 60 * 1000}
     );
-    const columns = [
-        "상품명",
-        "추천여부",
-        "세부 카테고리",
-        "판매가",
-        "할인가",
-        "게시여부",
-        "수정",
-        "삭제",
-    ]
+
+    const [editService, setEditService] = useState<string>('');
+    const {isOpen, handleModal } = useModals();
+    const handleEditService = (value:string) => {
+        setEditService(value)
+        handleModal(true)
+    }
 
 
     return (
@@ -33,56 +33,46 @@ export default function AllianceService() {
                 <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
                 {data && <>
                     <AllianceHeader/>
-                    <Table compact celled size='small' style={{margin: "4rem 0"}}>
-                        <Table.Header>
-                            <Table.Row style={{textAlign: "center"}}>
-                                {columns.map((v, i) =>
-                                    <Table.HeaderCell key={i}>{v}</Table.HeaderCell>
-                                )}
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {!data.length?
-                            <Table.Row textAlign="center">
-                                <Table.Cell colSpan='4' style={{padding: "80px 0"}}>
-                                    <h2>자료가 없습니다.</h2>
-                                </Table.Cell>
-                            </Table.Row> : <>
-                                {data?.map((row:any, i:number) =>
-                                    <Table.Row key={i}>
-                                        <Table.Cell width={3}>{row.name}</Table.Cell>
-                                        <Table.Cell width={1} style={{textAlign: "center"}}>
-                                            {row.recommend ?
-                                                <Label color="yellow" tag>추천</Label> :
-                                                '-'
-                                            }
-                                        </Table.Cell>
-                                        <Table.Cell width={1} style={{textAlign: "center"}}>{row.category}</Table.Cell>
-                                        <Table.Cell width={1} style={{textAlign:"right"}}>
-                                            {row.cost}
-                                        </Table.Cell>
-                                        <Table.Cell width={1} style={{textAlign:"right"}}>
-                                            {row.finally_cost}
-                                        </Table.Cell>
-                                        <Table.Cell width={1} style={{textAlign: "center"}}>
-                                            {row.status ?
-                                                <Label color="blue">게시</Label> :
-                                                <Label color="orange">대기</Label>
-                                            }
-                                        </Table.Cell>
-                                        <Table.Cell width={1} style={{textAlign: "center"}}>
-                                            <Label basic color="teal">수정</Label>
-                                        </Table.Cell>
-                                        <Table.Cell width={1} style={{textAlign: "center"}}>
-                                            <Label basic color="orange">삭제</Label>
-                                        </Table.Cell>
-                                    </Table.Row>
-                                )}
-                            </>}
-                        </Table.Body>
-                    </Table>
+                    <Card.Group doubling itemsPerRow={4} stackable style={{margin: "4rem 0"}}>
+                        {data.data.map((row: any, i: number) => (
+                            <Card key={i}>
+                                <Card.Content>
+                                    <Image src={row.image}
+                                           style={{height: '160px', width: '100%', marginBottom: '1rem'}}/>
+                                    <Card.Header>{row.name}</Card.Header>
+                                    <Card.Meta>
+                                        {row.status ?
+                                            <><Label circular color="green" size="tiny" empty/> 게시</> :
+                                            <><Label circular color="orange" size="tiny" empty/> 대기</>
+                                        }
+                                    </Card.Meta>
+                                    <Card.Description>{row.desc}</Card.Description>
+                                    <Card.Description>
+                                        <span style={{
+                                            textDecoration: "line-through",
+                                            color: "#ccc",
+                                            paddingRight: '4px'
+                                        }}>{row.cost}원</span>
+                                        {row.finally_cost}원
+                                    </Card.Description>
+                                </Card.Content>
+
+                                <Card.Content>
+                                    <Button size="tiny" disabled={isLoading} primary type="button"
+                                            onClick={() => handleEditService(row.objectId)}>
+                                        수정
+                                    </Button>
+                                    <Button size="tiny" disabled={isLoading}>삭제</Button>
+                                </Card.Content>
+                            </Card>
+                        ))}
+                    </Card.Group>
+
+                    <Button floated='right' primary size="small" onClick={() => navigate('/alliance')}>메뉴추가</Button>
                     <Button floated='right' size="small" onClick={() => navigate('/alliance')}>목록으로</Button>
                 </>}
+                {isOpen && <AllianceEditService objectId={editService} isOpen={isOpen} handler={() => handleModal(false)}/>}
+
             </Container>
         </Template>
 

@@ -1,9 +1,11 @@
+
+
 export default function useSession() {
     const GetSession = (name: string) => {
-        return JSON.parse(sessionStorage.getItem(name) || "");
+        return sessionStorage.getItem(name);
     }
     const SetSession = (name: string, item: any): void => {
-        sessionStorage.setItem(name, JSON.stringify(item));
+        sessionStorage.setItem(name, item);
     }
     const DeleteSession = (name: string): void => {
         sessionStorage.removeItem(name);
@@ -13,5 +15,5 @@ export default function useSession() {
 
 /** JSX가 아닌곳에서도 사용할 수 있게 */
 export const GetSession = (name: string) => {
-    return JSON.parse(sessionStorage.getItem(name) || "");
+    return sessionStorage.getItem(name) || "";
 }

@@ -25,9 +25,9 @@ export default function LoginForm() {
 
     /* input validation */
     useEffect(() => {
-        register("email", {
+        register("admin_id", {
             required: true,
-            pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+            // pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
         });
         register("password", {
             required: true,
@@ -44,7 +44,7 @@ export default function LoginForm() {
     const checkErrorPoint = (name: string, isError: boolean) => {
         if (isError) {
             switch (name) {
-                case "email" :
+                case "admin_id" :
                     return {content: "양식에 맞지 않습니다."}
                 default :
                     return {content: "필수 입력입니다."}
@@ -52,18 +52,10 @@ export default function LoginForm() {
         }
         return false;
     }
-    // const {mutate:test} = useMutation(postRegisterAPI);
-    // useEffect(()=>{
-    //     test({
-    //         email:'sample@sample.com',
-    //         password:'qwer1234'
-    //     }, {
-    //         onError: (error:any) => console.log(error),
-    //         onSuccess: (data) => console.log(data)
-    //     })
-    // },[])
+
     const {mutate, isLoading} = useMutation(postLoginAPI);
     const onSubmit: SubmitHandler<MemberType> = (inputs: MemberType) => {
+        console.log(inputs)
         mutate(inputs, {
             /*
             * Response 있는 에러 && 500 미만인 에러들은 화면에서 처리
@@ -80,10 +72,10 @@ export default function LoginForm() {
                 }
                 return navigate('/error')
             },
-            onSuccess: (data) => {
-                const {data: message} = data;
-                SetSession('user', message);
-                setMember(GetSession('user'));
+            onSuccess: (data:any) => {
+                const {data: token} = data;
+                console.log(token.data.accessToken)
+                SetSession('user', token.data.accessToken);
             }
         })
     }
@@ -94,14 +86,14 @@ export default function LoginForm() {
                 <Grid.Row>
                     <Grid.Column
                         as={Form.Input}
-                        name="email"
+                        name="admin_id"
                         fluid
                         icon='user'
                         iconPosition='left'
                         placeholder="email"
                         disabled={isLoading}
                         onChange={onChange}
-                        error={checkErrorPoint("email", !!errors.email)}
+                        error={checkErrorPoint("admin_id", !!errors.email)}
                         style={{fontSize: '16px'}}
                     />
                 </Grid.Row>

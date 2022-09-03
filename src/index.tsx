@@ -6,10 +6,10 @@ import {RecoilRoot} from "recoil";
 import {QueryClientProvider, QueryClient} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 
-(async () => {
-    const {worker} = await import('@/mock/worker');
-    return worker.start();
-})();
+// (async () => {
+//     const {worker} = await import('@/mock/worker');
+//     return worker.start();
+// })();
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -18,7 +18,7 @@ const root = ReactDOM.createRoot(
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            retry: 2,
+            retry: 0,
         },
     }
 });

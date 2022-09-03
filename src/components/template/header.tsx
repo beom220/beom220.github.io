@@ -8,7 +8,6 @@ import useSession from "@/hooks/useSession";
 import { MessagePortal } from "@/components/common";
 
 export default function HeaderNav() {
-
     const [isOpen, setIsOpen] = useRecoilState(sidebarState);
     const [member, setMember] = useRecoilState(memberState);
     const [fadeMessage, setFadeMessage] = useState<boolean>(false);

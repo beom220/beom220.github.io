@@ -72,6 +72,7 @@ export default function AllianceHeader() {
                     <Menu pointing secondary style={{marginTop: '6rem'}}>
                         {menu.map((v) =>
                             <Menu.Item
+                                key={v.text}
                                 name={v.text}
                                 active={activeItem === v.text}
                                 value={v.href}

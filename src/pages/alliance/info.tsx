@@ -107,7 +107,7 @@ export default function AllianceInfo() {
                                     <Table.Cell>일반 휴무</Table.Cell>
                                     <Table.Cell>
                                         {data.irregular_holiday
-                                            ?.map((v: Date) => fullTimeConverter(v))
+                                            ?.map((v: Date) => fullTimeConverter(v)).join(', ')
                                             ?? '-'
                                         }
                                     </Table.Cell>
@@ -115,7 +115,7 @@ export default function AllianceInfo() {
                                 <Table.Row>
                                     <Table.Cell>운영 시간</Table.Cell>
                                     <Table.Cell>
-                                        {timeConverter(data.open_time)} ~ {timeConverter(data.close_time)}
+                                        {timeConverter(data.open_time.iso)} ~ {timeConverter(data.close_time.iso)}
                                     </Table.Cell>
                                 </Table.Row>
                                 <Table.Row>
@@ -147,7 +147,7 @@ export default function AllianceInfo() {
                                 <Table.Row>
                                     <Table.Cell>제휴사 최초 진행일</Table.Cell>
                                     <Table.Cell>
-                                        {fullTimeConverter(data.upDatedAt)} {timeConverter(data.upDatedAt)}
+                                        {fullTimeConverter(data.updatedAt)} {timeConverter(data.updatedAt)}
                                     </Table.Cell>
                                 </Table.Row>
                                 <Table.Row>

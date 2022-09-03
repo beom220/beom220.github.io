@@ -1,4 +1,4 @@
-import clientAPI from "@/api/configAPI";
+import {clientAPI} from "@/api/configAPI";
 
 export const getProductsAPI = async (queryString:string) => {
     const { data } = await clientAPI.get('/products?category=' + queryString);

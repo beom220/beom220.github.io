@@ -32,7 +32,7 @@ export default function ConfirmPortal({message, isOpen, handler, actionHandler}:
 
 const BlurModal = styled(Modal)`
     width: 96%;
-    max-width: 380px;
+    max-width: 540px;
     left: 50%;
     top: 50%;
     position: fixed !important;

@@ -12,5 +12,7 @@ export const testKeys = {
 
     allianceByOrder : (order: object) => ['alliance', Object.entries(order).map(v => v.join('=')).join('&')] as const,
     allianceInfo : (id: string) => ['allianceInfo', id] as const,
+    allianceOption : (id: string) => ['allianceOption', id] as const,
     allianceService : (id: string) => ['allianceService', id] as const,
+    allianceServiceMenu : (id: string) => ['allianceServiceMenu', id] as const,
 }
