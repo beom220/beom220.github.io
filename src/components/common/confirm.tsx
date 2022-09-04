@@ -22,7 +22,7 @@ export default function ConfirmPortal({message, isOpen, handler, actionHandler}:
                 <Button negative size="tiny" onClick={handler}>
                     취소
                 </Button>
-                <Button positive size="tiny" onClick={actionHandler}>
+                <Button positive size="tiny" type="button" onClick={actionHandler}>
                     확인
                 </Button>
             </Modal.Actions>

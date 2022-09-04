@@ -3,9 +3,11 @@ import {useQuery} from "@tanstack/react-query";
 import {testKeys} from "@/types/queryKey";
 import {getAllianceServiceMenuAPI} from "@/api";
 import styled from "@emotion/styled";
-import {ChangeEvent, useEffect, useState} from "react";
+import {ChangeEvent, SyntheticEvent, useEffect, useState} from "react";
 import * as React from "react";
 import {CheckboxProps} from "semantic-ui-react/dist/commonjs/modules/Checkbox/Checkbox";
+import {allianceSelect} from "@/constants/allianceSelect";
+import {DropdownProps} from "semantic-ui-react/dist/commonjs/modules/Dropdown/Dropdown";
 
 
 const reserveOpts = [
@@ -37,13 +39,19 @@ export const dayOfWeek = [
     {id: 6, data: 6, showData: '토'}
 ];
 
-export default function AllianceEditService({objectId, isOpen, handler}: any) {
+export default function AllianceEditService({objectId, isOpen, handler, tags}: any) {
     const {data, isLoading} = useQuery(
         testKeys.allianceServiceMenu(objectId as string),
         () => getAllianceServiceMenuAPI(objectId as string),
         {staleTime: 60 * 1000}
     );
+
     const [workedDays, setWorkedDays] = useState(data?.data.working_day.length ? data.data.working_day : []);
+    const [selectTag, setSelectTag] = useState<string>(tags[0].text);
+    const onHandleSelectTag = (event: SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
+        setSelectTag(data.value as string)
+    }
+
     const handleWorkedDays = (e: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => {
         if (data.checked) {
             setWorkedDays([...workedDays, Number(data.value)].sort((a, b) => a - b));
@@ -55,6 +63,7 @@ export default function AllianceEditService({objectId, isOpen, handler}: any) {
     useEffect(() => {
         console.log(data?.data.working_day)
         console.log(workedDays)
+        console.log(tags)
     }, [objectId, workedDays])
     return (
         <>
@@ -68,23 +77,27 @@ export default function AllianceEditService({objectId, isOpen, handler}: any) {
                     <>
                         <Modal.Header as={"h2"}>
                             {data.data.name}
+                            <Form.Radio toggle checked={data.data.recommend} label="추천여부" style={{textAlign:'right'}}/>
                             <Form.Radio toggle checked={data.data.service_status} label="게시여부" style={{textAlign:'right'}}/>
                         </Modal.Header>
                         <Modal.Content>
-
                             <Form.Input
                                 label="상품명"
                                 defaultValue={data.data.name}
                             />
-                            <Form.Input
+                            <Form.Select
+                                options={tags}
                                 label="카테고리"
-                                defaultValue={data.data.category}
+                                defaultValue={tags.filter((v:any) => v.value === data.data.category)[0].value}
+                                onChange={onHandleSelectTag}
+                                // selection={}
                             />
                             <Form.Input
                                 label="예약타입"
                                 disabled
                                 defaultValue={reserveOpts.filter((v) => v.key === data.data.reserve_type_purchase)[0].text}
                             />
+                            {data.data.reserve_type_purchase === 0 ?
                             <Form.Group>
                                 {dayOfWeek.map((item) => (
                                     <Form.Checkbox
@@ -95,7 +108,7 @@ export default function AllianceEditService({objectId, isOpen, handler}: any) {
                                         checked={workedDays.includes(item.data)}
                                     />
                                 ))}
-                            </Form.Group>
+                            </Form.Group> : null }
                             <Form.Group>
                                 <Form.Input
                                     width={8}
@@ -131,7 +144,6 @@ export default function AllianceEditService({objectId, isOpen, handler}: any) {
                                 label="제품설명"
                                 defaultValue={data.data.desc}
                             />
-
                         </Modal.Content>
 
                         <Modal.Actions>

@@ -67,9 +67,9 @@ export default function AllianceHeader() {
                     <Header
                         as='h2'
                         content={data.name}
-                        subheader='Manage your alliance setting'
+                        subheader='Manage your Service'
                     />
-                    <Menu pointing secondary style={{marginTop: '6rem'}}>
+                    <Menu pointing secondary style={{marginTop: '2rem'}}>
                         {menu.map((v) =>
                             <Menu.Item
                                 key={v.text}

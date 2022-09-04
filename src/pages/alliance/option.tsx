@@ -6,6 +6,9 @@ import {Button, Card, Container, Image, Label, Loader, Table} from "semantic-ui-
 import AllianceHeader from "@/components/alliance/header";
 import * as React from "react";
 import Template from "@/components/template";
+import {useState} from "react";
+import useModals from "@/hooks/useModals";
+import AllianceOptionInfo from "@/pages/alliance/optionInfo";
 
 export default function AllianceOption() {
     const navigate = useNavigate();
@@ -15,17 +18,10 @@ export default function AllianceOption() {
         () => getAllianceOptionAPI(params.id as string),
         {staleTime: 60 * 1000}
     );
-    const columns = [
-        "옵션명",
-        "추천여부",
-        "추가금액",
-        "게시여부",
-        "수정",
-        "삭제",
-    ]
 
-    console.log(data)
-
+    // 옵션 메뉴 관리
+    const [editService, setEditService] = useState<string>('');
+    const {isOpen, handleModal} = useModals();
 
     return (
         <Template>
@@ -33,10 +29,7 @@ export default function AllianceOption() {
                 <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
                 {data && <>
                     <AllianceHeader/>
-
-
-
-                    <Card.Group doubling itemsPerRow={4} stackable style={{margin: "4rem 0"}}>
+                    <Card.Group doubling itemsPerRow={3} stackable style={{margin: "4rem 0"}}>
                             {!data.data.length?
                                     <h2>설정한 옵션이 없습니다.</h2>
                                 : <>
@@ -52,7 +45,10 @@ export default function AllianceOption() {
                                         </Card.Content>
 
                                         <Card.Content>
-                                            <Button size="tiny" disabled={isLoading} positive>
+                                            <Button size="tiny" disabled={isLoading} positive type="button" onClick={() => {
+                                                setEditService(row.objectId)
+                                                handleModal(true)
+                                            }}>
                                                 메뉴 관리
                                             </Button>
                                             <Button size="tiny" disabled={isLoading} primary>
@@ -68,6 +64,7 @@ export default function AllianceOption() {
                     <Button floated='right' primary size="small" onClick={() => navigate('/alliance')}>옵션추가</Button>
                     <Button floated='right' size="small" onClick={() => navigate('/alliance')}>목록으로</Button>
                 </>}
+                {isOpen && <AllianceOptionInfo objectId={params.id} filter={editService} isOpen={isOpen} handler={() => handleModal(false)}/>}
             </Container>
         </Template>
 

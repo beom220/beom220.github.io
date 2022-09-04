@@ -74,14 +74,14 @@ export default function AllianceList() {
             page: 1,
             tag: allianceSelect.filter(v => v.value === searchData)[0].key
         })
-
-        navigate(`/alliance?page=0&limit=${queryOption.limit}&tag=${queryOption.tag}`)
+        navigate(`/alliance?page=1&limit=${queryOption.limit}&tag=${allianceSelect.filter(v => v.value === searchData)[0].key}`)
     }
     const {data, isError, isLoading} = useQuery(
         testKeys.allianceByOrder(queryOption),
         () => getAllianceListAPI(queryOption),
         {staleTime: 60 * 1000}
     );
+
 
     const columns = [
         "제휴사명",
@@ -107,8 +107,8 @@ export default function AllianceList() {
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end'}}>
                     <Header
                         as='h2'
-                        content='제휴사 리스트'
-                        subheader='Manage your alliance setting'
+                        content='제휴사 목록'
+                        subheader='Manage your alliance'
                     />
                     <div>
                         <Select
@@ -125,8 +125,8 @@ export default function AllianceList() {
                     <Table compact celled size='small' style={{margin: "4rem 0"}}>
                         <Table.Header>
                             <Table.Row style={{textAlign: "center"}}>
-                                <Table.HeaderCell width={4}>{columns[0]}</Table.HeaderCell>
-                                <Table.HeaderCell width={8}>{columns[1]}</Table.HeaderCell>
+                                <Table.HeaderCell width={3}>{columns[0]}</Table.HeaderCell>
+                                <Table.HeaderCell width={9}>{columns[1]}</Table.HeaderCell>
                                 <Table.HeaderCell width={2}>{columns[2]}</Table.HeaderCell>
                                 <Table.HeaderCell width={2}>{columns[3]}</Table.HeaderCell>
                             </Table.Row>
@@ -143,20 +143,29 @@ export default function AllianceList() {
                                         <Table.Row key={i} style={{textAlign: "center"}}>
                                             {dataRow.map((row, index) => {
                                                 if (row === 'name') {
-                                                    return <Table.Cell key={index} style={{textAlign: "left"}}>
-                                                        <Link
-                                                            to={'/alliance/info/' + v.objectId}>{String(v[row])}</Link></Table.Cell>
-                                                }
+                                                    return (
+                                                        <Table.Cell key={index} style={{textAlign: "left"}}>
+                                                            <Link to={'/alliance/info/' + v.objectId}>
+                                                                {String(v[row])}
+                                                            </Link>
+                                                        </Table.Cell>
+                                                    )}
                                                 if (row === 'status') {
                                                     return (
-                                                        <Table.Cell key={index}>{v[row] ?
-                                                            <Label color="teal">게시</Label> :
-                                                            <Label color="orange">대기</Label>}
-                                                        </Table.Cell>)
-                                                }
+                                                        <Table.Cell key={index}>
+                                                            {v[row] ?
+                                                                <Label color="green">게시</Label> :
+                                                                <Label color="orange">대기</Label>
+                                                            }
+                                                        </Table.Cell>
+                                                    )}
                                                 if (row === 'address') {
-                                                    return <Table.Cell key={index}
-                                                                       style={{textAlign: "left"}}>{String(v[row])}</Table.Cell>
+                                                    return (
+                                                        <Table.Cell
+                                                            key={index}
+                                                            style={{textAlign: "left"}}>
+                                                            {String(v[row])}
+                                                        </Table.Cell>)
                                                 }
                                                 return <Table.Cell key={index}>{String(v[row])}</Table.Cell>
                                             })}
@@ -167,7 +176,7 @@ export default function AllianceList() {
                     </Table>
                     <div style={{textAlign: "center"}}>
                         <Pagination
-                            boundaryRange={0}
+                            boundaryRange={1}
                             activePage={Number(queryOption.page)}
                             ellipsisItem={null}
                             firstItem={{content: <Icon name="angle double left"/>, icon: true}}
