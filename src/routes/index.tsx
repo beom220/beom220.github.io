@@ -14,7 +14,7 @@ import {
 import {memberState} from "@/app/member";
 import {useRecoilValue} from "recoil";
 
-
+// element={member ? <ProductCreate/> : <Navigate to="/"/>}
 export default function Router() {
     const member = useRecoilValue(memberState);
     return (
@@ -34,25 +34,12 @@ export default function Router() {
             <Route path="/alliance"
                    element={<AllianceList/>}
             />
-            <Route path="/product/:id"
-                   element={<ProductDetail/>}
-            />
-            <Route path="/product/create"
-                   element={member ? <ProductCreate/> : <Navigate to="/"/>}
-            />
-            <Route path="/products"
-                   element={<ProductList/>}
-            />
 
             <Route path="/login"
                    element={!member ? <Login/> : <Navigate to="/"/>}
             />
-
-            <Route path="/test"
-                   element={<MapSample/>}
-            />
             <Route path="/"
-                   element={<AllianceList/>}
+                   element={!member ? <Login/> : <AllianceList/>}
             />
             <Route path="*"
                    element={<ErrorPage/>}

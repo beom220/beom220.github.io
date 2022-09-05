@@ -9,6 +9,9 @@ import Template from "@/components/template";
 import {useState} from "react";
 import useModals from "@/hooks/useModals";
 import AllianceOptionInfo from "@/pages/alliance/optionInfo";
+import {encodeMoney} from "@/util/converter";
+import {AllianceEditService} from "@/pages";
+import AllianceOptionEdit from "@/pages/alliance/optionEdit";
 
 export default function AllianceOption() {
     const navigate = useNavigate();
@@ -23,6 +26,9 @@ export default function AllianceOption() {
     const [editService, setEditService] = useState<string>('');
     const {isOpen, handleModal} = useModals();
 
+    // 옵션 수정
+    const [editOption, setEditOption] = useState<string>('');
+    const {isOpen:isEditOpen, handleModal:handleEditModal} = useModals();
     return (
         <Template>
             <Container>
@@ -40,7 +46,7 @@ export default function AllianceOption() {
                                             <Card.Header>{row.name}</Card.Header>
                                             <Card.Description>{row.description}</Card.Description>
                                             <Card.Description>
-                                                추가 금액 : {row.cost}원
+                                                추가 금액 : {encodeMoney(row.cost)}원
                                             </Card.Description>
                                         </Card.Content>
 
@@ -51,7 +57,10 @@ export default function AllianceOption() {
                                             }}>
                                                 메뉴 관리
                                             </Button>
-                                            <Button size="tiny" disabled={isLoading} primary>
+                                            <Button size="tiny" disabled={isLoading} positive type="button" onClick={() => {
+                                                setEditOption(row.objectId)
+                                                handleEditModal(true)
+                                            }}>
                                                 수정
                                             </Button>
                                             <Button size="tiny" disabled={isLoading}>삭제</Button>
@@ -65,6 +74,7 @@ export default function AllianceOption() {
                     <Button floated='right' size="small" onClick={() => navigate('/alliance')}>목록으로</Button>
                 </>}
                 {isOpen && <AllianceOptionInfo objectId={params.id} filter={editService} isOpen={isOpen} handler={() => handleModal(false)}/>}
+                {isEditOpen && <AllianceOptionEdit objectId={editOption} isOpen={isEditOpen} handler={() => handleEditModal(false)}/>}
             </Container>
         </Template>
 

@@ -12,9 +12,10 @@ export default function Sidenav() {
     const [isOpen, setIsOpen] = useRecoilState(sidebarState);
     const [activeItem, setActiveItem] = useState<string>(menuList[0].title)
 
-    useEffect(() =>{
-        console.log(location.pathname)
-    },[location])
+    // useEffect(() =>{
+    //     console.log(location.pathname)
+    // },[location])
+
     const sidebarClose = useCallback((): void => {
         setIsOpen({
             visible: false,

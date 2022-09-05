@@ -9,6 +9,7 @@ import useModals from "@/hooks/useModals";
 import {useEffect, useState} from "react";
 import {AllianceEditService} from "@/pages";
 import {ConfirmPortal, MessagePortal} from "@/components/common";
+import {encodeMoney} from "@/util/converter";
 
 const color = [
     'grey',
@@ -156,8 +157,8 @@ export default function AllianceService() {
                                             textDecoration: "line-through",
                                             color: "#ccc",
                                             paddingRight: '4px'
-                                        }}>{row.cost}원</span>
-                                        {row.finally_cost}원
+                                        }}>{encodeMoney(row.cost)}원</span>
+                                        {encodeMoney(row.finally_cost)}원
                                     </Card.Description>
                                 </Card.Content>
 
