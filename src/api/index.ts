@@ -21,15 +21,42 @@ export const getAllianceServiceAPI = async (id:string) => {
     return data;
 }
 
+/**
+ * 제휴사 리스트 메뉴 삭제
+ * @param id 메뉴 ObjectID
+ */
+export const deleteAllianceServiceAPI = async (id:string) => {
+    const {data} = await authAPI.delete('service/' + id)
+    return data;
+}
+
 // 제휴사 리스트 메뉴 태그 상세
 export const getAllianceServiceMenuTagAPI = async (id:string) => {
     const {data} = await authAPI.get('shop/service/tag/' + id)
     return data;
 }
 
-// 제휴사 리스트 메뉴 태그 등록
+/**
+ * 제휴사 리스트 메뉴 태그 등록
+ * @param form
+ *  objectId: 제휴사 ObjectId
+ *  category: string
+ *
+ */
 export const postAllianceServiceMenuTagAPI = async (form:{objectId:string, category:string}) => {
     const {data} = await authAPI.post('shop/service/tag', form)
+    return data;
+}
+
+// 제휴사 리스트 메뉴 태그 수정
+export const patchAllianceServiceMenuTagAPI = async (
+    form:{
+        shopId:string,
+        categoryList:string[],
+        exCategory:string,
+        changeCategory:string
+    }) => {
+    const {data} = await authAPI.patch('shop/service/tag', form)
     return data;
 }
 

@@ -60,8 +60,8 @@ export default function AllianceOptionEdit({objectId, isOpen, handler}: any) {
     }, [data])
 
     useEffect(() => {
-        console.log(editOption.image)
-    },[editOption.image])
+        console.log(editOption?.image)
+    },[editOption?.image])
 
     return (
         <BlurModal
@@ -70,14 +70,12 @@ export default function AllianceOptionEdit({objectId, isOpen, handler}: any) {
             onClose={handler}
             as={Form}
         >
-            {data &&
+            {data && editOption?.name &&
                 <>
                     <Modal.Header>
                         <Header
                             as="h3"
                             content={editOption.name + " 변경"}
-                            // content={data.data.name + '관리'}
-                            // subheader={`추가금액 : ${encodeMoney(data.data.cost)}원`}
                         />
                     </Modal.Header>
                     <Modal.Content>

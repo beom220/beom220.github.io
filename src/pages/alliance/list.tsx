@@ -1,13 +1,5 @@
 import Template from "@/components/template";
-import {
-    Container,
-    Icon,
-    Label,
-    Pagination,
-    Table,
-    Select,
-    Button, Loader, Header
-} from "semantic-ui-react";
+import {Container, Icon, Label, Pagination, Table, Select, Button, Loader, Header, Input} from "semantic-ui-react";
 import {testKeys} from "@/types/queryKey";
 import {useQuery} from "@tanstack/react-query";
 import {MouseEvent, SyntheticEvent, useCallback, useEffect, useState} from "react";
@@ -18,12 +10,14 @@ import {Link} from "react-router-dom";
 import {allianceSelect} from "@/constants/allianceSelect";
 import * as React from "react";
 import {DropdownProps} from "semantic-ui-react/dist/commonjs/modules/Dropdown/Dropdown";
+import {InputOnChangeData} from "semantic-ui-react/dist/commonjs/elements/Input/Input";
 
 export interface QueryOption {
     page?: number | null;
     limit: number;
     name?: string | null;
     tag?: number | string | null;
+    sort?: number | null;
 }
 
 export default function AllianceList() {
@@ -38,6 +32,7 @@ export default function AllianceList() {
         page: 1,
         limit: 10,
         tag: 0,
+        sort:0,
     })
 
     useEffect(() => {
@@ -63,15 +58,31 @@ export default function AllianceList() {
     }, [queryOption, setQueryOption, navigate])
 
 
+    const [searchName, setSearchName] = useState<string>("");
+    const onHandleSearchName = (event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
+        setSearchName(data.value)
+    }
+    const onSearchNameSubmit = () => {
+        setSearchData(allianceSelect[0].text);
+        setQueryOption({
+            ...queryOption,
+            page: 1,
+            tag: 0,
+            name: searchName,
+        })
+        navigate(`/alliance?page=1&limit=${queryOption.limit}&name=${queryOption.name}`)
+    }
+
     const [searchData, setSearchData] = useState<string>(allianceSelect[0].text);
     const onHandleSelectData = (event: SyntheticEvent<HTMLElement>, data: DropdownProps): void => {
-        console.log(data)
+        setSearchName("")
         setSearchData(data.value as string)
     }
     const onSearchSubmit = () => {
         setQueryOption({
             ...queryOption,
             page: 1,
+            name: "",
             tag: allianceSelect.filter(v => v.value === searchData)[0].key
         })
         navigate(`/alliance?page=1&limit=${queryOption.limit}&tag=${allianceSelect.filter(v => v.value === searchData)[0].key}`)
@@ -111,7 +122,14 @@ export default function AllianceList() {
                         subheader='Manage your alliance'
                     />
                     <div>
+                        <Input
+                            value={searchName}
+                            placeholder='제휴사명으로 검색'
+                            onChange={onHandleSearchName}
+                        />
+                        <Button type='button' primary onClick={onSearchNameSubmit}>검색</Button>
                         <Select
+                            value={searchData}
                             options={allianceSelect}
                             placeholder='카테고리 검색'
                             onChange={onHandleSelectData}

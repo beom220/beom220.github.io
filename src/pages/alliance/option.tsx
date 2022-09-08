@@ -2,7 +2,7 @@ import {useQuery} from "@tanstack/react-query";
 import {testKeys} from "@/types/queryKey";
 import { getAllianceOptionAPI} from "@/api";
 import {useNavigate, useParams} from "react-router";
-import {Button, Card, Container, Image, Label, Loader, Table} from "semantic-ui-react";
+import {Button, Card, Container, Image, Label, Loader, Message, Table} from "semantic-ui-react";
 import AllianceHeader from "@/components/alliance/header";
 import * as React from "react";
 import Template from "@/components/template";
@@ -10,7 +10,6 @@ import {useState} from "react";
 import useModals from "@/hooks/useModals";
 import AllianceOptionInfo from "@/pages/alliance/optionInfo";
 import {encodeMoney} from "@/util/converter";
-import {AllianceEditService} from "@/pages";
 import AllianceOptionEdit from "@/pages/alliance/optionEdit";
 
 export default function AllianceOption() {
@@ -35,7 +34,10 @@ export default function AllianceOption() {
                 <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
                 {data && <>
                     <AllianceHeader/>
-                    <Card.Group doubling itemsPerRow={3} stackable style={{margin: "4rem 0"}}>
+                    <Message info style={{marginTop: "2rem"}}>
+                        옵션으로 메뉴를 추가구성하실 수 있습니다.
+                    </Message>
+                    <Card.Group doubling itemsPerRow={3} stackable style={{margin: "2rem 0 4rem"}}>
                             {!data.data.length?
                                     <h2>설정한 옵션이 없습니다.</h2>
                                 : <>
@@ -57,7 +59,7 @@ export default function AllianceOption() {
                                             }}>
                                                 메뉴 관리
                                             </Button>
-                                            <Button size="tiny" disabled={isLoading} positive type="button" onClick={() => {
+                                            <Button size="tiny" disabled={isLoading} primary type="button" onClick={() => {
                                                 setEditOption(row.objectId)
                                                 handleEditModal(true)
                                             }}>
