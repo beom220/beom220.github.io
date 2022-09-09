@@ -2,16 +2,20 @@ import ReactDatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import {useState} from "react";
 import styled from "@emotion/styled";
+import {ko} from "date-fns/locale";
 
 export default function Calender() {
     const [startDate, setStartDate] = useState<Date | null>(new Date());
     const onChangeDate = (date: Date | null) => {
+        console.log(date)
         setStartDate(date)
     }
     const minDate = new Date('2022-08-13');
     return (
         <DatePickerStyled>
             <ReactDatePicker
+                locale={ko}
+                dateFormat="yyyy.MM.dd(eee)"
                 selected={startDate}
                 onChange={onChangeDate}
                 minDate={minDate}

@@ -64,7 +64,7 @@ export default function AllianceOptionEdit({objectId, isOpen, handler}: any) {
     },[editOption?.image])
 
     return (
-        <BlurModal
+        <CustomModal
             dimmer="blurring"
             open={isOpen}
             onClose={handler}
@@ -118,11 +118,11 @@ export default function AllianceOptionEdit({objectId, isOpen, handler}: any) {
                     </Modal.Actions>
                 </>
             }
-        </BlurModal>
+        </CustomModal>
     )
 }
 
-const BlurModal = styled(Modal)`
+const CustomModal = styled(Modal)`
     width: 96%;
     max-width: 840px;
     left: 50%;

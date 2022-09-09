@@ -31,8 +31,8 @@ export default function AllianceOptionInfo({objectId, filter, isOpen, handler}: 
 
 
     return (
-        <BlurModal
-            dimmer="blurring"
+        <CustomModal
+            dimmer="inverted"
             open={isOpen}
             onClose={handler}
             as={Form}
@@ -95,11 +95,11 @@ export default function AllianceOptionInfo({objectId, filter, isOpen, handler}: 
                     </Modal.Actions>
                 </>
             }
-        </BlurModal>
+        </CustomModal>
     )
 }
 
-const BlurModal = styled(Modal)`
+const CustomModal = styled(Modal)`
     width: 96%;
     max-width: 840px;
     left: 50%;

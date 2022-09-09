@@ -11,7 +11,7 @@ export default function AlertPortal({message, isOpen, handler}: AlertProps) {
         if (forwardedRef.current !== null) forwardedRef.current.focus();
     });
     return (
-        <BlurModal
+        <CustomModal
             dimmer="blurring"
             open={isOpen}
             onClose={handler}
@@ -33,13 +33,13 @@ export default function AlertPortal({message, isOpen, handler}: AlertProps) {
                     </Button>
                 </Ref>
             </Modal.Actions>
-        </BlurModal>
+        </CustomModal>
     )
 }
 
-const BlurModal = styled(Modal)`
+const CustomModal = styled(Modal)`
     width: 96%;
-    max-width: 380px;
+    max-width: 540px;
     left: 50%;
     top: 50%;
     position: fixed !important;

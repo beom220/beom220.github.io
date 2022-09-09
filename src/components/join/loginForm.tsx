@@ -74,8 +74,9 @@ export default function LoginForm() {
             },
             onSuccess: (data:any) => {
                 const {data: token} = data;
-                console.log(token.data.accessToken)
                 SetSession('user', token.data.accessToken);
+                alert('로그인')
+                navigate('/')
             }
         })
     }

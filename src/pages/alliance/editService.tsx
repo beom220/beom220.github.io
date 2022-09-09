@@ -67,7 +67,7 @@ export default function AllianceEditService({objectId, isOpen, handler, tags}: a
     }, [objectId, workedDays])
     return (
         <>
-            <BlurModal
+            <CustomModal
                 dimmer="blurring"
                 open={isOpen}
                 onClose={handler}
@@ -156,12 +156,12 @@ export default function AllianceEditService({objectId, isOpen, handler, tags}: a
                         </Modal.Actions>
                     </>
                 }
-            </BlurModal>
+            </CustomModal>
         </>
     )
 }
 
-const BlurModal = styled(Modal)`
+const CustomModal = styled(Modal)`
     width: 96%;
     max-width: 840px;
     left: 50%;

@@ -6,8 +6,10 @@ import {useCallback, useEffect, useState} from "react";
 import {memberState} from "@/app/member";
 import useSession from "@/hooks/useSession";
 import { MessagePortal } from "@/components/common";
+import {useNavigate} from "react-router";
 
 export default function HeaderNav() {
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useRecoilState(sidebarState);
     const [member, setMember] = useRecoilState(memberState);
     const [fadeMessage, setFadeMessage] = useState<boolean>(false);
@@ -24,7 +26,8 @@ export default function HeaderNav() {
         DeleteSession('user');
         setMember(null);
         setFadeMessage(true);
-    }, [setMember, DeleteSession])
+        navigate('/login')
+    }, [setMember, DeleteSession, navigate])
 
     useEffect(() => {
         if (fadeMessage) {
@@ -45,24 +48,6 @@ export default function HeaderNav() {
                 {/*Project Name*/}
             </Menu.Item>
 
-            {/*<Dropdown item simple text='Dropdown'>*/}
-            {/*    <Dropdown.Menu>*/}
-            {/*        <Dropdown.Item>List Item</Dropdown.Item>*/}
-            {/*        <Dropdown.Item>List Item</Dropdown.Item>*/}
-            {/*        <Dropdown.Divider/>*/}
-            {/*        <Dropdown.Header>Header Item</Dropdown.Header>*/}
-            {/*        <Dropdown.Item>*/}
-            {/*            <i className='dropdown icon'/>*/}
-            {/*            <span className='text'>Submenu</span>*/}
-            {/*            <Dropdown.Menu>*/}
-            {/*                <Dropdown.Item>List Item</Dropdown.Item>*/}
-            {/*                <Dropdown.Item>List Item</Dropdown.Item>*/}
-            {/*            </Dropdown.Menu>*/}
-            {/*        </Dropdown.Item>*/}
-            {/*        <Dropdown.Item>List Item</Dropdown.Item>*/}
-            {/*    </Dropdown.Menu>*/}
-            {/*</Dropdown>*/}
-
             <Menu.Menu position="right">
                 {member ?
                     <>
@@ -75,7 +60,6 @@ export default function HeaderNav() {
                         Join Us
                     </Menu.Item>
                 }
-
 
             </Menu.Menu>
             <MessagePortal isOpen={fadeMessage}>

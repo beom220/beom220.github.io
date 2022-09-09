@@ -126,15 +126,25 @@ export default function AllianceList() {
                             value={searchName}
                             placeholder='제휴사명으로 검색'
                             onChange={onHandleSearchName}
+                            action={{
+                                icon: 'search',
+                                color: "teal",
+                                onClick : {
+                                    onSearchNameSubmit
+                                }
+                            }}
                         />
-                        <Button type='button' primary onClick={onSearchNameSubmit}>검색</Button>
-                        <Select
-                            value={searchData}
-                            options={allianceSelect}
-                            placeholder='카테고리 검색'
-                            onChange={onHandleSelectData}
-                        />
-                        <Button type='button' primary onClick={onSearchSubmit}>검색</Button>
+                        {/*<Button type='button' basic primary onClick={onSearchNameSubmit}>검색</Button>*/}
+                        <div className="ui action input" style={{marginLeft:"1rem"}}>
+                            <Select
+                                value={searchData}
+                                options={allianceSelect}
+                                placeholder='카테고리 검색'
+                                onChange={onHandleSelectData}
+                            />
+                            <Button type='button' onClick={onSearchSubmit} icon='search' color="teal"/>
+                        </div>
+
                     </div>
                 </div>
 
@@ -205,6 +215,9 @@ export default function AllianceList() {
                             totalPages={data.totalPage}
                             onPageChange={onChangePage}
                         />
+                    </div>
+                    <div style={{textAlign:"right", marginTop:"2rem"}}>
+                        <Button primary onClick={() => navigate('/alliance/create')}>신규 제휴사 생성</Button>
                     </div>
                 </>}
             </Container>

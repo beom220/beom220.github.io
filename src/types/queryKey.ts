@@ -10,6 +10,8 @@ export const testKeys = {
     user: ['user'] as const,
     info: ['info'] as const,
 
+    schoolByOrder : (order: object) => ['school', Object.entries(order).map(v => v.join('=')).join('&')] as const,
+
     allianceByOrder : (order: object) => ['alliance', Object.entries(order).map(v => v.join('=')).join('&')] as const,
     allianceInfo : (id: string) => ['alliance Info', id] as const,
     allianceOption : (id: string) => ['alliance Option', id] as const,

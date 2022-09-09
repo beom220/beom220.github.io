@@ -1,7 +1,30 @@
 import {authAPI} from "@/api/configAPI";
+import {CreateAllianceType} from "@/types/alliance";
 
 export {postLoginAPI} from "@/api/member/login";
 export {getProductsAPI, getProductDetailAPI} from "@/api/product/product"
+
+
+// 제휴사 생성
+// 제휴사 아이디 중복체크
+export const postEmailCheck = async (id :{admin_id: string}) => {
+    const { data } = await authAPI.post('/shop/confirm', id);
+    return data
+}
+
+// 학교 리스트
+export const getSchoolsAPI = async (query:object) => {
+    const {data} = await authAPI.get('/school?' + Object.entries(query).map(v => v.join('=')).join('&'))
+    return data;
+}
+
+// 제휴사 생성
+export const postCreateAllianceAPI = async (allianceData:CreateAllianceType) => {
+    const {data} = await authAPI.post('/shop', allianceData);
+    return data;
+}
+
+
 
 // 제휴사 리스트
 export const getAllianceListAPI = async (query:object) => {

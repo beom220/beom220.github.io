@@ -5,8 +5,8 @@ import styled from "@emotion/styled";
 
 export default function ConfirmPortal({message, isOpen, handler, actionHandler}: ConfirmProps) {
     return (
-        <BlurModal
-            dimmer="blurring"
+        <CustomModal
+            dimmer="inverted"
             open={isOpen}
             onClose={handler}
         >
@@ -26,11 +26,11 @@ export default function ConfirmPortal({message, isOpen, handler, actionHandler}:
                     확인
                 </Button>
             </Modal.Actions>
-        </BlurModal>
+        </CustomModal>
     )
 }
 
-const BlurModal = styled(Modal)`
+const CustomModal = styled(Modal)`
     width: 96%;
     max-width: 540px;
     left: 50%;

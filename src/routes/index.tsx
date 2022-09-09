@@ -4,12 +4,9 @@ import MapSample from "@/pages/mapsample";
 import {
     Login,
     ErrorPage,
-    ProductList,
-    ProductDetail,
-    ProductCreate,
     AllianceList,
     AllianceService,
-    AllianceInfo, AllianceOption, AllianceEditService
+    AllianceInfo, AllianceOption, AllianceEditService, AllianceCreate
 } from "@/pages";
 import {memberState} from "@/app/member";
 import {useRecoilValue} from "recoil";
@@ -31,6 +28,9 @@ export default function Router() {
             <Route path="/alliance/info/:id"
                    element={<AllianceInfo/>}
             />
+            <Route path="/alliance/create"
+                   element={<AllianceCreate/>}
+            />
             <Route path="/alliance"
                    element={<AllianceList/>}
             />
@@ -39,7 +39,7 @@ export default function Router() {
                    element={!member ? <Login/> : <Navigate to="/"/>}
             />
             <Route path="/"
-                   element={!member ? <Login/> : <AllianceList/>}
+                   element={!member ?  <Navigate to="/login"/> :  <Navigate to="/alliance"/>}
             />
             <Route path="*"
                    element={<ErrorPage/>}
