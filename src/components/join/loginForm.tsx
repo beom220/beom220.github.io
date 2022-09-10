@@ -8,8 +8,9 @@ import {AlertPortal} from "@/components/common";
 import {useRecoilState} from "recoil";
 import {memberState} from "@/app/member";
 import {useNavigate} from "react-router";
-import {useMutation} from "@tanstack/react-query";
-import {postLoginAPI} from "@/api/member/login";
+import {useMutation, useQuery} from "@tanstack/react-query";
+import {getLoginInfoAPI, postLoginAPI} from "@/api/member/login";
+import {testKeys} from "@/types/queryKey";
 
 export default function LoginForm() {
     const [member, setMember] = useRecoilState(memberState);
@@ -17,11 +18,8 @@ export default function LoginForm() {
     const {isOpen, handleModal, message, handleMessage} = useModals();
     const {GetSession, SetSession} = useSession();
     const navigate = useNavigate();
+    const refreshPage = () => window.location.reload();
 
-    /* 로그인 유저라면 페이지 이동*/
-    useEffect(() => {
-        if (member) navigate('/');
-    }, [member, navigate])
 
     /* input validation */
     useEffect(() => {
@@ -53,9 +51,9 @@ export default function LoginForm() {
         return false;
     }
 
-    const {mutate, isLoading} = useMutation(postLoginAPI);
+    const {mutate, isLoading, isSuccess} = useMutation(postLoginAPI);
+
     const onSubmit: SubmitHandler<MemberType> = (inputs: MemberType) => {
-        console.log(inputs)
         mutate(inputs, {
             /*
             * Response 있는 에러 && 500 미만인 에러들은 화면에서 처리
@@ -76,10 +74,12 @@ export default function LoginForm() {
                 const {data: token} = data;
                 SetSession('user', token.data.accessToken);
                 alert('로그인')
-                navigate('/')
+                refreshPage()
+                // navigate('/')
             }
         })
     }
+
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>

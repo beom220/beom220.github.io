@@ -1,6 +1,6 @@
 export const menuList = [
     {
-        href: "/alliance/school-register",
+        href: "/school-register",
         title: "학교 관리",
     },
     {

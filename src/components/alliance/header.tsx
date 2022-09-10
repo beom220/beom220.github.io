@@ -5,6 +5,7 @@ import {getAllianceInfoAPI} from "@/api";
 import {MouseEvent, useEffect, useState} from "react";
 import {Header, Menu, MenuItemProps} from "semantic-ui-react";
 import * as React from "react";
+import MetaSeo from "@/components/common/metaSeo";
 
 export default function AllianceHeader() {
     const navigate = useNavigate();
@@ -62,6 +63,7 @@ export default function AllianceHeader() {
 
     return (
         <>
+            <MetaSeo title="제휴사 관리 | ABM "/>
             {data &&
                 <>
                     <Header

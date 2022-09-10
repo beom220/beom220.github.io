@@ -26,14 +26,13 @@ import {useNavigate} from "react-router";
 import {dateConverter} from "@/util/converter";
 import {testKeys} from "@/types/queryKey";
 import {CreateAllianceType} from "@/types/alliance";
-import {FormProps} from "semantic-ui-react/dist/commonjs/collections/Form/Form";
 
 export default function AllianceCreate() {
 
     const navigate = useNavigate();
     const _thisDate = dateConverter(new Date());
-    const openTime = _thisDate.yy + "-" + _thisDate.mm + "-" + _thisDate.dd + " 00:00:00";
-    const closeTime = _thisDate.yy + "-" + _thisDate.mm + "-" + _thisDate.dd + " 23:59:59";
+    const initOpenTime = _thisDate.yy + "/" + _thisDate.mm + "/" + _thisDate.dd + " 00:00:00";
+    const initCloseTime = _thisDate.yy + "/" + _thisDate.mm + "/" + _thisDate.dd + " 23:59:59";
 
     const [createData, setCreateData] = useState<CreateAllianceType>({
         status: true,
@@ -49,8 +48,8 @@ export default function AllianceCreate() {
         school: [],
         phone: null,
         email: null,
-        open_time: new Date(openTime),
-        close_time: new Date(closeTime),
+        open_time: new Date(initOpenTime),
+        close_time: new Date(initCloseTime),
         facility: null,
         sub_information: ["현재 준비중입니다."],
         benefits: null,
@@ -284,9 +283,9 @@ export default function AllianceCreate() {
             school: data.value as string[]
         })
     }
-    
+
     const {mutate, isLoading} = useMutation(postCreateAllianceAPI)
-    const onCreateSubmit =  (event: FormEvent<HTMLFormElement>, data: FormProps) => {
+    const onCreateSubmit =  (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         alert('전송')
@@ -338,6 +337,7 @@ export default function AllianceCreate() {
                         <Form.Group widths="equal">
                             <Form.Input
                                 name="admin_id"
+                                required
                                 defaultValue={createData.admin_id}
                                 onChange={onChangeCreateData}
                                 size="large" label="제휴사 계정 아이디"
@@ -355,6 +355,7 @@ export default function AllianceCreate() {
                             />
                             <Form.Input
                                 name="admin_email"
+                                required
                                 type="email"
                                 defaultValue={createData.admin_email}
                                 onChange={onChangeCreateData}
@@ -365,6 +366,7 @@ export default function AllianceCreate() {
                         <Form.Group widths="equal">
                             <Form.Input
                                 name="password"
+                                required
                                 defaultValue={createData.password}
                                 onChange={onChangeCreateData}
                                 type="password"
@@ -373,6 +375,7 @@ export default function AllianceCreate() {
                             />
                             <Form.Input
                                 name="password"
+                                required
                                 defaultValue={checkPassword}
                                 onChange={handleCheckPassword}
                                 type="password"
@@ -415,6 +418,7 @@ export default function AllianceCreate() {
                         <Form.Group widths="equal">
                             <Form.Input
                                 name="branch_name"
+                                required
                                 defaultValue={createData.branch_name}
                                 onChange={onChangeCreateData}
                                 size="large" label="제휴사 지점명"
@@ -424,6 +428,7 @@ export default function AllianceCreate() {
                             <Form.Select
                                 label="카테고리"
                                 name="category"
+                                required
                                 defaultValue={createData.category as string}
                                 options={allianceSelect.filter(v => v.key !== "0")}
                                 onChange={handleSelectCreateData}
@@ -435,6 +440,7 @@ export default function AllianceCreate() {
                         <Form.Group widths="equal">
                             <Form.Input
                                 name="phone"
+                                required
                                 defaultValue={createData.phone}
                                 onChange={onChangeCreateData}
                                 size="large" label="제휴사 연락처"
@@ -443,6 +449,7 @@ export default function AllianceCreate() {
                             <Form.Input
                                 name="email"
                                 type="email"
+                                required
                                 defaultValue={createData.email}
                                 onChange={onChangeCreateData}
                                 size="large" label="제휴사 이메일"
@@ -453,6 +460,7 @@ export default function AllianceCreate() {
                         <Form.Group widths="equal">
                             <Form.Input
                                 name="open_time"
+                                required
                                 defaultValue={dateConverter(createData.open_time).hourAndTime}
                                 onChange={onChangeCreateData}
                                 size="large" label="오픈 시간"
@@ -460,6 +468,7 @@ export default function AllianceCreate() {
                             />
                             <Form.Input
                                 name="close_time"
+                                required
                                 defaultValue={dateConverter(createData.close_time).hourAndTime}
                                 onChange={onChangeCreateData}
                                 size="large" label="마감 시간"
@@ -515,6 +524,7 @@ export default function AllianceCreate() {
                         <Form.Group widths="equal">
                             <Form.Input
                                 name="address"
+                                required
                                 defaultValue={createData.address}
                                 // onChange={onChangeCreateData}
                                 onClick={handleAddressOpen}
@@ -619,6 +629,7 @@ export default function AllianceCreate() {
                         />
                         <Form.Input
                             name="owner"
+                            required
                             defaultValue={createData.owner}
                             onChange={onChangeCreateData}
                             size="large" label="대표자명"
@@ -628,6 +639,7 @@ export default function AllianceCreate() {
                         <Form.Group widths="equal">
                             <Form.Input
                                 name="business_number"
+                                required
                                 defaultValue={createData.business_number}
                                 onChange={onChangeCreateData}
                                 size="large" label="사업자 등록 번호"
@@ -635,6 +647,7 @@ export default function AllianceCreate() {
                             />
                             <Form.Input
                                 name="business_address"
+                                required
                                 defaultValue={createData.business_address}
                                 onChange={onChangeCreateData}
                                 size="large" label="사업자 주소"
@@ -700,6 +713,7 @@ export default function AllianceCreate() {
                         <Form.Group widths="equal">
                             <Form.Input
                                 name="tax_manager"
+                                required
                                 defaultValue={createData.tax_manager}
                                 onChange={onChangeCreateData}
                                 size="large" label="세금계산서 담당자"
@@ -707,6 +721,7 @@ export default function AllianceCreate() {
                             />
                             <Form.Input
                                 name="tax_manager_email"
+                                required
                                 type="email"
                                 defaultValue={createData.tax_manager_email}
                                 onChange={onChangeCreateData}

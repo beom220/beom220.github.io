@@ -10,11 +10,11 @@ import {useLocation} from "react-router";
 export default function Sidenav() {
     const location = useLocation();
     const [isOpen, setIsOpen] = useRecoilState(sidebarState);
-    const [activeItem, setActiveItem] = useState<string>(menuList[0].title)
+    const [activeItem, setActiveItem] = useState<string>(menuList[0].href)
 
-    // useEffect(() =>{
-    //     console.log(location.pathname)
-    // },[location])
+    useEffect(() =>{
+        setActiveItem(location.pathname.split('/')[1])
+    },[location])
 
     const sidebarClose = useCallback((): void => {
         setIsOpen({
@@ -24,7 +24,7 @@ export default function Sidenav() {
     }, [setIsOpen]);
 
     const onActiveItem = (e:MouseEvent<HTMLAnchorElement>, data: MenuItemProps) => {
-        setActiveItem(data.name as string)
+        // setActiveItem(data.name as string)
         sidebarClose()
     }
     const MenuList = menuList.map((v) => {
@@ -37,7 +37,7 @@ export default function Sidenav() {
                 fontSize: '14px'
             }}
             name={v.title}
-            active={activeItem === v.title}
+            active={v.href.includes(activeItem)}
             onClick={onActiveItem}
         />
     })
@@ -53,7 +53,7 @@ export default function Sidenav() {
             visible={isOpen.visible}
             onHide={sidebarClose}
             width='thin'
-            style={{top: '53px', width:'80%', maxWidth:'200px'}}
+            style={{top: '53px', width:'80%', maxWidth:'240px'}}
         >
             <Menu.Item style={{textAlign:'left'}}>
                 <Menu.Header>제휴사</Menu.Header>

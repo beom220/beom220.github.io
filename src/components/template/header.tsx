@@ -1,6 +1,6 @@
 import {Menu, Image, Icon, } from "semantic-ui-react";
 import {Link} from "react-router-dom";
-import {useRecoilState} from "recoil";
+import {useRecoilState, useResetRecoilState} from "recoil";
 import {sidebarState} from "@/app/template";
 import {useCallback, useEffect, useState} from "react";
 import {memberState} from "@/app/member";
@@ -12,8 +12,10 @@ export default function HeaderNav() {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useRecoilState(sidebarState);
     const [member, setMember] = useRecoilState(memberState);
+    const resetMember = useResetRecoilState(memberState);
     const [fadeMessage, setFadeMessage] = useState<boolean>(false);
     const {DeleteSession} = useSession();
+    // const refreshPage = () => window.location.reload();
 
     const sidebarToggle = useCallback((): void => {
         setIsOpen({
@@ -24,10 +26,10 @@ export default function HeaderNav() {
 
     const onLogOut = useCallback((): void => {
         DeleteSession('user');
-        setMember(null);
+        resetMember();
         setFadeMessage(true);
         navigate('/login')
-    }, [setMember, DeleteSession, navigate])
+    }, [ DeleteSession, resetMember, navigate])
 
     useEffect(() => {
         if (fadeMessage) {

@@ -1,4 +1,5 @@
 import Template from "@/components/template";
+import {Navigate} from "react-router-dom";
 import {Button, Container, Image, Label, Loader, Table} from "semantic-ui-react";
 import {useQuery} from "@tanstack/react-query";
 import {testKeys} from "@/types/queryKey";
@@ -6,6 +7,7 @@ import {getAllianceInfoAPI} from "@/api";
 import {useNavigate, useParams} from "react-router";
 import * as React from "react";
 import AllianceHeader from "@/components/alliance/header";
+import {dateConverter} from "@/util/converter";
 
 export default function AllianceInfo() {
     const navigate = useNavigate();
@@ -37,6 +39,8 @@ export default function AllianceInfo() {
 
         return `${yy}년 ${mm}월 ${dd}일 `
     }
+
+    // if(isError) return  <Navigate to="/error"/>
 
     return (
         <Template>
@@ -115,7 +119,7 @@ export default function AllianceInfo() {
                                 <Table.Row>
                                     <Table.Cell>운영 시간</Table.Cell>
                                     <Table.Cell>
-                                        {timeConverter(data.open_time.iso)} ~ {timeConverter(data.close_time.iso)}
+                                        {dateConverter(data.open_time.iso).hourAndTime} ~ {dateConverter(data.close_time.iso).hourAndTime}
                                     </Table.Cell>
                                 </Table.Row>
                                 <Table.Row>

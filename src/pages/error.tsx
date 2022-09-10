@@ -1,5 +1,7 @@
 import {Button, Modal, Header, Icon, Divider} from "semantic-ui-react";
 import {useNavigate} from "react-router";
+import MetaSeo from "@/components/common/metaSeo";
+import * as React from "react";
 
 export default function ErrorPage(){
     const navigate = useNavigate();
@@ -9,6 +11,7 @@ export default function ErrorPage(){
             open
             size='small'
         >
+            <MetaSeo title="404 | ABM"/>
             <Header icon>
                 <Icon name='ban' color='red'/>
                 <Divider/>

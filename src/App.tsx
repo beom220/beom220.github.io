@@ -2,33 +2,38 @@ import React, {useEffect} from 'react';
 import 'semantic-ui-css/semantic.min.css';
 // import './app.css';
 import {BrowserRouter} from "react-router-dom";
-import Router from "@/routes";
+import { PrivateRoutes, PublicRoutes } from "@/routes";
 import {useQuery} from "@tanstack/react-query";
 import {testKeys} from "@/types/queryKey";
-import {getAllianceInfoAPI} from "@/api";
 import {getLoginInfoAPI} from "@/api/member/login";
 import {useRecoilState} from "recoil";
 import {memberState} from "@/app/member";
+import useSession from "@/hooks/useSession";
 
 function App() {
     const [member, setMember] = useRecoilState(memberState);
-    const {data, isError, isLoading} = useQuery(
+    const {GetSession} = useSession();
+
+    const {data:authData, isError:authIsError, isLoading:authIsLoading, isSuccess:authIsSuccess} = useQuery(
         testKeys.info,
         () => getLoginInfoAPI(),
-        {staleTime: 60 * 1000}
-    );
-
-    useEffect(() => {
-        if(data){
-            setMember(data.data)
+        {
+            staleTime: 60 * 1000,
+            enabled: !!GetSession('user')
         }
-    }, [data])
+    );
+    useEffect(() => {
+        if(!!authData && !member.objectId){
+            setMember(authData.data)
+        }
+    },[authData])
 
     return (
         <div className="App">
-            <BrowserRouter basename={process.env.PUBLIC_URL}>
-                <Router/>
-            </BrowserRouter>
+            {member.auth_level ?
+                <PublicRoutes/> :
+                <PrivateRoutes/>
+            }
         </div>
     );
 }

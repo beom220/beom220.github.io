@@ -1,6 +1,12 @@
 export interface MemberType {
-    key?: number;
-    email?: string;
-    password?: string;
-    nickname?: string;
+    objectId?: null | string
+    admin_id?: null | string
+    auth_level?: null | number
+    email?: null | string
+    shop?: null | string
+    name?: null | string
+    phone?: null | string
+    bank_name?: null | string
+    account?: null | string
+    account_number?: null | string
 }

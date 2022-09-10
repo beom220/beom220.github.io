@@ -129,9 +129,8 @@ export default function AllianceList() {
                             action={{
                                 icon: 'search',
                                 color: "teal",
-                                onClick : {
-                                    onSearchNameSubmit
-                                }
+                                onClick : onSearchNameSubmit
+
                             }}
                         />
                         {/*<Button type='button' basic primary onClick={onSearchNameSubmit}>검색</Button>*/}
