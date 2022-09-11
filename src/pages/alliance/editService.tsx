@@ -1,6 +1,6 @@
 import {Button, Container, Form, Loader, Modal} from "semantic-ui-react";
 import {useQuery} from "@tanstack/react-query";
-import {testKeys} from "@/types/queryKey";
+import {allianceKey} from "@/types/queryKey";
 import {getAllianceServiceMenuAPI} from "@/api";
 import styled from "@emotion/styled";
 import {ChangeEvent, SyntheticEvent, useEffect, useState} from "react";
@@ -41,7 +41,7 @@ export const dayOfWeek = [
 
 export default function AllianceEditService({objectId, isOpen, handler, tags}: any) {
     const {data, isLoading} = useQuery(
-        testKeys.allianceServiceMenu(objectId as string),
+        allianceKey.allianceServiceMenu(objectId as string),
         () => getAllianceServiceMenuAPI(objectId as string),
         {staleTime: 60 * 1000}
     );

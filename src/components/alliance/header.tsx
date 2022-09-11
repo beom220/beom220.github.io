@@ -1,6 +1,6 @@
 import {useLocation, useNavigate, useParams} from "react-router";
 import {useQuery} from "@tanstack/react-query";
-import {testKeys} from "@/types/queryKey";
+import {allianceKey} from "@/types/queryKey";
 import {getAllianceInfoAPI} from "@/api";
 import {MouseEvent, useEffect, useState} from "react";
 import {Header, Menu, MenuItemProps} from "semantic-ui-react";
@@ -15,7 +15,7 @@ export default function AllianceHeader() {
     const locationItem = location.pathname.split('/');
 
     const {data, isError, isLoading} = useQuery(
-        testKeys.allianceInfo(AllianceId),
+        allianceKey.allianceInfo(AllianceId),
         () => getAllianceInfoAPI(AllianceId),
         {staleTime: 60 * 1000}
     );

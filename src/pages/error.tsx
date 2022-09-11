@@ -11,7 +11,7 @@ export default function ErrorPage(){
             open
             size='small'
         >
-            <MetaSeo title="404 | ABM"/>
+            <MetaSeo title="Error | ABM"/>
             <Header icon>
                 <Icon name='ban' color='red'/>
                 <Divider/>

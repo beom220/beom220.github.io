@@ -10,7 +10,7 @@ import {memberState} from "@/app/member";
 import {useNavigate} from "react-router";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {getLoginInfoAPI, postLoginAPI} from "@/api/member/login";
-import {testKeys} from "@/types/queryKey";
+import {allianceKey} from "@/types/queryKey";
 
 export default function LoginForm() {
     const [member, setMember] = useRecoilState(memberState);

@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import {testKeys} from "@/types/queryKey";
+import {allianceKey} from "@/types/queryKey";
 import { getAllianceOptionAPI} from "@/api";
 import {useNavigate, useParams} from "react-router";
 import {Button, Card, Container, Image, Label, Loader, Message, Table} from "semantic-ui-react";
@@ -16,7 +16,7 @@ export default function AllianceOption() {
     const navigate = useNavigate();
     const params = useParams();
     const {data, isError, isLoading} = useQuery(
-        testKeys.allianceOption(params.id as string),
+        allianceKey.allianceOption(params.id as string),
         () => getAllianceOptionAPI(params.id as string),
         {staleTime: 60 * 1000}
     );
@@ -38,7 +38,7 @@ export default function AllianceOption() {
                         옵션으로 메뉴를 추가구성하실 수 있습니다.
                     </Message>
                     <Card.Group doubling itemsPerRow={3} stackable style={{margin: "2rem 0 4rem"}}>
-                            {!data.data.length?
+                            {!data.data?.length?
                                     <h2>설정한 옵션이 없습니다.</h2>
                                 : <>
                                 {data.data?.map((row:any, i:number) =>

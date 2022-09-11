@@ -1,14 +1,14 @@
 import {Button, Form, Header, Image, Input, InputOnChangeData, TextAreaProps, Modal} from "semantic-ui-react";
 import * as React from "react";
 import {useQuery} from "@tanstack/react-query";
-import {testKeys} from "@/types/queryKey";
+import {allianceKey} from "@/types/queryKey";
 import {getAllianceOptionMangeAPI} from "@/api";
 import styled from "@emotion/styled";
 import {ChangeEvent, useEffect, useState} from "react";
 
 export default function AllianceOptionEdit({objectId, isOpen, handler}: any) {
     const {data, isError, isLoading} = useQuery(
-        testKeys.allianceOptionManage(objectId),
+        allianceKey.allianceOptionManage(objectId),
         () => getAllianceOptionMangeAPI(objectId),
         {staleTime: 60 * 1000}
     );

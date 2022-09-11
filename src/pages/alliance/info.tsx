@@ -2,7 +2,7 @@ import Template from "@/components/template";
 import {Navigate} from "react-router-dom";
 import {Button, Container, Image, Label, Loader, Table} from "semantic-ui-react";
 import {useQuery} from "@tanstack/react-query";
-import {testKeys} from "@/types/queryKey";
+import {allianceKey} from "@/types/queryKey";
 import {getAllianceInfoAPI} from "@/api";
 import {useNavigate, useParams} from "react-router";
 import * as React from "react";
@@ -15,7 +15,7 @@ export default function AllianceInfo() {
     const AllianceId = params.id as string;
 
     const {data, isError, isLoading} = useQuery(
-        testKeys.allianceInfo(AllianceId),
+        allianceKey.allianceInfo(AllianceId),
         () => getAllianceInfoAPI(AllianceId),
         {staleTime: 60 * 1000}
     );
@@ -39,8 +39,6 @@ export default function AllianceInfo() {
 
         return `${yy}년 ${mm}월 ${dd}일 `
     }
-
-    // if(isError) return  <Navigate to="/error"/>
 
     return (
         <Template>

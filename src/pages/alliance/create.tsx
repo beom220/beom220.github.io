@@ -9,7 +9,7 @@ import {
     Message,
     MessageContent,
     MessageHeader,
-    Segment, Select
+    Segment
 } from "semantic-ui-react";
 import {ChangeEvent, FormEvent, SyntheticEvent, useEffect, useState} from "react";
 import {CheckboxProps, InputOnChangeData} from "semantic-ui-react";
@@ -24,7 +24,7 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 import {getSchoolsAPI, postCreateAllianceAPI, postEmailCheck} from "@/api";
 import {useNavigate} from "react-router";
 import {dateConverter} from "@/util/converter";
-import {testKeys} from "@/types/queryKey";
+import {schoolKey} from "@/types/queryKey";
 import {CreateAllianceType} from "@/types/alliance";
 
 export default function AllianceCreate() {
@@ -262,7 +262,7 @@ export default function AllianceCreate() {
     }
     // 대학교 리스트 요청
     const {data: schoolData, isLoading: schoolIsLoading} = useQuery(
-        testKeys.schoolByOrder(schoolQueryOption),
+        schoolKey.schoolByOrder(schoolQueryOption),
         () => getSchoolsAPI(schoolQueryOption),
         {staleTime: 60 * 1000}
     );

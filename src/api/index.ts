@@ -1,8 +1,9 @@
 import {authAPI} from "@/api/configAPI";
 import {CreateAllianceType} from "@/types/alliance";
+import {useQuery} from "@tanstack/react-query";
+import {schoolKey} from "@/types/queryKey";
 
 export {postLoginAPI} from "@/api/member/login";
-export {getProductsAPI, getProductDetailAPI} from "@/api/product/product"
 
 
 // 제휴사 생성
@@ -15,7 +16,7 @@ export const postEmailCheck = async (id :{admin_id: string}) => {
 // 학교 리스트
 export const getSchoolsAPI = async (query:object) => {
     const {data} = await authAPI.get('/school?' + Object.entries(query).map(v => v.join('=')).join('&'))
-    return data;
+    return data
 }
 
 // 제휴사 생성
@@ -23,8 +24,6 @@ export const postCreateAllianceAPI = async (allianceData:CreateAllianceType) => 
     const {data} = await authAPI.post('/shop', allianceData);
     return data;
 }
-
-
 
 // 제휴사 리스트
 export const getAllianceListAPI = async (query:object) => {

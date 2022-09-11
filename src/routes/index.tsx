@@ -1,12 +1,6 @@
 import {Routes, Route} from "react-router";
 import {Navigate} from "react-router-dom";
-import {
-    Login,
-    ErrorPage,
-    AllianceList,
-    AllianceService,
-    AllianceInfo, AllianceOption, AllianceEditService, AllianceCreate
-} from "@/pages";
+import {Login, ErrorPage, AllianceList, AllianceService, AllianceInfo, AllianceOption, AllianceEditService, AllianceCreate, CouponList} from "@/pages";
 import {memberState} from "@/app/member";
 import {useRecoilValue} from "recoil";
 
@@ -32,6 +26,9 @@ export function PublicRoutes() {
                     />
                     <Route path="/alliance/info/:id"
                            element={<AllianceInfo/>}
+                    />
+                    <Route path="/coupon"
+                           element={<CouponList/>}
                     />
                 </>
             }
@@ -62,6 +59,7 @@ export function PrivateRoutes() {
     const {objectId} = member;
     return (
         <Routes>
+            {/* 제휴사 */}
             <Route path="/alliance/option/:id"
                    element={<AllianceOption/>}
             />
@@ -77,9 +75,13 @@ export function PrivateRoutes() {
             <Route path="/alliance/create"
                    element={<AllianceCreate/>}
             />
-
             <Route path="/alliance"
                    element={<AllianceList/>}
+            />
+
+            {/* 쿠폰 */}
+            <Route path="/coupon"
+                   element={<CouponList/>}
             />
 
             <Route path="/login"

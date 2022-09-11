@@ -1,6 +1,6 @@
 import {Button, Table, Card, Container, Form, Image, Label, Loader, Modal, Checkbox, Header} from "semantic-ui-react";
 import {useQuery} from "@tanstack/react-query";
-import {testKeys} from "@/types/queryKey";
+import {allianceKey} from "@/types/queryKey";
 import {getAllianceOptionMangeAPI, getAllianceServiceAPI} from "@/api";
 import styled from "@emotion/styled";
 import * as React from "react";
@@ -11,13 +11,13 @@ import {encodeMoney} from "@/util/converter";
 export default function AllianceOptionInfo({objectId, filter, isOpen, handler}: any) {
     // 상품 서비스 목록 요청
     const {data, isError, isLoading} = useQuery(
-        testKeys.allianceService(objectId),
+        allianceKey.allianceService(objectId),
         () => getAllianceServiceAPI(objectId),
         {staleTime: 60 * 1000}
     );
     // 그룹 리스트
     const {data:manageData, isError:manageIsError, isLoading:manageIsLoading} = useQuery(
-        testKeys.allianceOptionManage(filter),
+        allianceKey.allianceOptionManage(filter),
         () => getAllianceOptionMangeAPI(filter),
         {staleTime: 60 * 1000}
     );

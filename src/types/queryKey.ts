@@ -1,17 +1,13 @@
-export const queryKeys = {
-    products: ['products'] as const,
-    products_topics: ['products_topics'] as const,
-    productsByCate: (productsCate: string) => ['products', productsCate] as const,
-    productById: (productId: string) => ['product', productId] as const,
-};
-
-
 export const testKeys = {
     user: ['user'] as const,
     info: ['info'] as const,
+}
 
+export const schoolKey = {
     schoolByOrder : (order: object) => ['school', Object.entries(order).map(v => v.join('=')).join('&')] as const,
+}
 
+export const allianceKey = {
     allianceByOrder : (order: object) => ['alliance', Object.entries(order).map(v => v.join('=')).join('&')] as const,
     allianceInfo : (id: string) => ['alliance Info', id] as const,
     allianceOption : (id: string) => ['alliance Option', id] as const,

@@ -1,6 +1,6 @@
 import Template from "@/components/template";
 import {Container, Icon, Label, Pagination, Table, Select, Button, Loader, Header, Input} from "semantic-ui-react";
-import {testKeys} from "@/types/queryKey";
+import {allianceKey} from "@/types/queryKey";
 import {useQuery} from "@tanstack/react-query";
 import {MouseEvent, SyntheticEvent, useCallback, useEffect, useState} from "react";
 import {getAllianceListAPI} from "@/api";
@@ -88,7 +88,7 @@ export default function AllianceList() {
         navigate(`/alliance?page=1&limit=${queryOption.limit}&tag=${allianceSelect.filter(v => v.value === searchData)[0].key}`)
     }
     const {data, isError, isLoading} = useQuery(
-        testKeys.allianceByOrder(queryOption),
+        allianceKey.allianceByOrder(queryOption),
         () => getAllianceListAPI(queryOption),
         {staleTime: 60 * 1000}
     );
@@ -115,41 +115,45 @@ export default function AllianceList() {
     return (
         <Template>
             <Container>
-                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end'}}>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'}}>
                     <Header
                         as='h2'
                         content='제휴사 목록'
                         subheader='Manage your alliance'
                     />
-                    <div>
-                        <Input
-                            value={searchName}
-                            placeholder='제휴사명으로 검색'
-                            onChange={onHandleSearchName}
-                            action={{
-                                icon: 'search',
-                                color: "teal",
-                                onClick : onSearchNameSubmit
-
-                            }}
-                        />
-                        {/*<Button type='button' basic primary onClick={onSearchNameSubmit}>검색</Button>*/}
-                        <div className="ui action input" style={{marginLeft:"1rem"}}>
-                            <Select
-                                value={searchData}
-                                options={allianceSelect}
-                                placeholder='카테고리 검색'
-                                onChange={onHandleSelectData}
-                            />
-                            <Button type='button' onClick={onSearchSubmit} icon='search' color="teal"/>
+                    <div style={{display:"flex", flexDirection:"column", gap:"1rem"}}>
+                        <div style={{textAlign:"right"}}>
+                            <Button primary onClick={() => navigate('/alliance/create')}>신규 제휴사 생성</Button>
                         </div>
+                        <div style={{display:"flex", gap:"1rem"}}>
+                            <Input
+                                value={searchName}
+                                placeholder='제휴사명으로 검색'
+                                onChange={onHandleSearchName}
+                                action={{
+                                    icon: 'search',
+                                    color: "teal",
+                                    onClick : onSearchNameSubmit
 
+                                }}
+                            />
+                            <div className="ui action input">
+                                <Select
+                                    value={searchData}
+                                    options={allianceSelect}
+                                    placeholder='카테고리 검색'
+                                    onChange={onHandleSelectData}
+                                />
+                                <Button type='button' onClick={onSearchSubmit} icon='search' color="teal"/>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
 
                 <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
                 {data && <>
-                    <Table compact celled size='small' style={{margin: "4rem 0"}}>
+                    <Table compact celled size='small' style={{margin: "2rem 0"}}>
                         <Table.Header>
                             <Table.Row style={{textAlign: "center"}}>
                                 <Table.HeaderCell width={3}>{columns[0]}</Table.HeaderCell>
@@ -214,9 +218,6 @@ export default function AllianceList() {
                             totalPages={data.totalPage}
                             onPageChange={onChangePage}
                         />
-                    </div>
-                    <div style={{textAlign:"right", marginTop:"2rem"}}>
-                        <Button primary onClick={() => navigate('/alliance/create')}>신규 제휴사 생성</Button>
                     </div>
                 </>}
             </Container>

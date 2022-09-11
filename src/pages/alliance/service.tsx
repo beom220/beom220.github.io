@@ -1,5 +1,5 @@
 import {useMutation, useQuery} from "@tanstack/react-query";
-import {testKeys} from "@/types/queryKey";
+import {allianceKey} from "@/types/queryKey";
 import {
     deleteAllianceServiceAPI,
     getAllianceServiceAPI,
@@ -42,7 +42,7 @@ export default function AllianceService() {
 
     // 카테고리 태그 요청
     const {data: tagData, isLoading: tagIsLoading, refetch: tagRefetch} = useQuery(
-        testKeys.allianceServiceTag(params.id as string),
+        allianceKey.allianceServiceTag(params.id as string),
         () => getAllianceServiceMenuTagAPI(params.id as string),
         {staleTime: 60 * 1000}
     );
@@ -102,7 +102,7 @@ export default function AllianceService() {
 
     // 상품 서비스 목록 요청
     const {data, isError, isLoading, refetch} = useQuery(
-        testKeys.allianceService(params.id as string),
+        allianceKey.allianceService(params.id as string),
         () => getAllianceServiceAPI(params.id as string),
         {staleTime: 60 * 1000}
     );
