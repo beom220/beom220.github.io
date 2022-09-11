@@ -1,3 +1,5 @@
+import {QueryStringType} from "@/types/queryString";
+
 type Money = string | number;
 
 /**
@@ -18,7 +20,11 @@ export function decodeMoney(value:Money){
     return Number(String(value).replace(pattern, ""));
 }
 
-export const dateConverter = (date:Date) => {
+/**
+ * 날짜 한글로 변환
+ * @param date
+ */
+export function dateConverter(date:Date){
     const _date = new Date(date);
     const yy = _date.getFullYear().toString();
 
@@ -41,5 +47,14 @@ export const dateConverter = (date:Date) => {
     const yearMonthDate = yy + '년 ' + mm + '월 ' + dd + '일 ';
     const hourAndTime = hh + '시 ' + min + '분';
     const fullDateMonth = yearMonthDate + hourAndTime;
+
     return { fullDateMonth, yearMonthDate, hourAndTime, yy, mm, dd, hh, min };
-};
+}
+
+/**
+ * queryOption 문자열로 변환
+ * @param query
+ */
+export function queryParse(query:QueryStringType){
+    return Object.entries(query).map(v => v.join('=')).join('&')
+}

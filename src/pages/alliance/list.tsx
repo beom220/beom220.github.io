@@ -11,14 +11,8 @@ import {allianceSelect} from "@/constants/allianceSelect";
 import * as React from "react";
 import {DropdownProps} from "semantic-ui-react/dist/commonjs/modules/Dropdown/Dropdown";
 import {InputOnChangeData} from "semantic-ui-react/dist/commonjs/elements/Input/Input";
+import {QueryStringType} from "@/types/queryString";
 
-export interface QueryOption {
-    page?: number | null;
-    limit: number;
-    name?: string | null;
-    tag?: number | string | null;
-    sort?: number | null;
-}
 
 export default function AllianceList() {
     const location = useLocation();
@@ -28,7 +22,7 @@ export default function AllianceList() {
     const paramsTag = params.get('tag');
     const navigate = useNavigate();
 
-    const [queryOption, setQueryOption] = useState<QueryOption>({
+    const [queryOption, setQueryOption] = useState<QueryStringType>({
         page: 1,
         limit: 10,
         tag: 0,

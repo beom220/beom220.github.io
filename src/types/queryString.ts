@@ -1,5 +1,8 @@
 export interface QueryStringType {
-    cate?: string | undefined;
-    page?: string | number | undefined;
-    limit?: string | number;
+    cate?: string | number
+    page?: string | number
+    limit?: string | number
+    sort?: number | string
+    tag?: number | string | null
+    name?: string | null;
 }

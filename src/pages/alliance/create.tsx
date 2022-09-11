@@ -9,26 +9,23 @@ import {
     Message,
     MessageContent,
     MessageHeader,
-    Segment
+    Segment,
+    CheckboxProps, InputOnChangeData, TextAreaProps, DropdownProps
 } from "semantic-ui-react";
 import {ChangeEvent, FormEvent, SyntheticEvent, useEffect, useState} from "react";
-import {CheckboxProps, InputOnChangeData} from "semantic-ui-react";
 import DaumPostcode, {Address} from "react-daum-postcode";
 import useModals from "@/hooks/useModals";
 import {AlertPortal} from "@/components/common";
-import * as React from "react";
-import {TextAreaProps} from "semantic-ui-react/dist/commonjs/addons/TextArea/TextArea";
 import {allianceSelect} from "@/constants/allianceSelect";
-import {DropdownProps} from "semantic-ui-react/dist/commonjs/modules/Dropdown/Dropdown";
 import {useMutation, useQuery} from "@tanstack/react-query";
 import {getSchoolsAPI, postCreateAllianceAPI, postEmailCheck} from "@/api";
 import {useNavigate} from "react-router";
 import {dateConverter} from "@/util/converter";
 import {schoolKey} from "@/types/queryKey";
 import {CreateAllianceType} from "@/types/alliance";
+import {QueryStringType} from "@/types/queryString";
 
 export default function AllianceCreate() {
-
     const navigate = useNavigate();
     const _thisDate = dateConverter(new Date());
     const initOpenTime = _thisDate.yy + "/" + _thisDate.mm + "/" + _thisDate.dd + " 00:00:00";
@@ -104,37 +101,37 @@ export default function AllianceCreate() {
 
     const {
         isOpen: IDCheckIsOpen,
-        handleModal:handleIDCheckIsOpen,
-        message:IDCheckMessage,
-        handleMessage:setIDCheckMessage
+        handleModal: handleIDCheckIsOpen,
+        message: IDCheckMessage,
+        handleMessage: setIDCheckMessage
     } = useModals();
 
     // 아이디 중복확인
-    const {mutate:IDMutate, isLoading:isIDLoading} = useMutation(postEmailCheck)
-    
+    const {mutate: IDMutate, isLoading: isIDLoading} = useMutation(postEmailCheck)
+
     const onAdminIDCheck = () => {
-        if(!createData.admin_id.trim()){
+        if (!createData.admin_id.trim()) {
             handleIDCheckIsOpen(true)
-            return setIDCheckMessage({ content : "아이디를 입력해주세요"})
+            return setIDCheckMessage({content: "아이디를 입력해주세요"})
         }
-        if(!adminIDPattern.test(createData.admin_id)){
+        if (!adminIDPattern.test(createData.admin_id)) {
             handleIDCheckIsOpen(true)
-            return setIDCheckMessage({ content : "아이디는 영어로 시작해야합니다. 특수문자는 사용할 수 없습니다."})
+            return setIDCheckMessage({content: "아이디는 영어로 시작해야합니다. 특수문자는 사용할 수 없습니다."})
         }
 
-        const data = { admin_id : createData.admin_id}
+        const data = {admin_id: createData.admin_id}
         IDMutate(data, {
-            onSuccess : (data) => {
-                if(data.content === "중복되는 아이디가 있습니다."){
+            onSuccess: (data) => {
+                if (data.content === "중복되는 아이디가 있습니다.") {
                     // 아이디 인풋에 에러
                     setIsAdminIDError(true)
                 } else {
                     setIsAdminIDError(false)
                 }
                 handleIDCheckIsOpen(true)
-                setIDCheckMessage({ content : data.content })
+                setIDCheckMessage({content: data.content})
             },
-            onError : (error) => {
+            onError: (error) => {
                 console.log(error);
                 navigate("/error")
             }
@@ -148,7 +145,7 @@ export default function AllianceCreate() {
     }
 
     // 비밀번호값, 비밀번호 체크값 비교
-    const comparePassword = (a :string, b : string) => {
+    const comparePassword = (a: string, b: string) => {
         return a === b
     }
 
@@ -221,10 +218,10 @@ export default function AllianceCreate() {
 
     // 다음 주소 검색 모달
     const {
-        isOpen:addressIsOpen,
-        handleModal:handleAddressIsOpen,
-        message:addressMessage,
-        handleMessage:setAddressMessage
+        isOpen: addressIsOpen,
+        handleModal: handleAddressIsOpen,
+        message: addressMessage,
+        handleMessage: setAddressMessage
     } = useModals();
 
     // 다음 주소 검색
@@ -244,18 +241,18 @@ export default function AllianceCreate() {
 
     // 다음 주소 검색 모달 컨텐츠 설정
     useEffect(() => {
-        if(addressIsOpen){
+        if (addressIsOpen) {
             setAddressMessage({
-                content:<DaumPostcode onComplete={searchAddress}/>
+                content: <DaumPostcode onComplete={searchAddress}/>
             })
         }
     }, [addressIsOpen])
 
 
     // 대학교 리스트
-    const [schoolList, setSchoolList] = useState<{value:string, text:string, key:string}[]>([]);
+    const [schoolList, setSchoolList] = useState<{ value: string, text: string, key: string }[]>([]);
     // 대학교 리스트 요청 쿼리옵션
-    const schoolQueryOption = {
+    const schoolQueryOption: QueryStringType = {
         page: 1,
         limit: 'all',
         sort: 0
@@ -270,7 +267,7 @@ export default function AllianceCreate() {
     // 대학교 리스트 요청 이후 설정
     useEffect(() => {
         if (schoolData && !schoolList.length) {
-            setSchoolList(() => schoolData.data.map((v:any, i: number) => {
+            setSchoolList(() => schoolData.data.map((v: any, i: number) => {
                 return {key: i, text: v.name, value: v.objectId}
             }))
         }
@@ -285,16 +282,16 @@ export default function AllianceCreate() {
     }
 
     const {mutate, isLoading} = useMutation(postCreateAllianceAPI)
-    const onCreateSubmit =  (event: FormEvent<HTMLFormElement>) => {
+    const onCreateSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         alert('전송')
         mutate(createData, {
-            onSuccess : (data) => {
+            onSuccess: (data) => {
                 alert('성공')
                 console.log(data)
             },
-            onError : (error) => {
+            onError: (error) => {
                 alert('실패')
                 console.log(error);
                 // navigate("/error")
@@ -347,11 +344,11 @@ export default function AllianceCreate() {
                                     color: "teal",
                                     type: "button",
                                     loading: isIDLoading,
-                                    onClick : onAdminIDCheck,
+                                    onClick: onAdminIDCheck,
                                 }}
                                 error={isAdminIDError ? {
                                     content: "중복되는 아이디가 있습니다."
-                                } : false }
+                                } : false}
                             />
                             <Form.Input
                                 name="admin_email"
@@ -383,7 +380,7 @@ export default function AllianceCreate() {
                                 placeholder="제휴사 계정 비밀번호 체크"
                                 error={
                                     checkPassword && !comparePassword(createData.password, checkPassword) ?
-                                    {content: "비밀번호를 확인해주세요.",} : false
+                                        {content: "비밀번호를 확인해주세요.",} : false
                                 }
                             />
                         </Form.Group>
@@ -433,7 +430,7 @@ export default function AllianceCreate() {
                                 options={allianceSelect.filter(v => v.key !== "0")}
                                 onChange={handleSelectCreateData}
                                 placeholder="카테고리"
-                                style={{fontSize:"1.14285714em"}}
+                                style={{fontSize: "1.14285714em"}}
                                 // onChange={onHandleSelectData}
                             />
                         </Form.Group>
@@ -491,6 +488,7 @@ export default function AllianceCreate() {
                                 placeholder="일반휴무일"
                             />
                         </Form.Group>
+
                         <Divider/>
                         <Form.TextArea
                             name="facility"
@@ -525,17 +523,16 @@ export default function AllianceCreate() {
                             <Form.Input
                                 name="address"
                                 required
+                                readOnly
                                 defaultValue={createData.address}
-                                // onChange={onChangeCreateData}
                                 onClick={handleAddressOpen}
                                 size="large" label="기본 주소"
                                 placeholder="기본 주소"
-                                readOnly
                                 action={{
                                     icon: "search",
                                     color: "teal",
-                                    onClick : handleAddressOpen,
-                                    type:"button"
+                                    onClick: handleAddressOpen,
+                                    type: "button"
                                 }}
 
                             />
@@ -557,7 +554,7 @@ export default function AllianceCreate() {
                                 onChange={handleSelectSchool}
                                 placeholder="주변 학교"
                                 loading={schoolIsLoading}
-                                style={{fontSize:"1.14285714em"}}
+                                style={{fontSize: "1.14285714em"}}
                             />
                             <Form.Input
                                 name="subway_info"
@@ -608,7 +605,7 @@ export default function AllianceCreate() {
                                             style: {cursor: "pointer"},
                                             onClick: () => setCreateData({
                                                 ...createData,
-                                                images : createData.images.filter(img => img !== v)
+                                                images: createData.images.filter(img => img !== v)
                                             })
                                         }}
                                     />
@@ -731,17 +728,19 @@ export default function AllianceCreate() {
                         </Form.Group>
                     </Segment>
 
-                    <Segment style={{textAlign:"center", marginTop:"4rem"}}>
+                    <Segment style={{textAlign: "center", marginTop: "4rem"}}>
                         <Button positive type="submit" fluid size="large" loading={isLoading}>제휴사 생성</Button>
                     </Segment>
                 </Form>
             </Container>
 
             {addressIsOpen &&
-                <AlertPortal message={addressMessage} isOpen={addressIsOpen} handler={() => handleAddressIsOpen(false)}/>
+                <AlertPortal message={addressMessage} isOpen={addressIsOpen}
+                             handler={() => handleAddressIsOpen(false)}/>
             }
             {IDCheckIsOpen &&
-                <AlertPortal message={IDCheckMessage} isOpen={IDCheckIsOpen} handler={() => handleIDCheckIsOpen(false)}/>
+                <AlertPortal message={IDCheckMessage} isOpen={IDCheckIsOpen}
+                             handler={() => handleIDCheckIsOpen(false)}/>
             }
         </Template>
     );

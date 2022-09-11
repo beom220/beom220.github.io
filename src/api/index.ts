@@ -1,8 +1,7 @@
 import {authAPI} from "@/api/configAPI";
 import {CreateAllianceType} from "@/types/alliance";
-import {useQuery} from "@tanstack/react-query";
-import {schoolKey} from "@/types/queryKey";
-
+import {queryParse} from "@/util/converter";
+import {QueryStringType} from "@/types/queryString";
 export {postLoginAPI} from "@/api/member/login";
 
 
@@ -14,8 +13,8 @@ export const postEmailCheck = async (id :{admin_id: string}) => {
 }
 
 // 학교 리스트
-export const getSchoolsAPI = async (query:object) => {
-    const {data} = await authAPI.get('/school?' + Object.entries(query).map(v => v.join('=')).join('&'))
+export const getSchoolsAPI = async (query:QueryStringType) => {
+    const {data} = await authAPI.get('/school?' + queryParse(query))
     return data
 }
 
@@ -26,8 +25,8 @@ export const postCreateAllianceAPI = async (allianceData:CreateAllianceType) => 
 }
 
 // 제휴사 리스트
-export const getAllianceListAPI = async (query:object) => {
-    const {data} = await authAPI.get('/shop?' + Object.entries(query).map(v => v.join('=')).join('&'))
+export const getAllianceListAPI = async (query:QueryStringType) => {
+    const {data} = await authAPI.get('/shop?' + queryParse(query))
     return data;
 }
 
@@ -99,3 +98,11 @@ export const getAllianceOptionMangeAPI = async (id:string) => {
     const {data} = await authAPI.get('/designer/' + id)
     return data;
 }
+
+
+// 쿠폰 리스트
+export const getCouponListAPI = async (query:QueryStringType) => {
+    const { data } = await  authAPI.get('coupon/list/group?' + queryParse(query))
+    return data;
+}
+
