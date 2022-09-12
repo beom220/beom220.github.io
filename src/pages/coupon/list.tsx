@@ -140,7 +140,7 @@ export default function CouponList() {
         }
     }, [couponGroup, confirmData])
 
-    // 쿠폰그룹 데이터 요청 이후 컨펌데이터에 데이터 바인딩
+    // 그룹아이디 셀렉 후 컨펌데이터에 바인딩
     useEffect(() => {
         setConfirmData({
             ...confirmData,
