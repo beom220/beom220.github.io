@@ -224,25 +224,25 @@ export default function CouponList() {
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell width={4} content="발행 수량"/>
-                                <Table.Cell content={encodeNumber(data.count)}/>
+                                <Table.Cell content={encodeNumber(data.count) + ' 건'}/>
                             </Table.Row>
 
                             <Table.Row>
-                                <Table.Cell width={4} content="할인율"/>
-                                <Table.Cell content={encodeNumber(data.discount)}/>
+                                <Table.Cell width={4} content="할인율 %"/>
+                                <Table.Cell content={encodeNumber(data.discount) + ' %'}/>
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell width={4} content="할인 금액"/>
-                                <Table.Cell content={encodeNumber(data.cost)}/>
+                                <Table.Cell content={encodeNumber(data.cost) + ' 원'}/>
                             </Table.Row>
 
                             <Table.Row>
                                 <Table.Cell width={4} content="최소 사용금액"/>
-                                <Table.Cell content={encodeNumber(data.minimum)}/>
+                                <Table.Cell content={encodeNumber(data.minimum) + ' 원'}/>
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell width={4} content="최대 할인금액"/>
-                                <Table.Cell content={encodeNumber(data.maxDiscount)}/>
+                                <Table.Cell content={encodeNumber(data.maxDiscount) + ' 원'}/>
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell width={4} content="발급 상태"/>
