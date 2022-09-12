@@ -7,8 +7,12 @@ import {useNavigate, useParams} from "react-router";
 import * as React from "react";
 import AllianceHeader from "@/components/alliance/header";
 import {dateConverter} from "@/util/converter";
+import {useEffect} from "react";
+import {useRecoilValue} from "recoil";
+import {memberState} from "@/app/member";
 
 export default function AllianceInfo() {
+    const member = useRecoilValue(memberState);
     const navigate = useNavigate();
     const params = useParams();
     const AllianceId = params.id as string;
@@ -24,17 +28,27 @@ export default function AllianceInfo() {
         const yy = _this.getFullYear();
         const mm = _this.getMonth() + 1;
         const dd = _this.getDate();
-
         return `${yy}년 ${mm}월 ${dd}일 `
     }
+
+    useEffect(() => {
+        if(!params.id && member.auth_level === 1){
+            navigate('/alliance/info/'+ member.shop)
+        }
+    },[navigate])
 
     return (
         <Template>
             <Container>
-                <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
+                <AllianceHeader/>
+                <Loader active={isLoading} size="massive" inline='centered' style={{
+                    position: 'fixed',
+                    top:'50%',
+                    left:'50%',
+                    transform:'translate(-50%, -50%)'
+                }}/>
                 {data &&
                     <>
-                        <AllianceHeader/>
                         <Table definition style={{margin: '4rem 0'}} size="small">
                             <Table.Body>
                                 <Table.Row>

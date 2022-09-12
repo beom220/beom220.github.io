@@ -1,16 +1,24 @@
 import { Menu, Sidebar} from "semantic-ui-react";
-import {useRecoilState} from "recoil";
+import {useRecoilState, useRecoilValue} from "recoil";
 import {sidebarState} from "@/app/template";
 import {MouseEvent, useCallback, useEffect, useState} from "react";
-import {menuList} from "@/constants/menuList";
+import {publicMenuList, privateMenuList} from "@/constants/menuList";
 import {Link} from "react-router-dom";
 import {MenuItemProps} from "semantic-ui-react";
 import {useLocation} from "react-router";
+import {memberState} from "@/app/member";
 
 export default function Sidenav() {
+    const member = useRecoilValue(memberState);
     const location = useLocation();
     const [isOpen, setIsOpen] = useRecoilState(sidebarState);
-    const [activeItem, setActiveItem] = useState<string>(menuList[0].href)
+    const [activeItem, setActiveItem] = useState<string>(
+        member.auth_level ?
+            publicMenuList(member.shop)[0].href :
+            privateMenuList[0].href
+    )
+
+    const menuList = member.auth_level ? publicMenuList(member.shop) : privateMenuList;
 
     useEffect(() =>{
         setActiveItem(location.pathname.split('/')[1])

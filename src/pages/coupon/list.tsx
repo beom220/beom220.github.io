@@ -81,7 +81,7 @@ export default function CouponList() {
     const onChangePage = (e: MouseEvent<HTMLAnchorElement>, data: PaginationProps) => {
         navigate(`/coupon?page=${data.activePage}&limit=${queryOption.limit}&sort=${queryOption.sort}&name=${queryOption.name}`)
     }
-    
+
     // 테이블 컬럼명
     const column = ["쿠폰명", "발행처", "신청일", "사용기한", "발행수", "등록수", "사용처", "상태", "사용여부"] as const;
     // 쿠폰 발급 상태
@@ -174,9 +174,9 @@ export default function CouponList() {
     const [mutateMessage, setMutateMessage] = useState<string>("");
 
     // 변경 요청 액션 & 업데이트
-    const {mutate, isLoading} = useMutation(patchCouponConfirmAPI)
+    const {mutate:couponConfirm, isLoading:couponConfirmIsLoading} = useMutation(patchCouponConfirmAPI)
     const couponGroupAction = () => {
-        mutate(confirmData,{
+        couponConfirm(confirmData,{
             onSuccess: () => {
                 queryClient.invalidateQueries(couponKey.couponListByOrder(queryOption))
                     .then(() => queryClient.invalidateQueries(couponKey.couponGroup(couponGroupId))
@@ -226,16 +226,14 @@ export default function CouponList() {
                                 <Table.Cell width={4} content="발행 수량"/>
                                 <Table.Cell content={encodeNumber(data.count) + ' 건'}/>
                             </Table.Row>
-
                             <Table.Row>
                                 <Table.Cell width={4} content="할인율 %"/>
-                                <Table.Cell content={encodeNumber(data.discount) + ' %'}/>
+                                <Table.Cell content={data.discount + ' %'}/>
                             </Table.Row>
                             <Table.Row>
                                 <Table.Cell width={4} content="할인 금액"/>
                                 <Table.Cell content={encodeNumber(data.cost) + ' 원'}/>
                             </Table.Row>
-
                             <Table.Row>
                                 <Table.Cell width={4} content="최소 사용금액"/>
                                 <Table.Cell content={encodeNumber(data.minimum) + ' 원'}/>
@@ -248,7 +246,7 @@ export default function CouponList() {
                                 <Table.Cell width={4} content="발급 상태"/>
                                 <Table.Cell content={couponStatusFilter(data.issueStatus)}/>
                             </Table.Row>
-                            {!data.issueStatus ?
+                            {data.issueStatus ? null :
                                 <Table.Row>
                                     <Table.Cell width={4} content="승인 및 반려"/>
                                     <Table.Cell>
@@ -268,8 +266,8 @@ export default function CouponList() {
                                         />
                                     </Table.Cell>
                                 </Table.Row>
-                                : null}
-                            {confirmData.status === 2 ?
+                            }
+                            {confirmData.status !== 2 ? null :
                                 <Table.Row>
                                     <Table.Cell width={4} content="반려 사유"/>
                                     <Table.Cell>
@@ -277,7 +275,7 @@ export default function CouponList() {
                                             <Form.TextArea/>
                                         </Form>
                                     </Table.Cell>
-                                </Table.Row> : null
+                                </Table.Row>
                             }
                         </Table.Body>
                     </Table>
@@ -330,7 +328,7 @@ export default function CouponList() {
                         </div>
                     </div>
                     {/* Header End   */}
-                    <Loader active={couponListIsLoading || isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
+                    <Loader active={couponListIsLoading || couponConfirmIsLoading} size="massive" inline='centered' style={{marginTop: '12rem'}}/>
                     {couponList && <>
                         <Table compact celled selectable size='small' style={{margin: "2rem 0"}}>
                             <Table.Header>
@@ -365,10 +363,10 @@ export default function CouponList() {
                                                 }}
                                             />}
                                         />
-                                        <Table.Cell width={2} content={row.issuer}/>
-                                        <Table.Cell content={dateConverter(row.createdAt).fullDateMonth}/>
-                                        <Table.Cell>
-                                            {dateConverter(row.dateStart).yearMonthDate} ~ <br/>{dateConverter(row.dateEnd).yearMonthDate}
+                                        <Table.Cell content={row.issuer}/>
+                                        <Table.Cell textAlign="right" content={dateConverter(row.createdAt).fullDateMonth}/>
+                                        <Table.Cell textAlign="right">
+                                            {dateConverter(row.dateStart).yearMonthDate}<br/>~ {dateConverter(row.dateEnd).yearMonthDate}
                                         </Table.Cell>
                                         <Table.Cell textAlign="right" content={`${encodeNumber(row.count)} 건`}/>
                                         <Table.Cell textAlign="right" content={`${encodeNumber(row.useCount)} 건`}/>

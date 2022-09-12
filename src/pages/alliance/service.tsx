@@ -126,13 +126,13 @@ export default function AllianceService() {
     // 삭제 서비스 타입
     type DeleteServiceType = {
         name: string,
-        objectId : string
+        objectId: string
     }
     // 삭제 서비스 정보
-    const [deleteServiceID, setDeleteServiceID] = useState<DeleteServiceType>({name:"", objectId:""});
+    const [deleteServiceID, setDeleteServiceID] = useState<DeleteServiceType>({name: "", objectId: ""});
 
     // 삭제 클릭시 서비스 정보 불러오기
-    const handleDeleteService = (target:DeleteServiceType) => {
+    const handleDeleteService = (target: DeleteServiceType) => {
         setDeleteServiceID(target)
         handleDeleteServiceModal(true)
     }
@@ -175,9 +175,9 @@ export default function AllianceService() {
     return (
         <Template>
             <Container>
+                <AllianceHeader/>
                 <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
                 {data && <>
-                    <AllianceHeader/>
                     <Message info style={{marginTop: "2rem"}}>
                         카테고리를 등록하면 보다 편리하게 서비스를 관리할 수 있습니다.
                     </Message>
@@ -188,7 +188,13 @@ export default function AllianceService() {
                         alignItems: "center",
                         flexWrap: "wrap"
                     }}>
-                        <Button positive size="medium" type="button" onClick={() => handleAddTagModal(true)}>카테고리 추가하기</Button>
+                        <Button
+                            positive
+                            size="medium"
+                            type="button"
+                            onClick={() => handleAddTagModal(true)}
+                            content="카테고리 추가하기"
+                        />
                         {tagData ?
                             tagData.map((v: string, i: number) => (
                                 <Label
@@ -200,51 +206,66 @@ export default function AllianceService() {
                         }
                     </div>
                     <Card.Group doubling itemsPerRow={3} stackable style={{margin: "2rem 0 4rem"}}>
-                        {data.data.map((row: any, i: number) => (
-                            <Card key={i}>
-                                <Card.Content>
-                                    <div style={{textAlign: "center"}}>
-                                        <Image src={row.image}
-                                               style={{maxHeight: '160px', maxWidth: '100%', marginBottom: '1rem'}}/>
-                                    </div>
-                                    <Card.Header>{row.name}</Card.Header>
-                                    <Card.Meta>
-                                        {row.status ?
-                                            <><Label circular color="green" size="tiny" empty/> 게시</> :
-                                            <><Label circular color="orange" size="tiny" empty/> 대기</>
-                                        }
-                                    </Card.Meta>
-                                    <Card.Description>{row.desc}</Card.Description>
-                                    <Card.Description>
+                        {!data.data.length ?
+                            <Message basic style={{width: '100%', textAlign: 'center'}}>
+                                <Message.Header>등록된 메뉴가 없습니다.</Message.Header>
+                                <p>메뉴 (서비스)를 등록해보세요!</p>
+                                <Button
+                                    primary
+                                    content='메뉴 추가 하기'
+                                    icon='add'
+                                    labelPosition='left'
+                                />
+                            </Message> :
+                            data.data.map((row: any, i: number) => (
+                                <Card key={i}>
+                                    <Card.Content>
+                                        <div style={{textAlign: "center"}}>
+                                            <Image src={row.image}
+                                                   style={{
+                                                       maxHeight: '160px',
+                                                       maxWidth: '100%',
+                                                       marginBottom: '1rem'
+                                                   }}/>
+                                        </div>
+                                        <Card.Header>{row.name}</Card.Header>
+                                        <Card.Meta>
+                                            {row.status ?
+                                                <><Label circular color="green" size="tiny" empty/> 게시</> :
+                                                <><Label circular color="orange" size="tiny" empty/> 대기</>
+                                            }
+                                        </Card.Meta>
+                                        <Card.Description>{row.desc}</Card.Description>
+                                        <Card.Description>
                                         <span style={{
                                             textDecoration: "line-through",
                                             color: "#ccc",
                                             paddingRight: '4px'
                                         }}>{encodeNumber(row.cost)}원</span>
-                                        {encodeNumber(row.finally_cost)}원
-                                    </Card.Description>
-                                </Card.Content>
+                                            {encodeNumber(row.finally_cost)}원
+                                        </Card.Description>
+                                    </Card.Content>
 
-                                <Card.Content>
-                                    <Button
-                                        size="tiny" disabled={isLoading}
-                                        primary type="button"
-                                        onClick={() => handleEditService(row.objectId)}
-                                        children="수정"
-                                    />
-                                    <Button
-                                        size="tiny"
-                                        disabled={isLoading}
-                                        type="button"
-                                        children="삭제"
-                                        onClick={() => handleDeleteService({
-                                            name: row.name,
-                                            objectId: row.objectId
-                                        })}
-                                    />
-                                </Card.Content>
-                            </Card>
-                        ))}
+                                    <Card.Content>
+                                        <Button
+                                            size="tiny" disabled={isLoading}
+                                            primary type="button"
+                                            onClick={() => handleEditService(row.objectId)}
+                                            children="수정"
+                                        />
+                                        <Button
+                                            size="tiny"
+                                            disabled={isLoading}
+                                            type="button"
+                                            children="삭제"
+                                            onClick={() => handleDeleteService({
+                                                name: row.name,
+                                                objectId: row.objectId
+                                            })}
+                                        />
+                                    </Card.Content>
+                                </Card>
+                            ))}
                     </Card.Group>
                     <Button floated='right' primary size="small" onClick={() => navigate('/alliance')}>메뉴추가</Button>
                     <Button floated='right' size="small" onClick={() => navigate('/alliance')}>목록으로</Button>

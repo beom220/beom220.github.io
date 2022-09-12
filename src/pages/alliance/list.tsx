@@ -146,7 +146,7 @@ export default function AllianceList() {
 
                 </div>
 
-                <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
+                <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '12rem'}}/>
                 {data && <>
                     <Table compact selectable celled size='small' style={{margin: "2rem 0"}}>
                         <Table.Header>

@@ -32,7 +32,7 @@ export default function AllianceOptionInfo({objectId, filter, isOpen, handler}: 
 
     return (
         <CustomModal
-            dimmer="inverted"
+            dimmer="blurring"
             open={isOpen}
             onClose={handler}
             as={Form}

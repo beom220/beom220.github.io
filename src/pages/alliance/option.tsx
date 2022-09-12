@@ -31,15 +31,24 @@ export default function AllianceOption() {
     return (
         <Template>
             <Container>
-                <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
+                <AllianceHeader/>
+                <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '12rem'}}/>
                 {data && <>
-                    <AllianceHeader/>
                     <Message info style={{marginTop: "2rem"}}>
                         옵션으로 메뉴를 추가구성하실 수 있습니다.
                     </Message>
                     <Card.Group doubling itemsPerRow={3} stackable style={{margin: "2rem 0 4rem"}}>
                             {!data.data?.length?
-                                    <h2>설정한 옵션이 없습니다.</h2>
+                                <Message basic style={{width: '100%', textAlign: 'center'}}>
+                                    <Message.Header>등록된 옵션이 없습니다.</Message.Header>
+                                    <p>옵션을 등록해보세요!</p>
+                                    <Button
+                                        primary
+                                        content='옵션 추가 하기'
+                                        icon='add'
+                                        labelPosition='left'
+                                    />
+                                </Message>
                                 : <>
                                 {data.data?.map((row:any, i:number) =>
                                     <Card key={i}>
