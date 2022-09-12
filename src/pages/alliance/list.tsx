@@ -11,7 +11,7 @@ import {allianceSelect} from "@/constants/allianceSelect";
 import * as React from "react";
 import {DropdownProps} from "semantic-ui-react/dist/commonjs/modules/Dropdown/Dropdown";
 import {InputOnChangeData} from "semantic-ui-react/dist/commonjs/elements/Input/Input";
-import {QueryStringType} from "@/types/queryString";
+import {QueryOptionType} from "@/types/queryString";
 
 
 export default function AllianceList() {
@@ -22,7 +22,7 @@ export default function AllianceList() {
     const paramsTag = params.get('tag');
     const navigate = useNavigate();
 
-    const [queryOption, setQueryOption] = useState<QueryStringType>({
+    const [queryOption, setQueryOption] = useState<QueryOptionType>({
         page: 1,
         limit: 10,
         tag: 0,
@@ -82,7 +82,7 @@ export default function AllianceList() {
         navigate(`/alliance?page=1&limit=${queryOption.limit}&tag=${allianceSelect.filter(v => v.value === searchData)[0].key}`)
     }
     const {data, isError, isLoading} = useQuery(
-        allianceKey.allianceByOrder(queryOption),
+        allianceKey.allianceListByOrder(queryOption),
         () => getAllianceListAPI(queryOption),
         {staleTime: 60 * 1000}
     );
@@ -95,12 +95,13 @@ export default function AllianceList() {
         "상태",
     ]
 
-    const dataRow = [
-        "name",
-        "address",
-        "category",
-        "status"
-    ]
+    const statusFilter = (status:boolean) => {
+        switch (status) {
+            default :
+            case true : return <Label content="게시" color="green" style={{fontWeight:'300'}}/>
+            case false : return <Label content="대기" color="orange" style={{fontWeight:'300'}}/>
+        }
+    }
 
     if (isError) {
         navigate('/error')
@@ -147,13 +148,13 @@ export default function AllianceList() {
 
                 <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
                 {data && <>
-                    <Table compact celled size='small' style={{margin: "2rem 0"}}>
+                    <Table compact selectable celled size='small' style={{margin: "2rem 0"}}>
                         <Table.Header>
                             <Table.Row style={{textAlign: "center"}}>
-                                <Table.HeaderCell width={3}>{columns[0]}</Table.HeaderCell>
-                                <Table.HeaderCell width={9}>{columns[1]}</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>{columns[2]}</Table.HeaderCell>
-                                <Table.HeaderCell width={2}>{columns[3]}</Table.HeaderCell>
+                                <Table.HeaderCell width={3} content={columns[0]}/>
+                                <Table.HeaderCell content={columns[1]}/>
+                                <Table.HeaderCell width={2} content={columns[2]}/>
+                                <Table.HeaderCell width={2} content={columns[3]}/>
                             </Table.Row>
                         </Table.Header>
 
@@ -164,39 +165,18 @@ export default function AllianceList() {
                                         <h2>자료가 없습니다.</h2>
                                     </Table.Cell>
                                 </Table.Row> : <>
-                                    {data.data.map((v: any, i: number) =>
-                                        <Table.Row key={i} style={{textAlign: "center"}}>
-                                            {dataRow.map((row, index) => {
-                                                if (row === 'name') {
-                                                    return (
-                                                        <Table.Cell key={index} style={{textAlign: "left"}}>
-                                                            <Link to={'/alliance/info/' + v.objectId}>
-                                                                {String(v[row])}
-                                                            </Link>
-                                                        </Table.Cell>
-                                                    )}
-                                                if (row === 'status') {
-                                                    return (
-                                                        <Table.Cell key={index}>
-                                                            {v[row] ?
-                                                                <Label color="green">게시</Label> :
-                                                                <Label color="orange">대기</Label>
-                                                            }
-                                                        </Table.Cell>
-                                                    )}
-                                                if (row === 'address') {
-                                                    return (
-                                                        <Table.Cell
-                                                            key={index}
-                                                            style={{textAlign: "left"}}>
-                                                            {String(v[row])}
-                                                        </Table.Cell>)
-                                                }
-                                                return <Table.Cell key={index}>{String(v[row])}</Table.Cell>
-                                            })}
-                                        </Table.Row>
-                                    )}</>
-                            }
+                                {data.data.map((row: any, i: number) =>
+                                    <Table.Row key={i} style={{textAlign: "center"}}>
+                                        <Table.Cell
+                                            textAlign="left"
+                                            content={<Link to={'/alliance/info/' + row.objectId} children={row.name}/>}
+                                        />
+                                        <Table.Cell content={row.address} textAlign="left"/>
+                                        <Table.Cell content={row.category}/>
+                                        <Table.Cell content={statusFilter(row.status)}/>
+                                    </Table.Row>
+                                )}
+                            </>}
                         </Table.Body>
                     </Table>
                     <div style={{textAlign: "center"}}>

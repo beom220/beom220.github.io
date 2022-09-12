@@ -26,10 +26,22 @@ export default function HeaderNav() {
 
     const onLogOut = useCallback((): void => {
         DeleteSession('user');
-        resetMember();
+        DeleteSession('userInfo');
+        setMember({
+            objectId: null,
+            admin_id: null,
+            auth_level: null,
+            email: null,
+            shop: null,
+        })
         setFadeMessage(true);
-        navigate('/login')
-    }, [ DeleteSession, resetMember, navigate])
+    }, [ DeleteSession, resetMember])
+
+    useEffect(() => {
+        if(!member.objectId){
+            navigate('/login')
+        }
+    }, [member, resetMember])
 
     useEffect(() => {
         if (fadeMessage) {

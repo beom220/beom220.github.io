@@ -1,10 +1,18 @@
 import {Routes, Route} from "react-router";
 import {Navigate} from "react-router-dom";
-import {Login, ErrorPage, AllianceList, AllianceService, AllianceInfo, AllianceOption, AllianceEditService, AllianceCreate, CouponList} from "@/pages";
+import {
+    Login,
+    ErrorPage,
+    AllianceList,
+    AllianceService,
+    AllianceInfo,
+    AllianceOption,
+    AllianceEditService,
+    AllianceCreate,
+    CouponList
+} from "@/pages";
 import {memberState} from "@/app/member";
 import {useRecoilValue} from "recoil";
-
-// element={member ? <ProductCreate/> : <Navigate to="/"/>}
 
 // 제휴사
 export function PublicRoutes() {
@@ -13,25 +21,22 @@ export function PublicRoutes() {
 
     return (
         <Routes>
-            {shop &&
-                <>
-                    <Route path="/alliance/option/:id"
-                           element={<AllianceOption/>}
-                    />
-                    <Route path="/alliance/service/edit/:id"
-                           element={<AllianceEditService/>}
-                    />
-                    <Route path="/alliance/service/:id"
-                           element={<AllianceService/>}
-                    />
-                    <Route path="/alliance/info/:id"
-                           element={<AllianceInfo/>}
-                    />
-                    <Route path="/coupon"
-                           element={<CouponList/>}
-                    />
-                </>
-            }
+            <Route path="/alliance/option/:id"
+                   element={<AllianceOption/>}
+            />
+            <Route path="/alliance/service/edit/:id"
+                   element={<AllianceEditService/>}
+            />
+            <Route path="/alliance/service/:id"
+                   element={<AllianceService/>}
+            />
+            <Route path="/alliance/info/:id"
+                   element={<AllianceInfo/>}
+            />
+
+            <Route path="/coupon"
+                   element={<CouponList/>}
+            />
 
             <Route path="/login"
                    element={!shop ?
@@ -39,7 +44,6 @@ export function PublicRoutes() {
                        <Navigate to={`/alliance/info/${shop}`}/>
                    }
             />
-
             <Route path="/"
                    element={!shop ?
                        <Navigate to="/login"/> :

@@ -1,7 +1,8 @@
 import {authAPI} from "@/api/configAPI";
 import {CreateAllianceType} from "@/types/alliance";
 import {queryParse} from "@/util/converter";
-import {QueryStringType} from "@/types/queryString";
+import {QueryOptionType} from "@/types/queryString";
+import {CouponConfirmType} from "@/types/coupon";
 export {postLoginAPI} from "@/api/member/login";
 
 
@@ -13,7 +14,7 @@ export const postEmailCheck = async (id :{admin_id: string}) => {
 }
 
 // 학교 리스트
-export const getSchoolsAPI = async (query:QueryStringType) => {
+export const getSchoolsAPI = async (query:QueryOptionType) => {
     const {data} = await authAPI.get('/school?' + queryParse(query))
     return data
 }
@@ -25,7 +26,7 @@ export const postCreateAllianceAPI = async (allianceData:CreateAllianceType) => 
 }
 
 // 제휴사 리스트
-export const getAllianceListAPI = async (query:QueryStringType) => {
+export const getAllianceListAPI = async (query:QueryOptionType) => {
     const {data} = await authAPI.get('/shop?' + queryParse(query))
     return data;
 }
@@ -101,8 +102,19 @@ export const getAllianceOptionMangeAPI = async (id:string) => {
 
 
 // 쿠폰 리스트
-export const getCouponListAPI = async (query:QueryStringType) => {
-    const { data } = await  authAPI.get('coupon/list/group?' + queryParse(query))
+export const getCouponListAPI = async (query:QueryOptionType) => {
+    const { data } = await authAPI.get('/coupon/list/group?' + queryParse(query))
+    return data;
+}
+// 쿠폰 그룹
+export const getCouponGroupAPI = async (id:string) => {
+    const { data } = await authAPI.get('/coupon/group/' + id)
+    return data;
+}
+
+// 쿠폰 그룹 발급 승인
+export const patchCouponConfirmAPI = async (form:CouponConfirmType) => {
+    const { data } = await authAPI.patch('/coupon/confirm', form)
     return data;
 }
 

@@ -24,7 +24,7 @@ import useModals from "@/hooks/useModals";
 import {useEffect, useState} from "react";
 import {AllianceEditService} from "@/pages";
 import {ConfirmPortal, MessagePortal} from "@/components/common";
-import {encodeMoney} from "@/util/converter";
+import {encodeNumber} from "@/util/converter";
 import * as React from "react";
 
 const color = ['grey', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'violet', 'purple', 'pink', 'brown', 'red', 'black',] as SemanticCOLORS[]
@@ -220,8 +220,8 @@ export default function AllianceService() {
                                             textDecoration: "line-through",
                                             color: "#ccc",
                                             paddingRight: '4px'
-                                        }}>{encodeMoney(row.cost)}원</span>
-                                        {encodeMoney(row.finally_cost)}원
+                                        }}>{encodeNumber(row.cost)}원</span>
+                                        {encodeNumber(row.finally_cost)}원
                                     </Card.Description>
                                 </Card.Content>
 

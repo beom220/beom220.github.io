@@ -6,7 +6,7 @@ import styled from "@emotion/styled";
 export default function ConfirmPortal({message, isOpen, handler, actionHandler}: ConfirmProps) {
     return (
         <CustomModal
-            dimmer="inverted"
+            dimmer="blurring"
             open={isOpen}
             onClose={handler}
         >

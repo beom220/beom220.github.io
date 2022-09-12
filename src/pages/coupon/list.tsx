@@ -1,11 +1,291 @@
-import {Button, Container, Header, Input, Select} from "semantic-ui-react";
+import {
+    Button,
+    Container, Form,
+    Header,
+    Icon,
+    Input,
+    Label,
+    Loader,
+    Pagination,
+    PaginationProps,
+    Select,
+    Table
+} from "semantic-ui-react";
 import Template from "@/components/template";
 import {allianceSelect} from "@/constants/allianceSelect";
+import {useLocation, useNavigate} from "react-router";
+import {ChangeEvent, MouseEvent, useEffect, useState} from "react";
+import {QueryOptionType} from "@/types/queryString";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {couponKey} from "@/types/queryKey";
+import {getCouponGroupAPI, getCouponListAPI, patchCouponConfirmAPI} from "@/api";
 import * as React from "react";
-import {useNavigate} from "react-router";
+import {dateConverter, encodeNumber} from "@/util/converter";
+import useModals from "@/hooks/useModals";
+import { ConfirmPortal, MessagePortal} from "@/components/common";
+import {CheckboxProps} from "semantic-ui-react/dist/commonjs/modules/Checkbox/Checkbox";
+import {CouponConfirmType} from "@/types/coupon";
 
-export default function CouponList(){
+export default function CouponList() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const locationSearch = location.search;
+    const params = new URLSearchParams(locationSearch);
+    const paramsPage = Number(params.get('page'));
+    const paramsLimit = Number(params.get('limit'));
+    const paramsSort = Number(params.get('sort'));
+    const paramsName = params.get('name');
+    const scrollTop = () => window.scrollTo(0,0)
+    const queryClient = useQueryClient()
+
+    // 쿠폰 리스트 쿼리옵션
+    const [queryOption, setQueryOption] = useState<QueryOptionType>({
+        page: 1,
+        limit: 10,
+        sort: 0,
+        name: ""
+    })
+
+    // 쿠폰 리스트 요청
+    const {data:couponList, isLoading:couponListIsLoading} = useQuery(
+        couponKey.couponListByOrder(queryOption),
+        () => getCouponListAPI(queryOption),
+        {
+            staleTime: 60 * 1000,
+            refetchInterval: 60 * 1000,
+        }
+    );
+
+    // 페이지 이동시 쿼리옵션 변경
+    useEffect(() => {
+        scrollTop();
+        setQueryOption({
+            page: !paramsPage ? queryOption.page : paramsPage,
+            limit: !paramsLimit ? queryOption.limit : paramsLimit,
+            sort: !paramsSort ? queryOption.sort : paramsSort,
+            name: paramsName ?? ""
+        })
+    }, [location])
+
+    // 검색명
+    const [searchName, setSearchName] = useState<string>("");
+    const onHandleSearchName = (event:ChangeEvent<HTMLInputElement>) => {
+        setSearchName(event.target.value)
+    }
+    // 검색 
+    const onSearchPage = () => {
+        navigate(`/coupon?page=1&limit=${queryOption.limit}&sort=${queryOption.sort}&name=${searchName}`)
+    }
+
+    // 페이징
+    const onChangePage = (e: MouseEvent<HTMLAnchorElement>, data: PaginationProps) => {
+        navigate(`/coupon?page=${data.activePage}&limit=${queryOption.limit}&sort=${queryOption.sort}&name=${queryOption.name}`)
+    }
+    
+    // 테이블 컬럼명
+    const column = ["쿠폰명", "발행처", "신청일", "사용기한", "발행수", "등록수", "사용처", "상태", "사용여부"] as const;
+    // 쿠폰 발급 상태
+    const coupon_status = ['발급중', '발급완료', '반려'] as const;
+    // 쿠폰 상태 필터
+    const couponStatusFilter = (status:number) => {
+        switch (status) {
+            default :
+            case 0 : return <Label content={coupon_status[0]} color="yellow" style={{fontWeight:'400'}}/>
+            case 1 : return <Label content={coupon_status[1]} color="blue" style={{fontWeight:'300'}}/>
+            case 2 : return <Label content={coupon_status[2]} color="red" style={{fontWeight:'300'}}/>
+        }
+    }
+    // 쿠폰 삭제 상태 필터
+    const deleteStatusFilter = (status:boolean) => {
+        switch (status) {
+            default :
+            case true : return <Label content="미사용" color="orange" style={{fontWeight:'300'}}/>
+            case false : return <Label content="사용" color="green" style={{fontWeight:'300'}}/>
+        }
+    }
+
+    // 쿠폰 그룹 모달
+    const {isOpen, handleModal, message, handleMessage} = useModals();
+    // 쿠폰 그룹 확인할 그룹 아이디설정
+    const [couponGroupId, setCouponGroupId] = useState<string>("");
+    const handleCouponGroupId = (value:string) => {
+        setCouponGroupId(value)
+    }
+    // 쿠폰 그룹 요청
+    const {data:couponGroup, isLoading:couponGroupIsLoading, isSuccess:couponGroupIsSuccess} = useQuery(
+        couponKey.couponGroup(couponGroupId),
+        () => getCouponGroupAPI(couponGroupId),
+        {
+            staleTime: 60 * 1000,
+            enabled: !!couponGroupId.length
+        }
+    );
+
+    // 쿠폰 그룹 컨펌 데이터
+    const confirmInitData = {
+        groupId: "",
+        status: 0,
+        reason: '',
+        deleteStatus: false
+    } as CouponConfirmType;
+    const [confirmData, setConfirmData] = useState(confirmInitData);
+
+    // 쿠폰그룹 데이터 요청 이후 모달컨텐츠 데이터 바인딩
+    useEffect(() =>{
+        if(couponGroup){
+            handleMessage({
+                title : couponGroup.data.couponName,
+                content: <ModalContent data={{...couponGroup.data}}/>
+            })
+        }
+    }, [couponGroup, confirmData])
+
+    // 쿠폰그룹 데이터 요청 이후 컨펌데이터에 데이터 바인딩
+    useEffect(() => {
+        setConfirmData({
+            ...confirmData,
+            groupId: couponGroupId
+        })
+    },[couponGroup])
+
+    // 승인 및 반려 컨트롤
+    const handleStatus = (event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => {
+        setConfirmData({
+            ...confirmData,
+            status: Number(data.value)
+        });
+    };
+
+    //  쿠폰 그룹 변경 데이터 초기화
+    const couponGroupDataInit = () => {
+        setCouponGroupId("");
+        handleMessage({title : null, content: null,})
+        setConfirmData(confirmInitData)
+    }
+
+    // 쿠폰 그룹 모달 닫기
+    const closeGroupModal = () => {
+        couponGroupDataInit();
+        handleModal(false);
+    }
+
+    // 변경 후 메세지
+    const [isOpenMessage, setIsOpenMessage] = useState<boolean>(false);
+    const [mutateMessage, setMutateMessage] = useState<string>("");
+
+    // 변경 요청 액션 & 업데이트
+    const {mutate, isLoading} = useMutation(patchCouponConfirmAPI)
+    const couponGroupAction = () => {
+        mutate(confirmData,{
+            onSuccess: () => {
+                queryClient.invalidateQueries(couponKey.couponListByOrder(queryOption))
+                    .then(() => queryClient.invalidateQueries(couponKey.couponGroup(couponGroupId))
+                        .then(() => setMutateMessage('변경에 성공하였습니다.')))
+            },
+            onError: (error) => {
+                console.log('error : ',error)
+                setMutateMessage('변경에 실패하였습니다.')
+            },
+            onSettled: (data) => {
+                console.log('settled : ',data)
+                setIsOpenMessage(true)
+                closeGroupModal()
+            }
+        })
+    }
+
+    // 업데이트 메세지 감시
+    useEffect(() => {
+        if (isOpenMessage) {
+            setTimeout(() => {
+                setIsOpenMessage(false)
+            }, 2000)
+        }
+    }, [isOpenMessage])
+
+    // 쿠폰그룹 모달 컨텐츠 설정
+    const ModalContent = ({data}:any):JSX.Element => {
+        return (
+            <>
+                {couponGroupIsSuccess &&
+                    <Table definition size="small">
+                        <Table.Body>
+                            <Table.Row>
+                                <Table.Cell width={4} content="발급 요청 제휴사"/>
+                                <Table.Cell content={data.shopName}/>
+                            </Table.Row>
+                            <Table.Row>
+                                <Table.Cell width={4} content="발급 요청일"/>
+                                <Table.Cell content={dateConverter(data.createdAt).yearMonthDate}/>
+                            </Table.Row>
+                            <Table.Row>
+                                <Table.Cell width={4} content="사용 기한"/>
+                                <Table.Cell content={`${dateConverter(data.dateStart).yearMonthDate} ~ ${dateConverter(data.dateEnd).yearMonthDate}`}/>
+                            </Table.Row>
+                            <Table.Row>
+                                <Table.Cell width={4} content="발행 수량"/>
+                                <Table.Cell content={encodeNumber(data.count)}/>
+                            </Table.Row>
+
+                            <Table.Row>
+                                <Table.Cell width={4} content="할인율"/>
+                                <Table.Cell content={encodeNumber(data.discount)}/>
+                            </Table.Row>
+                            <Table.Row>
+                                <Table.Cell width={4} content="할인 금액"/>
+                                <Table.Cell content={encodeNumber(data.cost)}/>
+                            </Table.Row>
+
+                            <Table.Row>
+                                <Table.Cell width={4} content="최소 사용금액"/>
+                                <Table.Cell content={encodeNumber(data.minimum)}/>
+                            </Table.Row>
+                            <Table.Row>
+                                <Table.Cell width={4} content="최대 할인금액"/>
+                                <Table.Cell content={encodeNumber(data.maxDiscount)}/>
+                            </Table.Row>
+                            <Table.Row>
+                                <Table.Cell width={4} content="발급 상태"/>
+                                <Table.Cell content={couponStatusFilter(data.issueStatus)}/>
+                            </Table.Row>
+                            {!data.issueStatus ?
+                                <Table.Row>
+                                    <Table.Cell width={4} content="승인 및 반려"/>
+                                    <Table.Cell>
+                                        <Form.Checkbox
+                                            label={<label>승인</label>}
+                                            name="status"
+                                            value={1}
+                                            checked={confirmData.status === 1}
+                                            onChange={handleStatus}
+                                        />
+                                        <Form.Checkbox
+                                            label={<label>반려</label>}
+                                            name="status"
+                                            value={2}
+                                            checked={confirmData.status === 2}
+                                            onChange={handleStatus}
+                                        />
+                                    </Table.Cell>
+                                </Table.Row>
+                                : null}
+                            {confirmData.status === 2 ?
+                                <Table.Row>
+                                    <Table.Cell width={4} content="반려 사유"/>
+                                    <Table.Cell>
+                                        <Form>
+                                            <Form.TextArea/>
+                                        </Form>
+                                    </Table.Cell>
+                                </Table.Row> : null
+                            }
+                        </Table.Body>
+                    </Table>
+                }
+            </>
+        )
+    }
+
     return (
         <>
             <Template>
@@ -16,20 +296,20 @@ export default function CouponList(){
                             content='쿠폰 목록'
                             subheader='Manage your alliance'
                         />
-                        <div style={{display:"flex", flexDirection:"column", gap:"1rem"}}>
-                            <div style={{textAlign:"right"}}>
+                        <div style={{display: "flex", flexDirection: "column", gap: "1rem"}}>
+                            <div style={{textAlign: "right"}}>
                                 <Button primary onClick={() => navigate('/alliance/create')}>신규 쿠폰 발급</Button>
                             </div>
-                            <div style={{display:"flex", gap:"1rem"}}>
+                            <div style={{display: "flex", gap: "1rem"}}>
                                 <Input
-                                    // value={searchName}
+                                    name="searchName"
+                                    value={searchName}
                                     placeholder='쿠폰명 검색'
-                                    // onChange={onHandleSearchName}
+                                    onChange={onHandleSearchName}
                                     action={{
                                         icon: 'search',
                                         color: "teal",
-                                        // onClick : onSearchNameSubmit
-
+                                        onClick : onSearchPage
                                     }}
                                 />
                                 <div className="ui action input">
@@ -49,9 +329,80 @@ export default function CouponList(){
                             </div>
                         </div>
                     </div>
-                {/* Header End   */}
-
-
+                    {/* Header End   */}
+                    <Loader active={couponListIsLoading || isLoading} size="massive" inline='centered' style={{marginTop: '6rem'}}/>
+                    {couponList && <>
+                        <Table compact celled selectable size='small' style={{margin: "2rem 0"}}>
+                            <Table.Header>
+                                <Table.Row textAlign="center">
+                                    {column.map((name, i) =>
+                                        <Table.HeaderCell key={i} content={name}/>
+                                    )}
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                            {!couponList.data.length ?
+                                <Table.Row textAlign="center">
+                                    <Table.Cell colSpan={column.length} style={{padding: "80px 0"}}>
+                                        <h2>자료가 없습니다.</h2>
+                                    </Table.Cell>
+                                </Table.Row>
+                                : <>{couponList.data.map((row: any, i: number) =>
+                                    <Table.Row
+                                        key={i}
+                                        active={row.deleteStatus}
+                                        warning={!row.status}
+                                        negative={row.status === 2}
+                                    >
+                                        <Table.Cell
+                                            content={<Label
+                                                basic
+                                                content={row.groupName}
+                                                style={{color:"inherit"}}
+                                                onClick={() => {
+                                                    handleCouponGroupId(row.groupId)
+                                                    handleModal(true)
+                                                }}
+                                            />}
+                                        />
+                                        <Table.Cell width={2} content={row.issuer}/>
+                                        <Table.Cell content={dateConverter(row.createdAt).fullDateMonth}/>
+                                        <Table.Cell>
+                                            {dateConverter(row.dateStart).yearMonthDate} ~ <br/>{dateConverter(row.dateEnd).yearMonthDate}
+                                        </Table.Cell>
+                                        <Table.Cell textAlign="right" content={`${encodeNumber(row.count)} 건`}/>
+                                        <Table.Cell textAlign="right" content={`${encodeNumber(row.useCount)} 건`}/>
+                                        <Table.Cell textAlign="center">
+                                            {/*{row.groupId}*/}
+                                            {row.status === 1 ?
+                                                <Label basic color="blue" content="보기"/>
+                                                : "-"
+                                            }
+                                        </Table.Cell>
+                                        <Table.Cell textAlign="center">{couponStatusFilter(row.status)}</Table.Cell>
+                                        <Table.Cell textAlign="center">{deleteStatusFilter(row.deleteStatus)}</Table.Cell>
+                                    </Table.Row>
+                                )}</>
+                            }
+                            </Table.Body>
+                        </Table>
+                        <div style={{textAlign: "center"}}>
+                            <Pagination
+                                boundaryRange={1}
+                                activePage={Number(queryOption.page)}
+                                ellipsisItem={null}
+                                firstItem={{content: <Icon name="angle double left"/>, icon: true}}
+                                lastItem={{content: <Icon name="angle double right"/>, icon: true}}
+                                prevItem={{content: <Icon name="angle left"/>, icon: true}}
+                                nextItem={{content: <Icon name="angle right"/>, icon: true}}
+                                siblingRange={1}
+                                totalPages={couponList.totalPage}
+                                onPageChange={onChangePage}
+                            />
+                        </div>
+                    </>}
+                    <ConfirmPortal actionHandler={couponGroupAction} message={message} isOpen={isOpen} handler={closeGroupModal}/>
+                    <MessagePortal isOpen={isOpenMessage} children={mutateMessage}/>
                 </Container>
             </Template>
         </>

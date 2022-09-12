@@ -1,5 +1,4 @@
 import Template from "@/components/template";
-import {Navigate} from "react-router-dom";
 import {Button, Container, Image, Label, Loader, Table} from "semantic-ui-react";
 import {useQuery} from "@tanstack/react-query";
 import {allianceKey} from "@/types/queryKey";
@@ -20,17 +19,6 @@ export default function AllianceInfo() {
         {staleTime: 60 * 1000}
     );
 
-    const timeConverter = (date: Date) => {
-        let hour = new Date(date).getHours().toString();
-        let min = new Date(date).getMinutes().toString();
-        if (Number(hour) < 10) {
-            hour = '0' + hour;
-        }
-        if (Number(min) < 10) {
-            min = '0' + min;
-        }
-        return `${hour}시 ${min}분`
-    }
     const fullTimeConverter = (date: Date) => {
         const _this = new Date(date);
         const yy = _this.getFullYear();
@@ -149,7 +137,7 @@ export default function AllianceInfo() {
                                 <Table.Row>
                                     <Table.Cell>제휴사 최초 진행일</Table.Cell>
                                     <Table.Cell>
-                                        {fullTimeConverter(data.updatedAt)} {timeConverter(data.updatedAt)}
+                                        {dateConverter(data.updatedAt).fullDateMonth}
                                     </Table.Cell>
                                 </Table.Row>
                                 <Table.Row>

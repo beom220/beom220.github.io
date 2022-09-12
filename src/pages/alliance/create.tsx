@@ -23,7 +23,7 @@ import {useNavigate} from "react-router";
 import {dateConverter} from "@/util/converter";
 import {schoolKey} from "@/types/queryKey";
 import {CreateAllianceType} from "@/types/alliance";
-import {QueryStringType} from "@/types/queryString";
+import {QueryOptionType} from "@/types/queryString";
 
 export default function AllianceCreate() {
     const navigate = useNavigate();
@@ -252,7 +252,7 @@ export default function AllianceCreate() {
     // 대학교 리스트
     const [schoolList, setSchoolList] = useState<{ value: string, text: string, key: string }[]>([]);
     // 대학교 리스트 요청 쿼리옵션
-    const schoolQueryOption: QueryStringType = {
+    const schoolQueryOption: QueryOptionType = {
         page: 1,
         limit: 'all',
         sort: 0

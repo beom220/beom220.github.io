@@ -1,4 +1,4 @@
-export interface QueryStringType {
+export interface QueryOptionType {
     cate?: string | number
     page?: string | number
     limit?: string | number

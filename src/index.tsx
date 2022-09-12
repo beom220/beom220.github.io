@@ -7,7 +7,7 @@ import {QueryClientProvider, QueryClient} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import {BrowserRouter} from "react-router-dom";
 import {DebugObserver} from "@/app/debug";
-import {Helmet, HelmetProvider} from 'react-helmet-async';
+import {HelmetProvider} from 'react-helmet-async';
 import MetaSeo from "@/components/common/metaSeo";
 // (async () => {
 //     const {worker} = await import('@/mock/worker');

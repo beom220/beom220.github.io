@@ -5,7 +5,7 @@ import {getAllianceOptionMangeAPI, getAllianceServiceAPI} from "@/api";
 import styled from "@emotion/styled";
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {encodeMoney} from "@/util/converter";
+import {encodeNumber} from "@/util/converter";
 
 
 export default function AllianceOptionInfo({objectId, filter, isOpen, handler}: any) {
@@ -44,7 +44,7 @@ export default function AllianceOptionInfo({objectId, filter, isOpen, handler}: 
                         <Header
                             as="h3"
                             content={manageData.data.name + '관리'}
-                            subheader={`추가금액 : ${encodeMoney(manageData.data.cost)}원`}
+                            subheader={`추가금액 : ${encodeNumber(manageData.data.cost)}원`}
                         />
                     </Modal.Header>
                     <Modal.Content>
@@ -77,8 +77,8 @@ export default function AllianceOptionInfo({objectId, filter, isOpen, handler}: 
                                 <Table.Cell>{row.recommend ? '추천' : '-'}</Table.Cell>
                                 <Table.Cell>{row.name}</Table.Cell>
                                 <Table.Cell>{row.category}</Table.Cell>
-                                <Table.Cell textAlign="right">{encodeMoney(row.cost)}원</Table.Cell>
-                                <Table.Cell textAlign="right">{encodeMoney(row.finally_cost)}원</Table.Cell>
+                                <Table.Cell textAlign="right">{encodeNumber(row.cost)}원</Table.Cell>
+                                <Table.Cell textAlign="right">{encodeNumber(row.finally_cost)}원</Table.Cell>
                             </Table.Row>
                         ))}
                             </Table.Body>

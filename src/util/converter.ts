@@ -1,13 +1,13 @@
-import {QueryStringType} from "@/types/queryString";
+import {QueryOptionType} from "@/types/queryString";
 
 type Money = string | number;
 
 /**
  * 숫자에 콤마 찍기
- * @param value
+ * @param value:Money
  */
-export function encodeMoney(value:Money){
-    const pattern = /\B(?=(\d{3})+(?!\d))/g
+export function encodeNumber(value:Money){
+    const pattern = /\B(?=(\d{3})+(?!\d))/g;
     return String(value).replace(pattern, ",");
 }
 
@@ -15,14 +15,14 @@ export function encodeMoney(value:Money){
  * 콤마 제거
  * @param value
  */
-export function decodeMoney(value:Money){
+export function decodeNumber(value:Money){
     const pattern = /,/g;
     return Number(String(value).replace(pattern, ""));
 }
 
 /**
  * 날짜 한글로 변환
- * @param date
+ * @param date:Date
  */
 export function dateConverter(date:Date){
     const _date = new Date(date);
@@ -48,13 +48,13 @@ export function dateConverter(date:Date){
     const hourAndTime = hh + '시 ' + min + '분';
     const fullDateMonth = yearMonthDate + hourAndTime;
 
-    return { fullDateMonth, yearMonthDate, hourAndTime, yy, mm, dd, hh, min };
+    return { fullDateMonth, yearMonthDate, hourAndTime, yy, mm, dd, hh, min }
 }
 
 /**
  * queryOption 문자열로 변환
  * @param query
  */
-export function queryParse(query:QueryStringType){
+export function queryParse(query:QueryOptionType){
     return Object.entries(query).map(v => v.join('=')).join('&')
 }

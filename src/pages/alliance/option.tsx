@@ -9,7 +9,7 @@ import Template from "@/components/template";
 import {useState} from "react";
 import useModals from "@/hooks/useModals";
 import AllianceOptionInfo from "@/pages/alliance/optionInfo";
-import {encodeMoney} from "@/util/converter";
+import {encodeNumber} from "@/util/converter";
 import AllianceOptionEdit from "@/pages/alliance/optionEdit";
 
 export default function AllianceOption() {
@@ -48,7 +48,7 @@ export default function AllianceOption() {
                                             <Card.Header>{row.name}</Card.Header>
                                             <Card.Description>{row.description}</Card.Description>
                                             <Card.Description>
-                                                추가 금액 : {encodeMoney(row.cost)}원
+                                                추가 금액 : {encodeNumber(row.cost)}원
                                             </Card.Description>
                                         </Card.Content>
 

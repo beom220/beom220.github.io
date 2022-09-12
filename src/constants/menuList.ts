@@ -12,7 +12,7 @@ export const menuList = [
     //     title: "예약 관리",
     // },
     {
-        href: "/coupon",
+        href: "/coupon?page=1&sort=0",
         title: "쿠폰 관리",
     },
     // {
