@@ -20,7 +20,13 @@ export const allianceKey = {
     allianceServiceMenu: (id: string) => ['alliance Service Menu', id] as const,
 }
 
+export const reservationKey = {
+    reservationListByOrder: (query: QueryOptionType) => ['reservation List', queryParse(query)] as const,
+    reservationInfo: (id: string) => ['reservation Info', id] as const,
+}
+
 export const couponKey = {
     couponListByOrder: (query: QueryOptionType) => ['coupon List', queryParse(query)] as const,
     couponGroup: (id: string) => ['coupon Group', id] as const,
+    couponGroupDetail: (id: string, query:QueryOptionType) => ['coupon Group Detail', id, queryParse(query)] as const,
 }

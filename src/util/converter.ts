@@ -44,9 +44,9 @@ export function dateConverter(date:Date){
         '0' + _date.getMinutes() :
         _date.getMinutes().toString();
 
-    const yearMonthDate = yy + '년 ' + mm + '월 ' + dd + '일 ';
-    const hourAndTime = hh + '시 ' + min + '분';
-    const fullDateMonth = yearMonthDate + hourAndTime;
+    const yearMonthDate = yy + '/' + mm + '/' + dd;
+    const hourAndTime = hh + ':' + min;
+    const fullDateMonth = yearMonthDate + " T " + hourAndTime;
 
     return { fullDateMonth, yearMonthDate, hourAndTime, yy, mm, dd, hh, min }
 }

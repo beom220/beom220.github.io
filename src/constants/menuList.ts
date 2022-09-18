@@ -7,6 +7,10 @@ export const publicMenuList = (shop:string) => [
         href: "/coupon?page=1&sort=0",
         title: "쿠폰 관리",
     },
+    {
+        href: "/reservation?page=1&sort=1",
+        title: "예약 관리",
+    }
 ]
 
 export const privateMenuList = [
@@ -18,4 +22,8 @@ export const privateMenuList = [
         href: "/coupon?page=1&sort=0",
         title: "쿠폰 관리",
     },
+    {
+        href: "/reservation?page=1&sort=1",
+        title: "예약 관리",
+    }
 ]

@@ -6,7 +6,7 @@ import {CouponConfirmType} from "@/types/coupon";
 export {postLoginAPI} from "@/api/member/login";
 
 
-// 제휴사 생성
+/**** 제휴사 ****/
 // 제휴사 아이디 중복체크
 export const postEmailCheck = async (id :{admin_id: string}) => {
     const { data } = await authAPI.post('/shop/confirm', id);
@@ -100,7 +100,19 @@ export const getAllianceOptionMangeAPI = async (id:string) => {
     return data;
 }
 
+/**** 예약 ****/
+// 예약 리스트
+export const getReservationListAPI = async (query:QueryOptionType) => {
+    const { data } = await authAPI.get('/purchase/services?' + queryParse(query))
+    return data;
+}
+// 예약 리스트 상세(개별건)
+export const getReservationAPI = async (id:string) => {
+    const { data } = await authAPI.get('/purchase/service/' + id)
+    return data;
+}
 
+/**** 쿠폰 ****/
 // 쿠폰 리스트
 export const getCouponListAPI = async (query:QueryOptionType) => {
     const { data } = await authAPI.get('/coupon/list/group?' + queryParse(query))
@@ -111,7 +123,11 @@ export const getCouponGroupAPI = async (id:string) => {
     const { data } = await authAPI.get('/coupon/group/' + id)
     return data;
 }
-
+// 쿠폰 그룹의 목록 ( 몇건 발행, 개별 쿠폰들 )
+export const getCouponGroupItemAPI = async (id:string, query:QueryOptionType) => {
+    const { data } = await authAPI.get(`/coupon/list/${id}?${queryParse(query)}`);
+    return data;
+}
 // 쿠폰 그룹 발급 승인
 export const patchCouponConfirmAPI = async (form:CouponConfirmType) => {
     const { data } = await authAPI.patch('/coupon/confirm', form)

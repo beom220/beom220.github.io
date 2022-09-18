@@ -9,7 +9,8 @@ import {
     AllianceOption,
     AllianceEditService,
     AllianceCreate,
-    CouponList
+    CouponList,
+    ReservationList
 } from "@/pages";
 import {memberState} from "@/app/member";
 import {useRecoilValue} from "recoil";
@@ -33,7 +34,11 @@ export function PublicRoutes() {
             <Route path="/alliance/info/:id"
                    element={<AllianceInfo/>}
             />
-
+            {/* 예약 */}
+            <Route path="/reservation"
+                   element={<ReservationList/>}
+            />
+            {/* 쿠폰 */}
             <Route path="/coupon"
                    element={<CouponList/>}
             />
@@ -82,7 +87,10 @@ export function PrivateRoutes() {
             <Route path="/alliance"
                    element={<AllianceList/>}
             />
-
+            {/* 예약 */}
+            <Route path="/reservation"
+                   element={<ReservationList/>}
+            />
             {/* 쿠폰 */}
             <Route path="/coupon"
                    element={<CouponList/>}
