@@ -207,6 +207,7 @@ export default function AllianceCreate() {
         reader.readAsDataURL(fileBlob);
         return new Promise((resolve) => {
             reader.onload = () => {
+                console.log(reader.result)
                 setCreateData({
                     ...createData,
                     images: [...createData.images, reader.result as string]

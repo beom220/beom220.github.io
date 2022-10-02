@@ -19,7 +19,7 @@ import {QueryOptionType} from "@/types/queryString";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {reservationKey} from "@/types/queryKey";
 import {getReservationAPI, getReservationListAPI,} from "@/api";
-import {dateConverter, encodeNumber} from "@/util/converter";
+import {dateConverter, encodeCall, encodeNumber} from "@/util/converter";
 import useModals from "@/hooks/useModals";
 import {AlertPortal, ConfirmPortal, MessagePortal} from "@/components/common";
 import {useRecoilValue} from "recoil";
@@ -29,6 +29,7 @@ import {DropdownProps} from "semantic-ui-react/dist/commonjs/modules/Dropdown/Dr
 
 interface ReservationQueryOption extends QueryOptionType {
     shopId: string;
+    status?: number;
 }
 
 export default function ReservationList() {
@@ -40,6 +41,7 @@ export default function ReservationList() {
     const paramsLimit = Number(params.get('limit'));
     const paramsSort = Number(params.get('sort'));
     const paramsName = params.get('name');
+    const paramsStatus = params.get('status');
     const scrollTop = () => window.scrollTo(0, 0)
     const member = useRecoilValue(memberState);
     const queryClient = useQueryClient()
@@ -52,7 +54,8 @@ export default function ReservationList() {
         limit: 10,
         sort: 1,
         name: "",
-        shopId: shopId
+        shopId: shopId,
+        status: 4
     })
 
     // 예약 리스트 요청
@@ -73,8 +76,10 @@ export default function ReservationList() {
             limit: !paramsLimit ? queryOption.limit : paramsLimit,
             sort: !String(paramsSort).length ? queryOption.sort : paramsSort,
             name: paramsName ?? "",
-            shopId: shopId
+            shopId: shopId,
+            status: paramsStatus === null ? queryOption.status : Number(paramsStatus)
         })
+        console.log(paramsStatus)
     }, [location])
 
     // 검색명
@@ -110,9 +115,40 @@ export default function ReservationList() {
         navigate(`/reservation?page=1&limit=${queryOption.limit}&sort=${reserveSortSelect}&name=${queryOption.name}`)
     }
 
+    // 상태 옵션
+    const reserveStatusOption = [
+        {
+            value: 0,
+            text: '예약완료',
+        },
+        {
+            value: 1,
+            text: '사용완료',
+        },
+        {
+            value: 2,
+            text: '예약취소',
+        },
+        {
+            value: 3,
+            text: '노쇼취소',
+        },
+        {
+            value: 4,
+            text: '전체',
+        },
+    ];
+    const [reserveStatusSelect, setReserveStatusSelect] = useState<number>(reserveStatusOption[0].value);
+    const onHandleStatus = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
+        setReserveStatusSelect(data.value as number)
+    }
+    // 정렬 검색
+    const onStatusPage = () => {
+        navigate(`/reservation?page=1&limit=${queryOption.limit}&sort=${queryOption.sort}&name=${queryOption.name}&status=${reserveStatusSelect}`)
+    }
     // 페이징
     const onChangePage = (e: MouseEvent<HTMLAnchorElement>, data: PaginationProps) => {
-        navigate(`/reservation?page=${data.activePage}&limit=${queryOption.limit}&sort=${queryOption.sort}&name=${queryOption.name}`)
+        navigate(`/reservation?page=${data.activePage}&limit=${queryOption.limit}&sort=${queryOption.sort}&name=${queryOption.name}&status=${queryOption.status}`)
     }
 
     // 테이블 컬럼명
@@ -176,7 +212,7 @@ export default function ReservationList() {
     }
 
     const ModalContent = ({data}: any): JSX.Element => {
-        const modalColumn = ["상품명", "상품 옵션명", "결제 방식", "사용한 포인트", "결제금액", "예약 회원", "연락처", "결제일시", "예약 일시", "사용완료 시간", "요청사항", "예약 상태 변경", "취소일", "취소 사유", "환불 금액", "승인 여부"] as const;
+        const modalColumn = ["상품명", "상품 옵션명", "결제 방식", "사용한 포인트", "결제금액", "예약자", "연락처", "결제 일시", "예약 일시", "사용완료 시간", "요청사항", "예약 상태 변경", "취소일", "취소 사유", "환불 금액", "승인 여부"] as const;
         const reserveTypeConverter = (status:number) => {
             switch (status) {
                 case 0 :
@@ -190,11 +226,15 @@ export default function ReservationList() {
             }
         };
         return (
-            <Table definition size="small">
+            <Table definition >
                 <Table.Body>
                     <Table.Row>
                         <Table.Cell width={4} content={modalColumn[5]}/>
                         <Table.Cell content={data.user_name}/>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.Cell width={4} content={modalColumn[6]}/>
+                        <Table.Cell content={encodeCall(data.phone)}/>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell width={4} content={modalColumn[0]}/>
@@ -205,13 +245,14 @@ export default function ReservationList() {
                         <Table.Cell content={data.option_name}/>
                     </Table.Row>
                     <Table.Row>
+                        <Table.Cell width={4} content={modalColumn[10]}/>
+                        <Table.Cell content={data.requirement}/>
+                    </Table.Row>
+                    <Table.Row>
                         <Table.Cell width={4} content={modalColumn[2]}/>
                         <Table.Cell content={reserveTypeConverter(data.purchase_type)}/>
                     </Table.Row>
-                    <Table.Row>
-                        <Table.Cell width={4} content={modalColumn[6]}/>
-                        <Table.Cell content={data.phone}/>
-                    </Table.Row>
+
                     <Table.Row>
                         <Table.Cell width={4} content={modalColumn[7]}/>
                         <Table.Cell content={dateConverter(data.pay_date).fullDateMonth}/>
@@ -230,10 +271,6 @@ export default function ReservationList() {
                     <Table.Row>
                         <Table.Cell width={4} content={modalColumn[9]}/>
                         <Table.Cell content={!data.reserve_date_use ? "-" : dateConverter(data.reserve_date_use).fullDateMonth}/>
-                    </Table.Row>
-                    <Table.Row>
-                        <Table.Cell width={4} content={modalColumn[10]}/>
-                        <Table.Cell content={data.requirement}/>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell width={4} content={modalColumn[15]}/>
@@ -264,10 +301,6 @@ export default function ReservationList() {
                         <Table.Cell width={4} content={modalColumn[3]}/>
                         <Table.Cell content={!data.use_point ? "0p" : encodeNumber(data.use_point) + "p"}/>
                     </Table.Row>
-                    <Table.Row positive>
-                        <Table.Cell width={4} content={modalColumn[4]}/>
-                        <Table.Cell content={encodeNumber(data.purchase_cost) + "원"}/>
-                    </Table.Row>
                     {(data.status === 2 || data.status === 3) ?
                         <>
                             <Table.Row warning>
@@ -280,10 +313,15 @@ export default function ReservationList() {
                             </Table.Row>
                             <Table.Row warning>
                                 <Table.Cell width={4} content={modalColumn[14]}/>
-                                <Table.Cell content={encodeNumber(data.refund_cost) + "원"}/>
+                                <Table.Cell content={!data.refund_cost ? "0원" : encodeNumber(data.refund_cost) + "원"}/>
+                                {/*<Table.Cell content={data.refund_cost + '??'}/>*/}
                             </Table.Row>
                         </> : null
                     }
+                    <Table.Row positive>
+                        <Table.Cell width={4} content={modalColumn[4]}/>
+                        <Table.Cell content={encodeNumber(data.purchase_cost) + "원"}/>
+                    </Table.Row>
                 </Table.Body>
             </Table>
         )
@@ -421,6 +459,21 @@ export default function ReservationList() {
                                     color="teal"
                                 />
                             </div>
+                            <div className="ui action input">
+                                <Select
+                                    // value={searchData}
+                                    options={reserveStatusOption}
+                                    placeholder='필터'
+                                    onChange={onHandleStatus}
+                                />
+                                <Button
+                                    type='button'
+                                    loading={reservationListIsLoading}
+                                    onClick={onStatusPage}
+                                    icon='search'
+                                    color="teal"
+                                />
+                            </div>
                         </div>
 
                     </div>
@@ -435,7 +488,7 @@ export default function ReservationList() {
                             }}
                     />
                     {reservationList && <>
-                        <Table compact celled selectable stackable size='small' style={{margin: "2rem 0"}}>
+                        <Table compact celled selectable stackable style={{margin: "2rem 0"}}>
                             <Table.Header>
                                 <Table.Row textAlign="center">
                                     {member.auth_level ?
@@ -517,19 +570,12 @@ export default function ReservationList() {
                             />
                         </div>
                     </>}
-                    {/*<Loader*/}
-                    {/*    active={false}*/}
-                    {/*    size="massive"*/}
-                    {/*    inline='centered'*/}
-                    {/*    style={{*/}
-                    {/*        position: 'fixed',*/}
-                    {/*        top:'50%',*/}
-                    {/*        left:'50%',*/}
-                    {/*        transform:'translate(-50%, -50%)'*/}
-                    {/*    }}*/}
-                    {/*/>*/}
-                    <ConfirmPortal actionHandler={closeReserveModal} message={message} isOpen={isOpen && reserveInfo}
-                                   handler={closeReserveModal}/>
+                    <ConfirmPortal
+                        actionHandler={closeReserveModal}
+                        message={message}
+                        isOpen={isOpen && !!reserveInfo}
+                        handler={closeReserveModal}
+                    />
                 </Container>
             </Template>
         </>

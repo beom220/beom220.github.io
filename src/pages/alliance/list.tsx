@@ -148,7 +148,7 @@ export default function AllianceList() {
 
                 <Loader active={isLoading} size="massive" inline='centered' style={{marginTop: '12rem'}}/>
                 {data && <>
-                    <Table compact selectable celled size='small' style={{margin: "2rem 0"}}>
+                    <Table compact selectable celled style={{margin: "2rem 0"}}>
                         <Table.Header>
                             <Table.Row style={{textAlign: "center"}}>
                                 <Table.HeaderCell width={3} content={columns[0]}/>

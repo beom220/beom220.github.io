@@ -277,7 +277,7 @@ export default function CouponList() {
         return (
             <>
                 {couponGroupIsSuccess &&
-                    <Table definition size="small">
+                    <Table definition>
                         <Table.Body>
                             <Table.Row>
                                 <Table.Cell width={4} content="발급 요청 제휴사"/>
@@ -442,7 +442,7 @@ export default function CouponList() {
                     <Loader active={couponListIsLoading || couponConfirmIsLoading} size="massive" inline='centered'
                             style={{marginTop: '12rem'}}/>
                     {couponList && <>
-                        <Table compact celled selectable size='small' style={{margin: "2rem 0"}}>
+                        <Table compact celled selectable style={{margin: "2rem 0"}}>
                             <Table.Header>
                                 <Table.Row textAlign="center">
                                     {column.map((name, i) =>

@@ -6,7 +6,7 @@ import {getAllianceInfoAPI} from "@/api";
 import {useNavigate, useParams} from "react-router";
 import * as React from "react";
 import AllianceHeader from "@/components/alliance/header";
-import {dateConverter} from "@/util/converter";
+import {dateConverter, encodeCall} from "@/util/converter";
 import {useEffect} from "react";
 import {useRecoilValue} from "recoil";
 import {memberState} from "@/app/member";
@@ -49,10 +49,10 @@ export default function AllianceInfo() {
                 }}/>
                 {data &&
                     <>
-                        <Table definition style={{margin: '4rem 0'}} size="small">
+                        <Table definition style={{margin: '4rem 0'}} >
                             <Table.Body>
                                 <Table.Row>
-                                    <Table.Cell width={4}>게시여부</Table.Cell>
+                                    <Table.Cell width={3}>게시여부</Table.Cell>
                                     <Table.Cell>
                                         {data.status ?
                                             <Label color="teal">게시</Label> :
@@ -125,7 +125,7 @@ export default function AllianceInfo() {
                                 <Table.Row>
                                     <Table.Cell>전화번호</Table.Cell>
                                     <Table.Cell>
-                                        {data.phone}
+                                        {encodeCall(data.phone)}
                                     </Table.Cell>
                                 </Table.Row>
 

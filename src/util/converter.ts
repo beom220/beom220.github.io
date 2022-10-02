@@ -21,6 +21,14 @@ export function decodeNumber(value:Money){
 }
 
 /**
+ * 연락처에 포맷 [xx,xxx]-[xxx,xxxx]-[xxxx]
+ * @param value
+ */
+export function encodeCall(value:string){
+    return value.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+}
+
+/**
  * 날짜 한글로 변환
  * @param date:Date
  */
